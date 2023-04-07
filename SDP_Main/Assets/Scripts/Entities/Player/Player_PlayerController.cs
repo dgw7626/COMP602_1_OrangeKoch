@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Photon.Pun;
 
 [RequireComponent(typeof(CharacterController), typeof(Player_InputManager), typeof(AudioSource))]
 public class Player_PlayerController : MonoBehaviour
@@ -187,7 +188,7 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (IsMultiplayer && !photonView.isMine)
+        if (IsMultiplayer && !photonView.IsMine)
             return;
         // TODO: check for Y kill
         /*  if (!IsDead && transform.position.y < KillHeight)
