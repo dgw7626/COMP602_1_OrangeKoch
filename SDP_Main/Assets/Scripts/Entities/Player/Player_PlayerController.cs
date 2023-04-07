@@ -111,6 +111,8 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsDead { get; private set; }
     public bool IsCrouching { get; private set; }
 
+    public bool IsMultiplayer;
+    public PhotonView photonView;
 
     //private List<Weapon> weapons = new List<Weapon>();
     //private Weapon currentWeapon = null;
@@ -145,6 +147,9 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
+        photonView = GetComponent<PhotonView>();
+        if (photonView == null)
+            Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
         /*
         Weapon[] myGuns = GetComponentsInChildren<Weapon>();
@@ -182,6 +187,8 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (IsMultiplayer && !photonView.isMine)
+            return;
         // TODO: check for Y kill
         /*  if (!IsDead && transform.position.y < KillHeight)
           {
