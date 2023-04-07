@@ -59,7 +59,7 @@ public class Player_InputManager : MonoBehaviour
     {
         if (InputIsLocked())
             return false;
-        return Input.GetKeyDown(KeyCode.Space);
+        return Input.GetButton("Jump");
     }
 
     public bool IsJumpHeld()
