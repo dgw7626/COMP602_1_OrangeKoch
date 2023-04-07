@@ -5,7 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
+    path: Assets/Scenes/Lobby.unity
+    guid: 74a52f30b491004448ca8fec269698f0
+  - enabled: 1
+    path: Assets/Scenes/MainMenuUI.unity
+    guid: c8233d2fb6f28d74e9156cbcd1efbf80
+  - enabled: 1
+    path: Assets/Scenes/CountdownTimer.unity
+    guid: dca806180c1b54a4e845a057c6758c0e
   m_configObjects: {}
