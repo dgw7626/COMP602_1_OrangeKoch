@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
 
-[RequireComponent(typeof(CharacterController), typeof(Player_InputManager), typeof(AudioSource))]
+[RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
 {
     [Header("References")]
