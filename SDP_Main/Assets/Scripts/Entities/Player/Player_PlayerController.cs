@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Photon.Pun;
 
-[RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
+[RequireComponent(typeof(CharacterController), typeof(Player_InputManager), typeof(AudioSource))]
 public class Player_PlayerController : MonoBehaviour
 {
     [Header("References")]
     [Tooltip("Reference to the main camera used for the player")]
     public Camera PlayerCamera;
+
+    [Tooltip("Audio source for footsteps, jump, etc...")]
+    public AudioSource AudioSource;
 
     [Header("General")]
     [Tooltip("Force applied downward when in the air")]
@@ -69,6 +73,22 @@ public class Player_PlayerController : MonoBehaviour
     [Tooltip("Speed of crouching transitions")]
     public float CrouchingSharpness = 10f;
 
+    [Header("Audio")]
+    [Tooltip("Amount of footstep sounds played when moving one meter")]
+    public float FootstepSfxFrequency = 1f;
+
+    [Tooltip("Amount of footstep sounds played when moving one meter while sprinting")]
+    public float FootstepSfxFrequencyWhileSprinting = 1f;
+
+    [Tooltip("Sound played for footsteps")]
+    public AudioClip FootstepSfx;
+
+    [Tooltip("Sound played when jumping")] public AudioClip JumpSfx;
+    [Tooltip("Sound played when landing")] public AudioClip LandSfx;
+
+    [Tooltip("Sound played when taking damage froma fall")]
+    public AudioClip FallDamageSfx;
+
     [Header("Fall Damage")]
     [Tooltip("Whether the player will recieve damage when hitting the ground at high speed")]
     public bool RecievesFallDamage;
@@ -93,7 +113,7 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsCrouching { get; private set; }
 
     public bool IsMultiplayer;
-    //public PhotonView photonView;
+    public PhotonView photonView;
 
     //private List<Weapon> weapons = new List<Weapon>();
     //private Weapon currentWeapon = null;
@@ -113,7 +133,6 @@ public class Player_PlayerController : MonoBehaviour
         }
     }
 
-    Player_SoundManager soundManager;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -121,6 +140,7 @@ public class Player_PlayerController : MonoBehaviour
     Vector3 m_LatestImpactSpeed;
     float m_LastTimeJumped = 0f;
     float m_CameraVerticalAngle = 0f;
+    float m_FootstepDistanceCounter;
     float m_TargetCharacterHeight;
 
     const float k_JumpGroundingPreventionTime = 0.2f;
@@ -128,9 +148,9 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
-        //photonView = GetComponent<PhotonView>();
-        //if (photonView == null)
-        //    Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
+        photonView = GetComponent<PhotonView>();
+        if (photonView == null)
+            Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
         /*
         Weapon[] myGuns = GetComponentsInChildren<Weapon>();
@@ -156,16 +176,8 @@ public class Player_PlayerController : MonoBehaviour
     {
         // fetch components on the same gameObject
         controller = GetComponent<CharacterController>();
-        if (controller == null)
-            Debug.LogError("ERROR: controller is NULL for " + gameObject.name);
 
         inputHandler = GetComponent<Player_InputManager>();
-        if (inputHandler == null)
-            Debug.LogError("ERROR: inputHandler is NULL for " + gameObject.name);
-
-        soundManager = GetComponentInChildren<Player_SoundManager>();
-        if (soundManager == null)
-            Debug.LogError("ERROR: soundManager is NULL for " + gameObject.name);
 
         controller.enableOverlapRecovery = true;
 
@@ -176,8 +188,8 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
-        /*if (IsMultiplayer && !photonView.isMine)
-            return;*/
+        if (IsMultiplayer && !photonView.IsMine)
+            return;
         // TODO: check for Y kill
         /*  if (!IsDead && transform.position.y < KillHeight)
           {
@@ -202,12 +214,12 @@ public class Player_PlayerController : MonoBehaviour
                 //m_Health.TakeDamage(dmgFromFall, null);
 
                 // fall damage SFX
-                soundManager.PlayFallDamage();
+                //AudioSource.PlayOneShot(FallDamageSfx);
             }
             else
             {
                 // land SFX
-                soundManager.PLayLand();
+                AudioSource.PlayOneShot(LandSfx);
             }
         }
 
@@ -343,7 +355,7 @@ public class Player_PlayerController : MonoBehaviour
                         CharacterVelocity += Vector3.up * JumpForce;
 
                         // play sound
-                        soundManager.PlayJump();
+                        //AudioSource.PlayOneShot(JumpSfx);
 
                         // remember last time we jumped because we need to prevent snapping to ground for a short time
                         m_LastTimeJumped = Time.time;
@@ -356,8 +368,16 @@ public class Player_PlayerController : MonoBehaviour
                 }
 
                 // footsteps sound
-                soundManager.PlayFootstep(isSprinting, CharacterVelocity.magnitude);
+                float chosenFootstepSfxFrequency =
+                    (isSprinting ? FootstepSfxFrequencyWhileSprinting : FootstepSfxFrequency);
+                if (m_FootstepDistanceCounter >= 1f / chosenFootstepSfxFrequency)
+                {
+                    m_FootstepDistanceCounter = 0f;
+                    AudioSource.PlayOneShot(FootstepSfx);
+                }
 
+                // keep track of distance traveled for footsteps sound
+                m_FootstepDistanceCounter += CharacterVelocity.magnitude * Time.deltaTime;
             }
             // handle air movement
             else
