@@ -4,15 +4,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
 
-[RequireComponent(typeof(CharacterController), typeof(Player_InputManager), typeof(AudioSource))]
+[RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
 {
     [Header("References")]
     [Tooltip("Reference to the main camera used for the player")]
     public Camera PlayerCamera;
-
-    [Tooltip("Audio source for footsteps, jump, etc...")]
-    public AudioSource AudioSource;
 
     [Header("General")]
     [Tooltip("Force applied downward when in the air")]
@@ -73,22 +70,6 @@ public class Player_PlayerController : MonoBehaviour
     [Tooltip("Speed of crouching transitions")]
     public float CrouchingSharpness = 10f;
 
-    [Header("Audio")]
-    [Tooltip("Amount of footstep sounds played when moving one meter")]
-    public float FootstepSfxFrequency = 1f;
-
-    [Tooltip("Amount of footstep sounds played when moving one meter while sprinting")]
-    public float FootstepSfxFrequencyWhileSprinting = 1f;
-
-    [Tooltip("Sound played for footsteps")]
-    public AudioClip FootstepSfx;
-
-    [Tooltip("Sound played when jumping")] public AudioClip JumpSfx;
-    [Tooltip("Sound played when landing")] public AudioClip LandSfx;
-
-    [Tooltip("Sound played when taking damage froma fall")]
-    public AudioClip FallDamageSfx;
-
     [Header("Fall Damage")]
     [Tooltip("Whether the player will recieve damage when hitting the ground at high speed")]
     public bool RecievesFallDamage;
@@ -114,6 +95,7 @@ public class Player_PlayerController : MonoBehaviour
 
     public bool IsMultiplayer;
     public PhotonView photonView;
+    public Player_SoundManager soundManager;
 
     //private List<Weapon> weapons = new List<Weapon>();
     //private Weapon currentWeapon = null;
@@ -148,7 +130,11 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
-        photonView = GetComponent<PhotonView>();
+        soundManager = GetComponentInChildren<Player_SoundManager>();
+        if(soundManager == null ) 
+            Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
+        
+            photonView = GetComponent<PhotonView>();
         if (photonView == null)
             Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
@@ -219,7 +205,7 @@ public class Player_PlayerController : MonoBehaviour
             else
             {
                 // land SFX
-                AudioSource.PlayOneShot(LandSfx);
+                soundManager.PLayLand(); ;
             }
         }
 
@@ -368,16 +354,7 @@ public class Player_PlayerController : MonoBehaviour
                 }
 
                 // footsteps sound
-                float chosenFootstepSfxFrequency =
-                    (isSprinting ? FootstepSfxFrequencyWhileSprinting : FootstepSfxFrequency);
-                if (m_FootstepDistanceCounter >= 1f / chosenFootstepSfxFrequency)
-                {
-                    m_FootstepDistanceCounter = 0f;
-                    AudioSource.PlayOneShot(FootstepSfx);
-                }
-
-                // keep track of distance traveled for footsteps sound
-                m_FootstepDistanceCounter += CharacterVelocity.magnitude * Time.deltaTime;
+                soundManager.PlayFootstep(isSprinting, CharacterVelocity.magnitude);
             }
             // handle air movement
             else
