@@ -130,6 +130,7 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
+        IsMultiplayer = true;
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if(soundManager == null ) 
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
