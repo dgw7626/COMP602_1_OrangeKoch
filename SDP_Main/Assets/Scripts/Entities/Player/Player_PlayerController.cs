@@ -94,6 +94,7 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsCrouching { get; private set; }
 
     public bool IsMultiplayer;
+    public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
 
@@ -131,6 +132,7 @@ public class Player_PlayerController : MonoBehaviour
     void Awake()
     {
         IsMultiplayer = true;
+        IsInputLocked = true;
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if(soundManager == null ) 
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
@@ -176,6 +178,9 @@ public class Player_PlayerController : MonoBehaviour
     void Update()
     {
         if (IsMultiplayer && !photonView.IsMine)
+            return;
+
+        if (IsInputLocked)
             return;
         // TODO: check for Y kill
         /*  if (!IsDead && transform.position.y < KillHeight)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_MultiplayerEntity : MonoBehaviour
 {
-    Player_PlayerController playerController;
+    public Player_PlayerController playerController;
 
     private void Start()
     {
