@@ -186,6 +186,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         Debug.Log(PhotonNetwork.NickName+" has started a Game!");
-        PhotonNetwork.LoadLevel("Game");
+        PhotonNetwork.LoadLevel("GameMap_default");
     }
 }
