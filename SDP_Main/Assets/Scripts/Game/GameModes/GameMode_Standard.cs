@@ -2,6 +2,8 @@ using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using ExitGames.Client.Photon.StructWrapping;
 
 public class GameMode_Standard : IgameMode
 {
@@ -26,6 +28,7 @@ public class GameMode_Standard : IgameMode
         // Unlock Player Movement
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.activePlayers)
         {
+            Debug.Log("Unlocking Controlls for: " + PhotonNetwork.LocalPlayer.NickName);
             p.playerController.IsMultiplayer = true;
             p.playerController.IsInputLocked = false;
         }

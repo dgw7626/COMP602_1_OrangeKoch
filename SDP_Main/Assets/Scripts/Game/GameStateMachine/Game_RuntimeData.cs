@@ -9,4 +9,5 @@ public class Game_RuntimeData
     public static bool isMultiplayer = true;
     public static IgameMode gameMode = null;
 
+
 }
