@@ -28,7 +28,7 @@ public class GameMode_Standard : IgameMode
         // Unlock Player Movement
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.activePlayers)
         {
-            Debug.Log("Unlocking Controlls for: " + PhotonNetwork.LocalPlayer.NickName);
+            Debug.Log("Unlocking Controlls for: " + PhotonNetwork.LocalPlayer.NickName + p.name);
             p.playerController.IsMultiplayer = true;
             p.playerController.IsInputLocked = false;
         }
