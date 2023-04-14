@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject cameraHolder;
     [SerializeField] float mouseSensitivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
 
-    [SerializeField] Item[] items;
+    //[SerializeField] Item[] items;
 
     int itemIndex;
     int previousItemIndex = -1; //default as there is no negative item (not switched yet)
@@ -51,14 +51,14 @@ public class PlayerController : MonoBehaviour
         Move();
         Jump();
 
-        for(int i = 0; i < items.Length; i++)
+        /*for(int i = 0; i < items.Length; i++)
         {
             if(Input.GetKeyDown((i + 1).ToString()))
             {
                 EquipItem(i);
                 break;
             }
-        }
+        }*/
     }
 
     void Look()
@@ -95,12 +95,12 @@ public class PlayerController : MonoBehaviour
 
         itemIndex = _index;
 
-        items[itemIndex].itemGameObject.SetActive(true);
+       /* items[itemIndex].itemGameObject.SetActive(true);
 
         if(previousItemIndex != -1)
         {
             items[previousItemIndex].itemGameObject.SetActive(false);
-        }
+        }*/
 
         previousItemIndex = itemIndex;
         Debug.Log("Current item isndex: " + itemIndex);
