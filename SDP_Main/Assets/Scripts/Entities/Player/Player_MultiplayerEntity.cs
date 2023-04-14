@@ -11,6 +11,7 @@ public class Player_MultiplayerEntity : MonoBehaviour
         playerController = GetComponent<Player_PlayerController>();
         if (Game_RuntimeData.isMultiplayer)
         {
+            playerController.IsInputLocked = true;
             Game_RuntimeData.activePlayers.Add(this);
         }
     }

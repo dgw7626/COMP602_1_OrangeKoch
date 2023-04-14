@@ -19,6 +19,7 @@ public class GameMode_Manager : MonoBehaviour
 
     void Init()
     {
+        Debug.Log("Initializing Game!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         gameMode.InitGame();
     }
 
