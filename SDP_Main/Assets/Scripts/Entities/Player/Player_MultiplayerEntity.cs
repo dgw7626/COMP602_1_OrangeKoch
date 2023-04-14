@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Player_MultiplayerEntity : MonoBehaviour
 {
-    Player_PlayerController playerController;
+    public Player_PlayerController playerController;
 
     private void Start()
     {
         playerController = GetComponent<Player_PlayerController>();
         if (Game_RuntimeData.isMultiplayer)
+        {
+            playerController.IsInputLocked = true;
             Game_RuntimeData.activePlayers.Add(this);
+        }
     }
 }

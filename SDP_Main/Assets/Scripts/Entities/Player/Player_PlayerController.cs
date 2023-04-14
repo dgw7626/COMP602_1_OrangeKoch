@@ -94,6 +94,7 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsCrouching { get; private set; }
 
     public bool IsMultiplayer;
+    public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
 
@@ -134,9 +135,9 @@ public class Player_PlayerController : MonoBehaviour
         photonView = GetComponent<PhotonView>();
 
         soundManager = GetComponentInChildren<Player_SoundManager>();
-        if(soundManager == null ) 
+        if(soundManager == null )
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
-        
+
         if (photonView == null)
             Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
@@ -184,6 +185,9 @@ public class Player_PlayerController : MonoBehaviour
     {
         if (IsMultiplayer && !photonView.IsMine)
             return;
+
+        if (IsInputLocked)
+            return;
         // TODO: check for Y kill
         /*  if (!IsDead && transform.position.y < KillHeight)
           {
@@ -194,7 +198,7 @@ public class Player_PlayerController : MonoBehaviour
 
         bool wasGrounded = IsGrounded;
         GroundCheck();
-        
+
         // landing
         if (IsGrounded && !wasGrounded)
         {
@@ -405,13 +409,13 @@ public class Player_PlayerController : MonoBehaviour
         return Vector3.Angle(transform.up, normal) <= controller.slopeLimit;
     }
 
-    // Gets the center point of the bottom hemisphere of the character controller capsule    
+    // Gets the center point of the bottom hemisphere of the character controller capsule
     Vector3 GetCapsuleBottomHemisphere()
     {
         return transform.position + (transform.up * controller.radius);
     }
 
-    // Gets the center point of the top hemisphere of the character controller capsule    
+    // Gets the center point of the top hemisphere of the character controller capsule
     Vector3 GetCapsuleTopHemisphere(float atHeight)
     {
         return transform.position + (transform.up * (atHeight - controller.radius));
