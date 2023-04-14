@@ -131,13 +131,13 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
-        IsMultiplayer = true;
-        IsInputLocked = true;
+        IsMultiplayer = Game_RuntimeData.isMultiplayer;
+        photonView = GetComponent<PhotonView>();
+
         soundManager = GetComponentInChildren<Player_SoundManager>();
-        if(soundManager == null ) 
+        if(soundManager == null )
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
-        
-            photonView = GetComponent<PhotonView>();
+
         if (photonView == null)
             Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
@@ -163,6 +163,12 @@ public class Player_PlayerController : MonoBehaviour
 
     void Start()
     {
+
+        if (!photonView.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+        }
+
         // fetch components on the same gameObject
         controller = GetComponent<CharacterController>();
 
@@ -192,7 +198,7 @@ public class Player_PlayerController : MonoBehaviour
 
         bool wasGrounded = IsGrounded;
         GroundCheck();
-        
+
         // landing
         if (IsGrounded && !wasGrounded)
         {
@@ -403,13 +409,13 @@ public class Player_PlayerController : MonoBehaviour
         return Vector3.Angle(transform.up, normal) <= controller.slopeLimit;
     }
 
-    // Gets the center point of the bottom hemisphere of the character controller capsule    
+    // Gets the center point of the bottom hemisphere of the character controller capsule
     Vector3 GetCapsuleBottomHemisphere()
     {
         return transform.position + (transform.up * controller.radius);
     }
 
-    // Gets the center point of the top hemisphere of the character controller capsule    
+    // Gets the center point of the top hemisphere of the character controller capsule
     Vector3 GetCapsuleTopHemisphere(float atHeight)
     {
         return transform.position + (transform.up * (atHeight - controller.radius));
