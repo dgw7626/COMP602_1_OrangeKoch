@@ -5,10 +5,11 @@ using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
-
+    public const float quitDelay = 0.5f;
     public static Launcher Instance;
 
     [SerializeField] TMP_InputField roomNameInputField;
@@ -31,11 +32,22 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.Log("Disconnected from Dion Server");
+        base.OnDisconnected(cause);
+        Game_RuntimeData.isMultiplayer = false;
+        Debug.Log("isMultiplayer has been set to: "+Game_RuntimeData.isMultiplayer);
+
+    }
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Dion Server");
         PhotonNetwork.JoinLobby();
         PhotonNetwork.AutomaticallySyncScene = true;
+        Game_RuntimeData.isMultiplayer = true;
+        Debug.Log("isMultiplayer has been set to: " + Game_RuntimeData.isMultiplayer);
     }
 
     public override void OnJoinedLobby()
@@ -45,23 +57,18 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
-    public void CreateRoom()
+    public void FindRoom()
     {
-        if (string.IsNullOrEmpty(roomNameInputField.text))
-        {
-            Debug.Log("Room Name Input Field was Empty Returning.");
-            return;
-        }
-            PhotonNetwork.CreateRoom(roomNameInputField.text);
-        MenuManager.Instance.OpenMenu("loading");
-        Debug.Log("Room " + roomNameInputField.text + " was created.");
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = 16;
+        PhotonNetwork.JoinOrCreateRoom("default_room",options, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("room");
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
-        Debug.Log("Room "+roomNameText.text + " was joined by "+PhotonNetwork.NickName+".");
+        Debug.Log("Room "+roomNameText.text + " was joined by "+PhotonNetwork.NickName+"."); 
 
         Player[] players = PhotonNetwork.PlayerList;
 
@@ -89,15 +96,36 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("error");
         Debug.Log("Error: Room Failed to Create.");
     }
+    public void QuitMultiplayer()
+    {
+        Debug.Log("Quit Multiplayer Invoked - Returning to Main Menu.");
+        PhotonView PV = GetComponent<PhotonView>();
+        PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
+        PhotonNetwork.Disconnect();
+
+        StartCoroutine(QuitAfterDelay());
+    }
+
+    IEnumerator QuitAfterDelay()
+    {
+        while (true)
+        {
+            int i = 0;
+            if (!PhotonNetwork.IsConnected) { 
+                break;    
+            }
+            yield return null;
+            Debug.Log(i++);
+
+        }
+       // yield return new WaitForSeconds(quitDelay);
+        
+        SceneManager.LoadScene("Lobby");
+    }
 
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        MenuManager.Instance.OpenMenu("loading");
-    }
-    public void JoinRoom(RoomInfo info)
-    {
-        PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loading");
     }
 

@@ -130,12 +130,13 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
-        IsMultiplayer = true;
+        IsMultiplayer = Game_RuntimeData.isMultiplayer;
+        photonView = GetComponent<PhotonView>();
+
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if(soundManager == null ) 
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
         
-            photonView = GetComponent<PhotonView>();
         if (photonView == null)
             Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
@@ -161,6 +162,12 @@ public class Player_PlayerController : MonoBehaviour
 
     void Start()
     {
+
+        if (!photonView.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+        }
+
         // fetch components on the same gameObject
         controller = GetComponent<CharacterController>();
 
