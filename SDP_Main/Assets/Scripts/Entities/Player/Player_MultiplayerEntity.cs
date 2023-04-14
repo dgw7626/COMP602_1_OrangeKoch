@@ -10,6 +10,8 @@ public class Player_MultiplayerEntity : MonoBehaviour
     {
         playerController = GetComponent<Player_PlayerController>();
         if (Game_RuntimeData.isMultiplayer)
+        {
             Game_RuntimeData.activePlayers.Add(this);
+        }
     }
 }

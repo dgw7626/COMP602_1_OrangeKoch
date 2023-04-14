@@ -18,6 +18,7 @@ public class GameMode_Standard : IgameMode
 
             Game_RuntimeData.teams[team].Add(Game_RuntimeData.activePlayers[i]);
         }
+        StartGame();
     }
 
     public void StartGame()
