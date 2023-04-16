@@ -31,6 +31,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     public void InitBullets()
     {
         Transform bullets = transform.Find("Bullets");
+        Transform firePos = transform.GetChild(0).GetChild(0).transform;
         for(int i = 0; i < weaponInfo.bulletCounts; i++)
         {
             GameObject bulletObject = Instantiate(Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject, Vector3.zero, Quaternion.identity,bullets.transform);
@@ -38,6 +39,9 @@ public class Weapon_ProjectileManager : MonoBehaviour
             bulletObject.GetComponent<AudioSource>().clip = weaponInfo.shootEffect;
             GameObject muzzleFlash = Instantiate(weaponInfo.muzzleFlash.gameObject, Vector3.zero, Quaternion.identity, bulletObject.transform);
             muzzleFlash.name = "[" + i + "]" + muzzleFlash.name;
+            // Bullet Trace effects
+            GameObject bulletTrace = Instantiate(weaponInfo.bulletTrace.gameObject, (firePos.position + new Vector3(0, -3f, 0)), weaponInfo.bulletTrace.transform.rotation, bulletObject.transform);
+            bulletTrace.name = "[" + i + "]" + bulletTrace.name;
             GameObject hitObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             //Ignore Raycast.
             hitObject.layer = 2;

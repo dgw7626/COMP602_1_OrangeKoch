@@ -16,7 +16,7 @@ public class Weapon_WeaponController : MonoBehaviour
     {
         
 
-        playerInputManager = GetComponentInChildren<Player_InputManager>();
+        playerInputManager = GetComponentInParent<Player_InputManager>();
         weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
     void Start()

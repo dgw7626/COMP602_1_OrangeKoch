@@ -127,7 +127,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2780725331642502374}
   - component: {fileID: 2034508856957731750}
-  - component: {fileID: 106341746095587627}
   - component: {fileID: 5524425805881592064}
   m_Layer: 0
   m_Name: WeaponHolder
@@ -167,20 +166,6 @@ MonoBehaviour:
   weaponInfo: {fileID: 11400000, guid: 4673bca3687865b4f9c38f8d92326c0f, type: 2}
   localBullets: []
   fakeParent: {fileID: 156926678}
---- !u!114 &106341746095587627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447952117001267369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fa5cd70a34b0a4a935dca294b4d528, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lookSensitivity: 1
-  invertY: 0
 --- !u!114 &5524425805881592064
 MonoBehaviour:
   m_ObjectHideFlags: 0
