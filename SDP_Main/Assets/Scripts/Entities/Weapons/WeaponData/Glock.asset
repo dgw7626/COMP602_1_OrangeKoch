@@ -18,3 +18,4 @@ MonoBehaviour:
   muzzleFlash: {fileID: 2021418561459885581, guid: 20b49fc10cad53c42bbe10b3be821b6a, type: 3}
   shootEffect: {fileID: 8300000, guid: e730d1593f127d94887ca2c16b3826d4, type: 3}
   reloadEffect: {fileID: 8300000, guid: f4438bab9e436884b95522f3363a5e09, type: 3}
+  hitEffect: {fileID: 8300000, guid: 1aef24b3f583fd24a80af7e72760dcd8, type: 3}

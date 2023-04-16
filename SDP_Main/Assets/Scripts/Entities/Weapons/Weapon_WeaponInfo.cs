@@ -10,4 +10,5 @@ public class Weapon_WeaponInfo : ScriptableObject
    public ParticleSystem muzzleFlash;
    public AudioClip shootEffect;
    public AudioClip reloadEffect;
+    public AudioClip hitEffect;
 }

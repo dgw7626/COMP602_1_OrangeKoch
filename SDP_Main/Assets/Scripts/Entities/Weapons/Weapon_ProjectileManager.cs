@@ -38,6 +38,17 @@ public class Weapon_ProjectileManager : MonoBehaviour
             bulletObject.GetComponent<AudioSource>().clip = weaponInfo.shootEffect;
             GameObject muzzleFlash = Instantiate(weaponInfo.muzzleFlash.gameObject, Vector3.zero, Quaternion.identity, bulletObject.transform);
             muzzleFlash.name = "[" + i + "]" + muzzleFlash.name;
+            GameObject hitObject = new GameObject();
+            hitObject.AddComponent<AudioSource>().playOnAwake = false;
+            hitObject.GetComponent<AudioSource>().clip = weaponInfo.hitEffect;
+            hitObject.GetComponent<AudioSource>().spatialBlend = 1;
+            hitObject.GetComponent<AudioSource>().rolloffMode = AudioRolloffMode.Linear;
+            hitObject.GetComponent<AudioSource>().minDistance = 0;
+            hitObject.GetComponent<AudioSource>().maxDistance = 20;
+            hitObject.transform.SetParent(bulletObject.transform);
+            //GameObject hitObject = Instantiate(gameObject , Vector3.zero, Quaternion.identity, bulletObject.transform);
+            hitObject.name = "[" + i + "] hit Objects"; 
+
             bulletObject.SetActive(false);
             localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
         }
@@ -51,11 +62,11 @@ public class Weapon_ProjectileManager : MonoBehaviour
             if (!bullet.gameObject.activeSelf)
             {
                 bullet.gameObject.SetActive(true);
-                bullet.Hit(firePos);
+                bullet.Fire(firePos);
 
             }
             yield return new WaitForSeconds(delaySecond);
-            bullet.gameObject.SetActive(false);
+        //    bullet.gameObject.SetActive(false);
         }
         StopCoroutine(currentCoroutine);
     }
@@ -79,7 +90,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         switch (fireType) {
             case Weapon_E_Firetype.AUTO:
                 {
-                    currentCoroutine = StartCoroutine(GetShoot(0.01f));
+                    currentCoroutine = StartCoroutine(GetShoot(0.1f));
                     break;
                 }
             case Weapon_E_Firetype.BURST:
