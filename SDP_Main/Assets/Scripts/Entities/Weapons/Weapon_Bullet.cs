@@ -16,12 +16,11 @@ public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
         Transform bulletVfx = transform.GetChild(1).transform;
         Transform hitVfx = transform.GetChild(2).transform;
         bulletVfx.transform.position = transform.position;
-        print(GetComponentInParent<Player_InputManager>().transform.eulerAngles.y + " |" + GetComponentInParent<Player_InputManager>().transform.rotation.y);
+     //   print(GetComponentInParent<Player_InputManager>().transform.eulerAngles.y + " |" + GetComponentInParent<Player_InputManager>().transform.rotation.y);
        // bulletVfx.transform.rotation = new Quaternion(0, GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0, 0);
        // bulletVfx.transform.rotation = Quaternion.AngLe
         //(origin.rotation.eulerAngles.x + (-90f))
      //   bulletVfx.transform.rotation = Quaternion.AngleAxis((Camera.main.transform.rotation.eulerAngles.x + (-90f)), Vector3.right);
-        bulletVfx.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)),GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y,0);
         print(Quaternion.AngleAxis((Camera.main.transform.rotation.eulerAngles.x + (-90f)), Vector3.right));
         vfx.GetComponent<ParticleSystem>().Play();
         bulletVfx.GetComponent<ParticleSystem>().Play();
@@ -69,7 +68,7 @@ public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
        // print(tempPos.rotation);// -0.7 is the 90 degree
        // print(tempPos.eulerAngles);
         bulletObject.transform.SetParent(transform);
-      
+        bulletObject.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)), GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0);
         //bulletObject.transform.position = transform.position;
         //bulletObject.transform.rotation = new Quaternion((transform.rotation.x + (-0.7f)), transform.rotation.y, transform.rotation.z, 0);
         // bulletObject.transform.position = transform.position;

@@ -6,7 +6,7 @@ using Photon.Pun;
 [RequireComponent(typeof(Weapon_ProjectileManager))]
 public class Weapon_WeaponController : MonoBehaviour
 {
-    public Player_InputManager playerInputManager;
+    public Player_InputManager inputHandler;
     internal Weapon_ProjectileManager weaponProjectileMananger;
 
     [SerializeField] internal PhotonView PhotonView;
@@ -14,9 +14,9 @@ public class Weapon_WeaponController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        
 
-        playerInputManager = GetComponentInParent<Player_InputManager>();
+
+        inputHandler = GetComponentInParent<Player_InputManager>();
         weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
     void Start()
@@ -37,7 +37,7 @@ public class Weapon_WeaponController : MonoBehaviour
         }
 
         weaponProjectileMananger.UpdateChildTransform();
-        if (playerInputManager.GetFireInputDown())
+        if (inputHandler.GetFireInputDown())
         {
             weaponProjectileMananger.InitShoot(Weapon_E_Firetype.SEMI);
         }

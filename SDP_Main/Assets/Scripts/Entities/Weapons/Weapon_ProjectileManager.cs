@@ -42,7 +42,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             // Bullet Trace effects
             GameObject bulletTrace = Instantiate(weaponInfo.bulletTrace.gameObject, (firePos.position + new Vector3(0, -3f, 0)), weaponInfo.bulletTrace.transform.rotation, bulletObject.transform);
             bulletTrace.name = "[" + i + "]" + bulletTrace.name;
-            GameObject hitObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject hitObject = new GameObject();
             //Ignore Raycast.
             hitObject.layer = 2;
             hitObject.AddComponent<AudioSource>().playOnAwake = false;
