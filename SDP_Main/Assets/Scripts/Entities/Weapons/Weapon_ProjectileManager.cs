@@ -27,6 +27,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         transform.position = newpos;
         transform.rotation = newrot;
     }
+    
     public void InitBullets()
     {
         Transform bullets = transform.Find("Bullets");
