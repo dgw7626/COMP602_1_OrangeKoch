@@ -32,7 +32,8 @@ public class Weapon_WeaponController : MonoBehaviour
     {
         if (!PhotonView.IsMine)
         {
-            Destroy(GetComponentInChildren<Camera>().gameObject);
+            return;
+           // Destroy(GetComponentInChildren<Camera>().gameObject);
         }
 
         weaponProjectileMananger.UpdateChildTransform();

@@ -38,7 +38,9 @@ public class Weapon_ProjectileManager : MonoBehaviour
             bulletObject.GetComponent<AudioSource>().clip = weaponInfo.shootEffect;
             GameObject muzzleFlash = Instantiate(weaponInfo.muzzleFlash.gameObject, Vector3.zero, Quaternion.identity, bulletObject.transform);
             muzzleFlash.name = "[" + i + "]" + muzzleFlash.name;
-            GameObject hitObject = new GameObject();
+            GameObject hitObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            //Ignore Raycast.
+            hitObject.layer = 2;
             hitObject.AddComponent<AudioSource>().playOnAwake = false;
             hitObject.GetComponent<AudioSource>().clip = weaponInfo.hitEffect;
             hitObject.GetComponent<AudioSource>().spatialBlend = 1;
