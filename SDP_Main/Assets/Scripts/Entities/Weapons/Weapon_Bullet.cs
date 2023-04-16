@@ -5,7 +5,7 @@ using UnityEngine;
 public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
 {
     // need a direction to determin the hit point of the surface.
-    
+    internal GameObject hitObject;
     public void Fire(Transform origin)
     {
         transform.position = origin.position;
@@ -21,6 +21,9 @@ public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
                 Debug.unityLogger.logEnabled = true;
                 Debug.Log(hit.transform.name + ": Fire");
                 hitVfx.position = hit.point;
+                //testing hit location
+                hitVfx.parent = null;
+                hitObject = hitVfx.gameObject;
                 hitVfx.GetComponent<AudioSource>().Play();
                 Invoke(nameof(DisableBullet),transform.GetComponent<AudioSource>().clip.length);
                 return;
@@ -45,6 +48,7 @@ public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
 
     internal void DisableBullet()
     {
+        hitObject.transform.SetParent(transform);
         transform.gameObject.SetActive(false);
         return;
     }
