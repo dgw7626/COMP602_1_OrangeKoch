@@ -8,5 +8,6 @@ public class Weapon_WeaponInfo : ScriptableObject
    public int bulletCounts;
    public int clipCounts;
    public ParticleSystem muzzleFlash;
-    
+   public AudioClip shootEffect;
+   public AudioClip reloadEffect;
 }

@@ -5,15 +5,21 @@ using UnityEngine;
 public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
 {
     // need a direction to determin the hit point of the surface.
+    
     public void Fire(Transform origin)
     {
-        if(Physics.Raycast(origin.position, Camera.main.transform.forward, out RaycastHit hit,Mathf.Infinity))
+        transform.position = origin.position;
+        Transform vfx = transform.GetChild(0).transform;
+        vfx.GetComponent<ParticleSystem>().Play();
+        transform.GetComponent<AudioSource>().Play();
+        if (Physics.Raycast(origin.position, Camera.main.transform.forward, out RaycastHit hit,Mathf.Infinity))
         {
             if(hit.transform != null)
             {
                 Debug.DrawLine(origin.position,hit.point, Color.red);
                 Debug.unityLogger.logEnabled = true;
                 Debug.Log(hit.transform.name + ": Fire");
+                Invoke(nameof(DisableBullet),transform.GetComponent<AudioSource>().clip.length);
                 return;
             }           
         }
@@ -25,12 +31,17 @@ public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
         {
             if (hit.transform != null)
             {
-                Debug.DrawRay(origin.position, hit.point, Color.yellow);
+                Debug.DrawLine(origin.position, hit.point, Color.yellow);
                 Debug.unityLogger.logEnabled = true;
                 Debug.Log(hit.transform.name + ": Hit");
                 return;
             }
         }
 
+    }
+
+    internal void DisableBullet()
+    {
+        transform.gameObject.SetActive(false);
     }
 }

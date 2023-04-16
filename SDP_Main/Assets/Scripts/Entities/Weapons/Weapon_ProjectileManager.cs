@@ -13,7 +13,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     [SerializeField] internal Transform fakeParent;
     void Start()
     {
-        fakeParent = Camera.main.transform;
+    //    fakeParent = Camera.main.transform;
         pos = fakeParent.transform.InverseTransformPoint(transform.position);
         fw = fakeParent.transform.InverseTransformDirection(transform.forward);
         up = fakeParent.transform.InverseTransformDirection(transform.up);
@@ -34,6 +34,9 @@ public class Weapon_ProjectileManager : MonoBehaviour
         {
             GameObject bulletObject = Instantiate(Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject, Vector3.zero, Quaternion.identity,bullets.transform);
             bulletObject.name = "["+  i + "]" + bullets.name;
+            bulletObject.GetComponent<AudioSource>().clip = weaponInfo.shootEffect;
+            GameObject muzzleFlash = Instantiate(weaponInfo.muzzleFlash.gameObject, Vector3.zero, Quaternion.identity, bulletObject.transform);
+            muzzleFlash.name = "[" + i + "]" + muzzleFlash.name;
             bulletObject.SetActive(false);
             localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
         }
@@ -55,7 +58,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         }
         StopCoroutine(currentCoroutine);
     }
-    public void GetShoot()
+    public void GetShoot(bool isDebug)
     {
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
         foreach (Weapon_Bullet bullet in localBullets)
@@ -63,10 +66,11 @@ public class Weapon_ProjectileManager : MonoBehaviour
             if (!bullet.gameObject.activeSelf)
             {
                 bullet.gameObject.SetActive(true);
+                //   (isDebug  == true)? bullet.Hit(firePos) : bullet.Fire(firePos);
                 bullet.Fire(firePos);
-
+                return;
             }
-            bullet.gameObject.SetActive(false);
+            //bullet.gameObject.SetActive(false);
         }
     }
     public void InitShoot(Weapon_E_Firetype fireType)
@@ -84,7 +88,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
                 }
             case Weapon_E_Firetype.SEMI:
                 {
-                    GetShoot();
+                    GetShoot(false);
                     break;
                 }
             default:
