@@ -65,10 +65,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("title");
-        Debug.Log("Joined Lobby");
 
         // Randomly set a player name for each person joining Multiplayer
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        Debug.Log(PhotonNetwork.NickName + " Joined Lobby");
     }
 
     /*

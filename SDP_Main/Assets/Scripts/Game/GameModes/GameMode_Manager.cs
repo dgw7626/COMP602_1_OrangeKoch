@@ -1,8 +1,10 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameMode_Manager : MonoBehaviour
+public class GameMode_Manager : MonoBehaviourPunCallbacks
 {
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
@@ -42,5 +44,20 @@ public class GameMode_Manager : MonoBehaviour
     void Update()
     {
         gameMode.OnPerFrameUpdate();
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        StartCoroutine(gameMode.OnPlayerEnterMatch(newPlayer));
+        
+    }
+    public override void OnJoinedRoom()
+    {
+    }
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+        gameMode.OnPlayerLeftMatch(otherPlayer);
     }
 }
