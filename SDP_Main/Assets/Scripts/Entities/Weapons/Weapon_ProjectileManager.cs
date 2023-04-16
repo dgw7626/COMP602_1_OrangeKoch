@@ -1,19 +1,99 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class Weapon_ProjectileManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    [SerializeField] Weapon_WeaponInfo weaponInfo;
+    [SerializeField] internal List<Weapon_Bullet> localBullets;
+    internal Coroutine currentCoroutine;
+    internal Vector3 pos, fw, up;
+    [SerializeField] internal Transform fakeParent;
     void Start()
     {
-        Weapon_Bullet bullet = new Weapon_Bullet();
-        bullet.Fire();
+        fakeParent = Camera.main.transform;
+        pos = fakeParent.transform.InverseTransformPoint(transform.position);
+        fw = fakeParent.transform.InverseTransformDirection(transform.forward);
+        up = fakeParent.transform.InverseTransformDirection(transform.up);
     }
-
-    // Update is called once per frame
-    void Update()
+    public void UpdateChildTransform()
     {
+        var newpos = fakeParent.transform.TransformPoint(pos);
+        var newfw = fakeParent.transform.TransformDirection(fw);
+        var newup = fakeParent.transform.TransformDirection(up);
+        var newrot = Quaternion.LookRotation(newfw, newup);
+        transform.position = newpos;
+        transform.rotation = newrot;
+    }
+    public void InitBullets()
+    {
+        Transform bullets = transform.Find("Bullets");
+        for(int i = 0; i < weaponInfo.bulletCounts; i++)
+        {
+            GameObject bulletObject = Instantiate(Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject, Vector3.zero, Quaternion.identity,bullets.transform);
+            bulletObject.name = "["+  i + "]" + bullets.name;
+            bulletObject.SetActive(false);
+            localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
+        }
 
     }
+    public IEnumerator GetShoot(float delaySecond)
+    {
+        Transform firePos = transform.GetChild(0).GetChild(0).transform;
+        foreach(Weapon_Bullet bullet in localBullets)
+        {
+            if (!bullet.gameObject.activeSelf)
+            {
+                bullet.gameObject.SetActive(true);
+                bullet.Hit(firePos);
+
+            }
+            yield return new WaitForSeconds(delaySecond);
+            bullet.gameObject.SetActive(false);
+        }
+        StopCoroutine(currentCoroutine);
+    }
+    public void GetShoot()
+    {
+        Transform firePos = transform.GetChild(0).GetChild(0).transform;
+        foreach (Weapon_Bullet bullet in localBullets)
+        {
+            if (!bullet.gameObject.activeSelf)
+            {
+                bullet.gameObject.SetActive(true);
+                bullet.Fire(firePos);
+
+            }
+            bullet.gameObject.SetActive(false);
+        }
+    }
+    public void InitShoot(Weapon_E_Firetype fireType)
+    {
+        switch (fireType) {
+            case Weapon_E_Firetype.AUTO:
+                {
+                    currentCoroutine = StartCoroutine(GetShoot(0.01f));
+                    break;
+                }
+            case Weapon_E_Firetype.BURST:
+                {
+
+                    break;
+                }
+            case Weapon_E_Firetype.SEMI:
+                {
+                    GetShoot();
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+         }
+    }
+   
+
+
 }

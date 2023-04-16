@@ -2,24 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon_Bullet : Weapon_I_Fireable
+public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
 {
-
-    public void Fire()
+    // need a direction to determin the hit point of the surface.
+    public void Fire(Transform origin)
     {
-        Debug.Log("happyTooniverse");
+        if(Physics.Raycast(origin.position, Camera.main.transform.forward, out RaycastHit hit,Mathf.Infinity))
+        {
+            if(hit.transform != null)
+            {
+                Debug.DrawLine(origin.position,hit.point, Color.red);
+                Debug.unityLogger.logEnabled = true;
+                Debug.Log(hit.transform.name + ": Fire");
+                return;
+            }           
+        }
     }
 
-    public void Hit()
+    public void Hit(Transform origin)
     {
-        throw new System.NotImplementedException();
-    }
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
+        if (Physics.Raycast(origin.position, Camera.main.transform.forward, out RaycastHit hit, Mathf.Infinity))
+        {
+            if (hit.transform != null)
+            {
+                Debug.DrawRay(origin.position, hit.point, Color.yellow);
+                Debug.unityLogger.logEnabled = true;
+                Debug.Log(hit.transform.name + ": Hit");
+                return;
+            }
+        }
 
     }
 }

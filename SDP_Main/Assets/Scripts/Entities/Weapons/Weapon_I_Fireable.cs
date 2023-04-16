@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface Weapon_I_Fireable
 {
-    public void Fire();
-    public void Hit();
+    public void Fire(Transform origin);
+    public void Hit(Transform origin);
 }
