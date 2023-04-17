@@ -3,16 +3,16 @@ using Photon.Pun;
 using UnityEngine.SceneManagement;
 using System.IO;
 
-public class RoomManager : MonoBehaviourPunCallbacks
+public class Multiplayer_RoomManager : MonoBehaviourPunCallbacks
 {
 
-    public static RoomManager Instance;
+    public static Multiplayer_RoomManager Instance;
 
     private void Awake()
     {
-        if(Instance) //Checks for other RoomManager Instances
+        if(Instance) //Checks for other Multiplayer_RoomManager Instances
         {
-            Destroy(gameObject); //Ensures there is only one RoomManager.
+            Destroy(gameObject); //Ensures there is only one Multiplayer_RoomManager.
                 return;
         }
         DontDestroyOnLoad(gameObject);

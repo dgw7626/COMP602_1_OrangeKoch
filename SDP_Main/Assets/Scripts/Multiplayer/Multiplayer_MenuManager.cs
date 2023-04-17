@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuManager : MonoBehaviour
+public class Multiplayer_MenuManager : MonoBehaviour
 {
-    public static MenuManager Instance;
+    public static Multiplayer_MenuManager Instance;
 
-    [SerializeField] Menu[] menus;
+    [SerializeField] Multiplayer_MenuItem[] menus;
 
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void OpenMenu(Menu menu)
+    public void OpenMenu(Multiplayer_MenuItem menu)
     {
         for(int i = 0; i < menus.Length; i++)
         {
@@ -40,7 +40,7 @@ public class MenuManager : MonoBehaviour
         menu.Open();
     }
 
-    public void CloseMenu(Menu menu)
+    public void CloseMenu(Multiplayer_MenuItem menu)
     {
         menu.Close();
     }
