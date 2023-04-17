@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SDP_Main/Assets/Photon/PhotonVoice/Code/FMOD/Editor/FMODHelpersMenu.cs.meta
 guid: b0b10b725f786624cbfe9e5c88f3792f
+========
+guid: 476cc7d7cd9874016adc216baab94a0a
+timeCreated: 1484146680
+licenseType: Store
+>>>>>>>> parent of 6b5d545 (Merge branch 'main' of https://github.com/dgw7626/COMP602_1_OrangeKoch):SDP_Main/Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs.meta
 MonoImporter:
-  externalObjects: {}
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0
