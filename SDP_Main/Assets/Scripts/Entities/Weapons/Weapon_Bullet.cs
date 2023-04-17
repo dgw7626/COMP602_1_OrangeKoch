@@ -21,7 +21,7 @@ public class Weapon_Bullet : MonoBehaviour, Weapon_I_Fireable
        // bulletVfx.transform.rotation = Quaternion.AngLe
         //(origin.rotation.eulerAngles.x + (-90f))
      //   bulletVfx.transform.rotation = Quaternion.AngleAxis((Camera.main.transform.rotation.eulerAngles.x + (-90f)), Vector3.right);
-        print(Quaternion.AngleAxis((Camera.main.transform.rotation.eulerAngles.x + (-90f)), Vector3.right));
+      //  print(Quaternion.AngleAxis((Camera.main.transform.rotation.eulerAngles.x + (-90f)), Vector3.right));
         vfx.GetComponent<ParticleSystem>().Play();
         bulletVfx.GetComponent<ParticleSystem>().Play();
         transform.GetComponent<AudioSource>().Play();

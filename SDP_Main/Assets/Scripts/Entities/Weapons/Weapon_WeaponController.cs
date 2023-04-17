@@ -37,10 +37,7 @@ public class Weapon_WeaponController : MonoBehaviour
         }
 
         weaponProjectileMananger.UpdateChildTransform();
-        if (inputHandler.GetFireInputDown())
-        {
-            weaponProjectileMananger.InitShoot(Weapon_E_Firetype.SEMI);
-        }
+     
         
     }
 }
