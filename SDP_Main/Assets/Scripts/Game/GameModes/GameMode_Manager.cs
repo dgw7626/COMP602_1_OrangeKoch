@@ -34,6 +34,17 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
      */
     void Init()
     {
+        Game_RuntimeData.activePlayers = new Dictionary<int, Player_MultiplayerEntity>();
+
+        foreach (Player_MultiplayerEntity e in Game_RuntimeData.instantiatedPlayers)
+        {
+            //if (e.GetComponent<PhotonView>().IsMine)
+            {
+                Debug.Log("Trying to add ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
+                Game_RuntimeData.activePlayers.Add(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
+                Debug.Log("Added ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
+            }
+        }
         gameMode.InitGame();
         StartCoroutine(gameMode.OnOneSecondCountdown());
     }

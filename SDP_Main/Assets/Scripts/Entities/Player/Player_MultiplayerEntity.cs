@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_MultiplayerEntity : MonoBehaviour, IPunObservable
+public class Player_MultiplayerEntity : MonoBehaviour//, IPunObservable
 {
     public Player_PlayerController playerController;
     public string uniqueID {  get; private set; }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+ /*   public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if(stream.IsWriting)
         {
             stream.SendNext(uniqueID);
         }
-    }
+    }*/
 
     public bool RegisterUniqueID(string uniqueID)
     {
@@ -28,7 +28,7 @@ public class Player_MultiplayerEntity : MonoBehaviour, IPunObservable
         if (Game_RuntimeData.isMultiplayer)
         {
             playerController.IsInputLocked = true;
-            Game_RuntimeData.activePlayers.Add(this);
+            Game_RuntimeData.instantiatedPlayers.Add(this);
         }
     }
 }
