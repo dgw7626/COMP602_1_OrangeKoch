@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SDP_Main/Assets/Photon/PhotonVoice-Documentation.chm.meta
 guid: 47c2c24101e2c974fab2782e04e499ee
+========
+guid: 9f29ab7caf950b04c8ef9b0379012fd1
+folderAsset: yes
+>>>>>>>> parent of 6b5d545 (Merge branch 'main' of https://github.com/dgw7626/COMP602_1_OrangeKoch):SDP_Main/Assets/Scenes/TestScenes.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
