@@ -31,4 +31,12 @@ public class Player_MultiplayerEntity : MonoBehaviour//, IPunObservable
             Game_RuntimeData.instantiatedPlayers.Add(this);
         }
     }
+
+    [PunRPC]
+    public DamageStruct OnDamageRecieved(DamageStruct damage) 
+    {
+        //TODO: Calculate Damage
+        damage.damageTotal = 0.0f;
+        return damage;
+    }
 }
