@@ -13,11 +13,13 @@ public class ScoreManager
     public int deaths;
     public int won;
 
-    public ScoreManager()
+    public ScoreManager(string playerName, int kills, int deaths, int won)
     {
-        playerName = PutPlayerDetailOnFirebase.playerName;
-        kills = PutPlayerDetailOnFirebase.playerKills;
-        deaths = PutPlayerDetailOnFirebase.playerDeaths;
-        won = PutPlayerDetailOnFirebase.playerWon;
+        this.playerName = playerName;
+        this.kills = kills;
+        this.deaths = deaths;
+        this.won = won;
     }
+
+    
 }

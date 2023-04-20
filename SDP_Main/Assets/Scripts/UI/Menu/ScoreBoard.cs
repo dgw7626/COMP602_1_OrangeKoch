@@ -49,7 +49,7 @@ public class ScoreBoard : MonoBehaviour
    }
    private void Update()
    {
-     RestClient.Get<PlayerDetail>("https://project-10bbb-default-rtdb.firebaseio.com/" + "/Jayho" +".json").Then(response =>
+     RestClient.Get<PlayerDetail>("https://project-10bbb-default-rtdb.firebaseio.com/" + "/player1" +".json").Then(response =>
          {
              playerdetail = response;
              UpdatePlayerDetail_1();

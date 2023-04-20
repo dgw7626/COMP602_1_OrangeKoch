@@ -6,15 +6,15 @@ using  Proyecto26;
 
 public class PutPlayerDetailOnFirebase : MonoBehaviour 
 {
-     public static string playerName = "Jayho";
-     public static int playerKills = 3;
-     public static int playerDeaths = 3;
-     public static int playerWon = 3;
-
+    ScoreManager scoreMan1 = new ScoreManager("Jay", 5, 5, 5);
+    ScoreManager scoreMan2 = new ScoreManager("Jayho", 10, 10, 10);
+    
     void Start()
     {
-        ScoreManager scoreMan = new ScoreManager();
-        RestClient.Put("https://project-10bbb-default-rtdb.firebaseio.com/Jayho.json", scoreMan);
+        RestClient.Put("https://project-10bbb-default-rtdb.firebaseio.com/player1.json", scoreMan1);
+
+        
+        RestClient.Put("https://project-10bbb-default-rtdb.firebaseio.com/player2.json", scoreMan2);
     }
 
     
