@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,9 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 {
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
-    
+    public int gameTime { get; private set; }
+
+
     /**
      * Fetch the gameMode from Game_RuntimeData and Invoke InitGame on that gameMode.
      * 
@@ -70,5 +73,20 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     {
         base.OnPlayerLeftRoom(otherPlayer);
         gameMode.OnPlayerLeftMatch(otherPlayer);
+    }
+
+    [PunRPC]
+    public void GetSynchronousTimerValue()
+    {
+        //return gameTime;
+    }
+
+    [PunRPC]
+    public void SetSynchronousTimerValue()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameTime--;
+        }
     }
 }

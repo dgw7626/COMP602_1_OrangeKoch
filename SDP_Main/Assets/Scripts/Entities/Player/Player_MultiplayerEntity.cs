@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_MultiplayerEntity : MonoBehaviour//, IPunObservable
+public class Player_MultiplayerEntity : MonoBehaviour
 {
     public Player_PlayerController playerController;
     public string uniqueID {  get; private set; }
@@ -23,6 +23,11 @@ public class Player_MultiplayerEntity : MonoBehaviour//, IPunObservable
         {
             playerController.IsInputLocked = true;
             Game_RuntimeData.instantiatedPlayers.Add(this);
+            
+            if(playerController.photonView.IsMine)
+            {
+                Game_RuntimeData.thisMachinesPlayersPhotonView = playerController.photonView;
+            }
         }
     }
 

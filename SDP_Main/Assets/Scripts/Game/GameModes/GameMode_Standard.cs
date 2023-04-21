@@ -8,28 +8,15 @@ using Photon.Realtime;
 
 public class GameMode_Standard : IgameMode
 {
-    public const int MAX_GAME_TIME_SECONDS = 20;
+    public const int MAX_GAME_TIME_SECONDS = 120;
     private const int NUM_TEAMS = 2;
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
-    public int _gameTime {  get; private set; }
     public List<int> teamScores {  get; private set; }
     public void InitGame()
     {
-      
-
-        /*foreach (Player p in PhotonNetwork.PlayerList)
-        {
-            string s = p.NickName;
-            //GameObject playerObject = p.TagObject as GameObject;
-            //Game_RuntimeData.entities.Add(playerObject.GetComponent<Player_MultiplayerEntity>());
-            //Debug.Log("Player Object: " + playerObject.name);
-            //Debug.Log(p.TagObject);
-        }*/
-
-
         // Initialize Countdown
-        _gameTime = MAX_GAME_TIME_SECONDS + 1;
+        //gameTime = MAX_GAME_TIME_SECONDS + 1;
 
         teamScores = new List<int>();
 
@@ -78,10 +65,17 @@ public class GameMode_Standard : IgameMode
     public IEnumerator OnOneSecondCountdown()
     {
         Debug.Log("Begin! ");
-        while(_gameTime > 0)
+        while(true)
         {
-            _gameTime--;
-            Debug.Log("Time left: " + _gameTime);
+            if(PhotonNetwork.IsMasterClient)
+            {
+                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("SetSynchronousTimerValue", RpcTarget.All, new Object[0]);
+            }
+            else
+            {
+                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", PhotonNetwork.MasterClient, new Object[0]);
+            }
+            //Debug.Log("Time left: " + gameTime);
             yield return new WaitForSeconds(1);
 
         }
@@ -128,4 +122,6 @@ public class GameMode_Standard : IgameMode
             }
         }
     }
+
+
 }
