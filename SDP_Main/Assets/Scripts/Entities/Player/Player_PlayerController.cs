@@ -184,6 +184,11 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
+        //--------------------------------------------------------------------------------------------------
+        /**
+         * TODO: TEMPORARY
+         * This is being used to simulate a player being shot.
+         */
         if(inputHandler.OnTest())
         {
             if(Game_RuntimeData.activePlayers.Count > 1 )
@@ -206,6 +211,7 @@ public class Player_PlayerController : MonoBehaviour
                 }
             }
         }
+        //--------------------------------------------------------------------------------------------------
 
         if (IsMultiplayer && !photonView.IsMine)
             return;
