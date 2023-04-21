@@ -6,10 +6,10 @@ using Photon.Realtime;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
+public class Launcher : MonoBehaviourPunCallbacks
 {
     public const float quitDelay = 0.5f;
-    public static Multiplayer_NetworkManager Instance;
+    public static Launcher Instance;
 
     [SerializeField] TMP_Text errorText;                // Error message text field variable to be displayed
     [SerializeField] TMP_Text roomNameText;             // Room Name label header
@@ -18,7 +18,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject startGameButton;        // Object for master player to start game
 
     /*
-     * Creates a unique instance of Multiplayer_NetworkManager
+     * Creates a unique instance of Launcher
      */
     void Awake()
     {
@@ -40,7 +40,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
      */
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.Log("Disconnected from Photon Server");
+        Debug.Log("Disconnected from Dion Server");
         base.OnDisconnected(cause);
         Game_RuntimeData.isMultiplayer = false;  //Sets the multiplayer flag to false
         Debug.Log("isMultiplayer has been set to: "+Game_RuntimeData.isMultiplayer);
@@ -64,11 +64,11 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
      */
     public override void OnJoinedLobby()
     {
-        Multiplayer_MenuManager.Instance.OpenMenu("title");
-        Debug.Log("Joined Lobby");
+        MenuManager.Instance.OpenMenu("title");
 
         // Randomly set a player name for each person joining Multiplayer
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        Debug.Log(PhotonNetwork.NickName + " Joined Lobby");
     }
 
     /*
@@ -86,7 +86,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
      */
     public override void OnJoinedRoom()
     {
-        Multiplayer_MenuManager.Instance.OpenMenu("room");
+        MenuManager.Instance.OpenMenu("room");
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
         Debug.Log("Room "+roomNameText.text + " was joined by "+PhotonNetwork.NickName+"."); 
 
@@ -101,7 +101,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         //Instantiate a player name for each player that is in the room
         for (int i = 0; i < players.Count(); i++)
         {
-            Instantiate(playerListItemPrefab, playerListContent).GetComponent<Multiplayer_PlayerListItem>().SetUp(players[i]);
+            Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
         }
 
         startGameButton.SetActive(PhotonNetwork.IsMasterClient); //Sets the start game visible for Master Client
@@ -121,16 +121,16 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         errorText.text = "Room Creation Failed: " + message;
-        Multiplayer_MenuManager.Instance.OpenMenu("error");
+        MenuManager.Instance.OpenMenu("error");
         Debug.Log("Error: Room Failed to Create.");
     }
 
     /*
-     * Method to quit multiplayer and return to Main Multiplayer_MenuItem.
+     * Method to quit multiplayer and return to Main Menu.
      */
     public void QuitMultiplayer()
     {
-        Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
+        Debug.Log("Quit Multiplayer Invoked - Returning to Main Menu.");
         PhotonView PV = GetComponent<PhotonView>();
         PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
         PhotonNetwork.Disconnect();
@@ -160,7 +160,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        Multiplayer_MenuManager.Instance.OpenMenu("loading");
+        MenuManager.Instance.OpenMenu("loading");
     }
 
     /*
@@ -169,7 +169,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         Debug.Log("Player left the room.");
-        Multiplayer_MenuManager.Instance.OpenMenu("title");
+        MenuManager.Instance.OpenMenu("title");
     }
 
     /*
@@ -177,7 +177,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
      */
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Instantiate(playerListItemPrefab, playerListContent).GetComponent<Multiplayer_PlayerListItem>().SetUp(newPlayer);
+        Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
     }
 
     /*
