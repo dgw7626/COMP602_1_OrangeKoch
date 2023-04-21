@@ -10,7 +10,7 @@ public class Player_MultiplayerEntity : MonoBehaviour//, IPunObservable
 
     public bool RegisterUniqueID(string uniqueID)
     {
-        if (uniqueID != null)
+        if (this.uniqueID != null)
             return false;
 
         this.uniqueID = uniqueID;

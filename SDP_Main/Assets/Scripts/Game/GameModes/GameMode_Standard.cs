@@ -124,8 +124,7 @@ public class GameMode_Standard : IgameMode
         {
             if (e.GetComponent<PhotonView>().Owner.ActorNumber == id)
             {
-                Game_RuntimeData.activePlayers.Add(id, e);
-                e.RegisterUniqueID("" + id);
+                Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
             }
         }
     }

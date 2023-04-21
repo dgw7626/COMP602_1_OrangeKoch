@@ -11,6 +11,18 @@ public class Game_RuntimeData
     public static bool isMultiplayer = true;
     public static IgameMode gameMode = null;
 
+
+    public static void RegisterNewMultiplayerPlayer(int id, Player_MultiplayerEntity entity)
+    {
+        if (activePlayers.ContainsKey(id))
+        {
+            Debug.LogError("CANNOT ADD NEW PLAYER! PLAYER ID: " + id + " IS ALREADY REGISTERED");
+            return;
+        }
+
+        activePlayers.Add(id, entity);
+        entity.RegisterUniqueID("" + id);
+    }
     public static void DebugPrintMP_PlayerInfo()
     {
         Debug.Log("List of instatiated players:");

@@ -41,7 +41,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
             //if (e.GetComponent<PhotonView>().IsMine)
             {
                 Debug.Log("Trying to add ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
-                Game_RuntimeData.activePlayers.Add(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
+                Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
                 Debug.Log("Added ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
             }
         }
