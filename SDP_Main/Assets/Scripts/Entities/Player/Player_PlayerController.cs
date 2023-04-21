@@ -183,6 +183,20 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
+        if(inputHandler.OnTest())
+        {
+            if(Game_RuntimeData.activePlayers.Count > 1 )
+            {
+                foreach(KeyValuePair<int, Player_MultiplayerEntity> e in Game_RuntimeData.activePlayers)
+                {
+                    if(e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
+                    {
+                        Debug.Log("FOUND ANOTHER PLAYER FROM TEST BUTTON!!!!!");
+                    }
+                }
+            }
+        }
+
         if (IsMultiplayer && !photonView.IsMine)
             return;
 

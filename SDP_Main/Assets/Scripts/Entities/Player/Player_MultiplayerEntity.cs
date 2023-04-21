@@ -8,19 +8,13 @@ public class Player_MultiplayerEntity : MonoBehaviour//, IPunObservable
     public Player_PlayerController playerController;
     public string uniqueID {  get; private set; }
 
- /*   public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if(stream.IsWriting)
-        {
-            stream.SendNext(uniqueID);
-        }
-    }*/
-
     public bool RegisterUniqueID(string uniqueID)
     {
+        if (uniqueID != null)
+            return false;
+
         this.uniqueID = uniqueID;
-        //TODO
-        return false;
+        return true;
     }
     private void Start()
     {
