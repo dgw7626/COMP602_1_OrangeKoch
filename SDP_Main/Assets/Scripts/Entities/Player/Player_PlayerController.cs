@@ -191,6 +191,9 @@ public class Player_PlayerController : MonoBehaviour
                 {
                     if(e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
                     {
+                        Data_DamageData d = new Data_DamageData();
+
+                        photonView.RPC("OnDamageRecieved", e.Value.GetComponent<PhotonView>().Owner, 1f);
                         Debug.Log("FOUND ANOTHER PLAYER FROM TEST BUTTON!!!!!");
                     }
                 }

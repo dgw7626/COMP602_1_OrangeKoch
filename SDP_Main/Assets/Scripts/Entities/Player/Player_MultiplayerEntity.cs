@@ -27,10 +27,17 @@ public class Player_MultiplayerEntity : MonoBehaviour//, IPunObservable
     }
 
     [PunRPC]
-    public DamageStruct OnDamageRecieved(DamageStruct damage) 
+    public void OnDamageRecieved(float damage) 
     {
+        if (!playerController.photonView.IsMine)
+        {
+            Debug.Log("I am Not executing because it is not me");
+            return;
+        }
+        Debug.Log("I am executing because it is me!");
         //TODO: Calculate Damage
-        damage.damageTotal = 0.0f;
-        return damage;
+        //damage.damageTotal = 0.0f;
+        //return damage;
     }
 }
+ 
