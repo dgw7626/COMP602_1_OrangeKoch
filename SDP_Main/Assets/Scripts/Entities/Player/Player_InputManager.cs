@@ -82,14 +82,7 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetAxis("Shoot") > 0f;
     }
-    //Weapon Script for semi.
-    public bool GetFireInputDown()
-    {
-        if (InputIsLocked()) 
-            return false;
 
-        return Input.GetButtonDown("Shoot");
-    }
     public bool GetAimInputHeld()
     {
         if (InputIsLocked())
@@ -186,4 +179,9 @@ public class Player_InputManager : MonoBehaviour
         i *= 0.01f;
         return i;
     }
+    public bool GetVoiceMuteButtonIsPressed()
+    {
+        return Input.GetButton("ProximityVoiceMute");
+    }
+
 }
