@@ -235,7 +235,7 @@ public class Player_PlayerController : MonoBehaviour
        
         if (inputHandler.GetFireInputDown())
         {
-           projectMananger.InitShoot(Weapon_E_Firetype.SEMI);
+           //projectMananger.InitShoot(Weapon_E_Firetype.SEMI);
         }
     }
 
