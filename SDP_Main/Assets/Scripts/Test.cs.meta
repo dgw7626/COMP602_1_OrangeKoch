@@ -1,12 +1,7 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:SDP_Main/Assets/Scripts/Test.cs.meta
 guid: a9ace883d2c5f1a43b8235d10a77784c
-========
-guid: 476cc7d7cd9874016adc216baab94a0a
-timeCreated: 1484146680
-licenseType: Store
->>>>>>>> parent of 6b5d545 (Merge branch 'main' of https://github.com/dgw7626/COMP602_1_OrangeKoch):SDP_Main/Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs.meta
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences: []
   executionOrder: 0
