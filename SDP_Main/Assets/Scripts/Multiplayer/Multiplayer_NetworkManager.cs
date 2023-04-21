@@ -57,6 +57,8 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;    //Syncs all slave clients to start scene when the Master changes
         Game_RuntimeData.isMultiplayer = true;      //Sets the multiplayer flag to true
         Debug.Log("isMultiplayer has been set to: " + Game_RuntimeData.isMultiplayer);
+
+        Game_GameState.GetGameMapScenes();
     }
 
     /*
@@ -150,8 +152,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
             }
             yield return null;
         }
-        
-        SceneManager.LoadScene("Lobby");
+        Game_GameState.NextScene("Lobby");
     }
 
     /*
@@ -186,6 +187,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         Debug.Log(PhotonNetwork.NickName+" has started a Game!");
-        PhotonNetwork.LoadLevel("GameMap_default");
+        //PhotonNetwork.LoadLevel("GameMap_default");
+        PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Default);
     }
 }

@@ -10,6 +10,7 @@ public class Game_RuntimeData
     public static Dictionary<int, Player_MultiplayerEntity> activePlayers = new Dictionary<int, Player_MultiplayerEntity>(); 
     public static bool isMultiplayer = true;
     public static IgameMode gameMode = null;
+    public static List<string> GameMap_List;
 
     public static void DebugPrintMP_PlayerInfo()
     {
