@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
+using Photon.Realtime;
 
 [RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
@@ -192,8 +193,9 @@ public class Player_PlayerController : MonoBehaviour
                     if(e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
                     {
                         Data_DamageData d = new Data_DamageData();
+                        Player target = e.Value.GetComponent<PhotonView>().Owner;
 
-                        photonView.RPC("OnDamageRecieved", e.Value.GetComponent<PhotonView>().Owner, 1f);
+                        photonView.RPC("OnDamageRecieved", target, 1f);
                         Debug.Log("FOUND ANOTHER PLAYER FROM TEST BUTTON!!!!!");
                     }
                 }
