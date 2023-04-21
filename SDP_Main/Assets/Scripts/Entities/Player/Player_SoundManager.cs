@@ -25,7 +25,29 @@ public class Player_SoundManager : MonoBehaviour
     public AudioClip FallDamageSfx;
 
 
+    public bool proximityVoiceMute;
+
     float m_FootstepDistanceCounter;
+
+    private void Awake()
+    {
+        proximityVoiceMute = false;
+    }
+
+    private void Update()
+    {
+        if (transform.parent.GetComponent<Player_InputManager>().GetVoiceMuteButtonIsPressed())
+            OnMuteButtonPressed();
+    }
+
+    private void OnMuteButtonPressed()
+    {
+        proximityVoiceMute = !proximityVoiceMute;
+
+        transform.GetChild(0).GetComponent<AudioSource>().mute = proximityVoiceMute;
+        Debug.Log(transform.GetChild(0));
+        Debug.Log(transform.GetChild(0).GetComponent<AudioSource>());
+    }
 
     internal void PlayFallDamage()
     {
