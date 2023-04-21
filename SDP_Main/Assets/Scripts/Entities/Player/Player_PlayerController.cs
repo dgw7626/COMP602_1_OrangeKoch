@@ -193,10 +193,15 @@ public class Player_PlayerController : MonoBehaviour
                     if(e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
                     {
                         Data_DamageData d = new Data_DamageData();
-                        Player target = e.Value.GetComponent<PhotonView>().Owner;
+                        PhotonView targetView = e.Value.GetComponent<PhotonView>();
+                        if(targetView.IsMine)
+                        {
+                            Debug.Log("The target is me, so I wont call it.");
+                            break;
+                        }
+                        Player target = targetView.Owner;
 
                         photonView.RPC("OnDamageRecieved", target, 1f);
-                        Debug.Log("FOUND ANOTHER PLAYER FROM TEST BUTTON!!!!!");
                     }
                 }
             }
