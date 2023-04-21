@@ -186,9 +186,4 @@ public class Player_InputManager : MonoBehaviour
         i *= 0.01f;
         return i;
     }
-    public bool GetVoiceMuteButtonIsPressed()
-    {
-        return Input.GetButton("ProximityVoiceMute");
-    }
-
 }
