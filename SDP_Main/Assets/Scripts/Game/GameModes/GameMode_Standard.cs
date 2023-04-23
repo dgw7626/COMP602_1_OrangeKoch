@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Realtime;
+using System;
 
 public class GameMode_Standard : IgameMode
 {
@@ -16,7 +17,6 @@ public class GameMode_Standard : IgameMode
     public void InitGame()
     {
         // Initialize Countdown
-        //gameTime = MAX_GAME_TIME_SECONDS + 1;
 
         teamScores = new List<int>();
 
@@ -34,6 +34,11 @@ public class GameMode_Standard : IgameMode
             int team = i % 2 == 0 ? 0 : 1;
 
             Game_RuntimeData.teams[team].Add(Game_RuntimeData.instantiatedPlayers[i]);
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameMode_Manager.InitializeGameTimer(MAX_GAME_TIME_SECONDS);
         }
 
         StartGame();
@@ -69,11 +74,12 @@ public class GameMode_Standard : IgameMode
         {
             if(PhotonNetwork.IsMasterClient)
             {
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("SetSynchronousTimerValue", RpcTarget.All, new Object[0]);
+                //Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("SetSynchronousTimerValue", RpcTarget.All, new Object[0]);
+                GameMode_Manager.SetSynchronousTimerValue();
             }
             else
             {
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", PhotonNetwork.MasterClient, new Object[0]);
+                //Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", PhotonNetwork.MasterClient, new Object[0]);
             }
             //Debug.Log("Time left: " + gameTime);
             yield return new WaitForSeconds(1);
