@@ -44,5 +44,11 @@ public class Player_MultiplayerEntity : MonoBehaviour
         //damage.damageTotal = 0.0f;
         //return damage;
     }
+
+    [PunRPC]
+    public void GetSynchronousTimerValue(int value)
+    {
+        GameMode_Manager.gameTime = value;
+    }
 }
  

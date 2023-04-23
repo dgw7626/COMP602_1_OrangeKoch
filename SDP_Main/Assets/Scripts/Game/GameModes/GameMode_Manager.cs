@@ -9,7 +9,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 {
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
-    public static int gameTime { get; private set; }
+    public static int gameTime;
 
 
     /**
@@ -77,23 +77,13 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         gameMode.OnPlayerLeftMatch(otherPlayer);
     }
 
-    [PunRPC]
-    public void GetSynchronousTimerValue()
-    {
-        //return gameTime;
-    }
+
 
     public static void SetSynchronousTimerValue()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             gameTime--;
-            Debug.Log(gameTime);
         }
-    }
-
-    public static void InitializeGameTimer(int timeSeconds)
-    {
-        gameTime = timeSeconds;
     }
 }
