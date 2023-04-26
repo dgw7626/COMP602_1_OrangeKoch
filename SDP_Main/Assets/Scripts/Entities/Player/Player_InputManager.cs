@@ -9,12 +9,12 @@ public class Player_InputManager : MonoBehaviour
     [Tooltip("Used to flip the vertical input axis")]
     public bool invertY = false;
 
-    Player_PlayerController playerControllercript;
+    Player_PlayerController playerControllerscript;
     bool isShootHeld;
 
     void Start()
     {
-        playerControllercript = GetComponent<Player_PlayerController>();
+        playerControllerscript = GetComponent<Player_PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -82,14 +82,7 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetAxis("Shoot") > 0f;
     }
-    //Weapon Script for semi.
-    public bool GetFireInputDown()
-    {
-        if (InputIsLocked()) 
-            return false;
 
-        return Input.GetButtonDown("Shoot");
-    }
     public bool GetAimInputHeld()
     {
         if (InputIsLocked())
@@ -185,5 +178,10 @@ public class Player_InputManager : MonoBehaviour
         // reduce mouse input amount
         i *= 0.01f;
         return i;
+    }
+    public bool GetVoiceMuteButtonIsPressed()
+    {
+        // Check if Mute button is being pressed
+        return Input.GetButtonDown("ProximityVoiceMute");
     }
 }

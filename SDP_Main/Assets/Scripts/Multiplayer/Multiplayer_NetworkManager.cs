@@ -52,7 +52,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
      */
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Connected to Dion Server");
+        Debug.Log("Connected to Photon Server");
         PhotonNetwork.JoinLobby();  // Join the main lobby of multiplayer
         PhotonNetwork.AutomaticallySyncScene = true;    //Syncs all slave clients to start scene when the Master changes
         Game_RuntimeData.isMultiplayer = true;      //Sets the multiplayer flag to true

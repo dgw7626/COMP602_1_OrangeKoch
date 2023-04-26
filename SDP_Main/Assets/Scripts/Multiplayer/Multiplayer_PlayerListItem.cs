@@ -9,6 +9,10 @@ public class Multiplayer_PlayerListItem : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text text;
     Player player;
+    private void Start()
+    {
+        text = GetComponent<TMP_Text>();
+    }
     public void SetUp(Player _player)
     {
         player = _player;
