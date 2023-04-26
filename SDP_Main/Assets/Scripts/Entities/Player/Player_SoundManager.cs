@@ -1,7 +1,9 @@
+using Photon.Voice.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player_SoundManager : MonoBehaviour
 {
@@ -25,7 +27,49 @@ public class Player_SoundManager : MonoBehaviour
     public AudioClip FallDamageSfx;
 
 
+    public bool proximityVoiceMute;
+
     float m_FootstepDistanceCounter;
+
+    public TextMeshProUGUI muteText;
+    private void Awake()
+    {
+
+       
+        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            proximityVoiceMute = false;
+            muteText = transform.parent.GetComponentInChildren<TextMeshProUGUI>();
+           // transform.parent.GetComponentInChildren<Canvas>().worldCamera = transform.parent.GetComponentInChildren<Camera>();
+            muteText.text = "(Press \"M\") Mute: " + ((proximityVoiceMute) ? "UNMUTE" : "MUTE");
+        }
+        
+            //.text = "(Press \"M\") Mute" + proximityVoiceMute;
+    }
+
+        private void Update()
+    {
+        if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            return;
+        }
+        if (transform.parent.GetComponent<Player_InputManager>().GetVoiceMuteButtonIsPressed())
+        OnMuteButtonPressed();
+        
+              
+        
+    }
+
+    private void OnMuteButtonPressed()
+    {
+            proximityVoiceMute = !proximityVoiceMute;
+            Debug.Log("Mute Button Pressed!");
+            transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = proximityVoiceMute;
+            muteText.text = "(Press \"M\") Mute" + ((proximityVoiceMute) ? "UNMUTE": "MUTE");
+        //transform.GetChild(0).GetComponent<Recorder>().LoopAudioClip = false;
+        //Debug.Log(transform.GetChild(0));
+        //Debug.Log(transform.GetChild(0).GetComponent<AudioSource>());
+    }
 
     internal void PlayFallDamage()
     {
@@ -52,7 +96,7 @@ public class Player_SoundManager : MonoBehaviour
         //AudioSource.PlayOneShot(JumpSfx);
     }
 
-    internal void PLayLand()
+    internal void PlayLand()
     {
         AudioSource.PlayOneShot(LandSfx);
     }

@@ -217,7 +217,7 @@ public class Player_PlayerController : MonoBehaviour
             else
             {
                 // land SFX
-                soundManager.PLayLand(); ;
+                soundManager.PlayLand(); ;
             }
         }
 
