@@ -31,44 +31,84 @@ public class Player_SoundManager : MonoBehaviour
 
     float m_FootstepDistanceCounter;
 
-    public TextMeshProUGUI muteText;
+    public TextMeshProUGUI proximityMuteText;
+    public TextMeshProUGUI pushToTalkText;
     private void Awake()
     {
-
-       
-        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
-        {
-            proximityVoiceMute = false;
-            muteText = transform.parent.GetComponentInChildren<TextMeshProUGUI>();
-           // transform.parent.GetComponentInChildren<Canvas>().worldCamera = transform.parent.GetComponentInChildren<Camera>();
-            muteText.text = "(Press \"M\") Mute: " + ((proximityVoiceMute) ? "UNMUTE" : "MUTE");
-        }
-        
-            //.text = "(Press \"M\") Mute" + proximityVoiceMute;
-    }
-
-        private void Update()
-    {
+        //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
             return;
         }
+
+        //Load if the instance belongs to me
+        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            //Set up VoiceChat and VoiceChat Display settings
+            proximityMuteText.enabled = true;
+            pushToTalkText.enabled = true;
+            proximityVoiceMute = false;
+            proximityMuteText = transform.parent.Find("PlayerUI").Find("ProximityMute_Text").GetComponent<TextMeshProUGUI>();
+            proximityMuteText.text = "(Press \"M\") Mute: " + ((proximityVoiceMute) ? "MUTE" : "UNMUTE");
+            pushToTalkText = transform.parent.Find("PlayerUI").Find("PTT_Text").GetComponent<TextMeshProUGUI>();
+            pushToTalkText.text = "(Press \"LEFT ALT\") PTT: OFF";
+        }
+    }
+
+        private void Update()
+    {
+        //Do not load if the instance does not belong to me
+        if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            return;
+        }
+
+        //Check for Mute Button being pressed
         if (transform.parent.GetComponent<Player_InputManager>().GetVoiceMuteButtonIsPressed())
-        OnMuteButtonPressed();
-        
-              
-        
+            OnMuteButtonPressed();
+
+        //Check for Push to talk button being pressed
+        if (transform.parent.GetComponent<Player_InputManager>().GetPTTButtonIsPressed())
+        {
+            //Start Transmitting Voice
+            OnPTTButtonPressed();
+        } else if(!transform.parent.GetComponent<Player_InputManager>().GetPTTButtonIsPressed() &&
+            transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled)
+        {
+            //Finish Transmitting Voice
+            OnPTTButtonReleased();
+        }
+
+
+
     }
 
     private void OnMuteButtonPressed()
     {
-            proximityVoiceMute = !proximityVoiceMute;
-            Debug.Log("Mute Button Pressed!");
-            transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = proximityVoiceMute;
-            muteText.text = "(Press \"M\") Mute" + ((proximityVoiceMute) ? "UNMUTE": "MUTE");
-        //transform.GetChild(0).GetComponent<Recorder>().LoopAudioClip = false;
-        //Debug.Log(transform.GetChild(0));
-        //Debug.Log(transform.GetChild(0).GetComponent<AudioSource>());
+        proximityVoiceMute = !proximityVoiceMute;
+        Debug.Log("Mute Button Pressed!");
+        transform.GetChild(0).GetComponent<AudioSource>().mute = proximityVoiceMute;
+        //transform.GetChild(0).GetComponent<Speaker>().enabled = !proximityVoiceMute;
+        proximityMuteText.text = "(Press \"M\") Mute: " + ((proximityVoiceMute) ? "MUTE" : "UNMUTE");
+    }
+    private void OnPTTButtonPressed()
+    {
+        if (!transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled)
+        {
+            //Start Transmitting Voice
+            Debug.Log("PTT Button Pressed!");
+            transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = true;
+            pushToTalkText.text = "(Press \"LEFT ALT\") PTT: ON";
+        } else
+        {
+            //Continue Transmitting Voice
+        }
+    }
+    private void OnPTTButtonReleased()
+    {
+        Debug.Log("PTT Button Released!");
+        transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = false;
+        pushToTalkText.text = "(Press \"LEFT ALT\") PTT: OFF";
     }
 
     internal void PlayFallDamage()
