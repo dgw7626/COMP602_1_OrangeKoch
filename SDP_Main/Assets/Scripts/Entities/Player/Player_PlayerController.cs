@@ -116,7 +116,7 @@ public class Player_PlayerController : MonoBehaviour
         }
     }
 
-    Weapon_ProjectileManager projectMananger;
+    WeaponProjectileManager projectMananger;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -174,7 +174,7 @@ public class Player_PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         inputHandler = GetComponent<Player_InputManager>();
-        projectMananger = GetComponentInChildren<Weapon_ProjectileManager>();
+        projectMananger = GetComponentInChildren<WeaponProjectileManager>();
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
@@ -235,7 +235,7 @@ public class Player_PlayerController : MonoBehaviour
        
         if (inputHandler.GetFireInputDown())
         {
-           projectMananger.InitShoot(Weapon_E_Firetype.SEMI);
+           projectMananger.InitShoot(WeaponFiretype.SEMI);
         }
     }
 

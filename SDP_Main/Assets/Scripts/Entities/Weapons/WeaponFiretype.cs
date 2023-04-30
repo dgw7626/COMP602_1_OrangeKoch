@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Weapon_E_Firetype
+public enum WeaponFiretype
 {
     SEMI,
     AUTO,

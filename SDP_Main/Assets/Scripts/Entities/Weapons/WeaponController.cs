@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-[RequireComponent(typeof(Weapon_ProjectileManager))]
-public class Weapon_WeaponController : MonoBehaviour
+[RequireComponent(typeof(WeaponProjectileManager))]
+public class WeaponController : MonoBehaviour
 {
-    public Player_InputManager inputHandler;
-    internal Weapon_ProjectileManager weaponProjectileMananger;
+    private Player_InputManager _inputHandler;
+    private WeaponProjectileManager _weaponProjectileMananger;
 
     [SerializeField] internal PhotonView PhotonView;
     internal bool IsMultiplayer;
@@ -16,15 +16,15 @@ public class Weapon_WeaponController : MonoBehaviour
     {
 
 
-        inputHandler = GetComponentInParent<Player_InputManager>();
-        weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
+        _inputHandler = GetComponentInParent<Player_InputManager>();
+        _weaponProjectileMananger = GetComponent<WeaponProjectileManager>();
     }
     void Start()
     {
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
       //  PhotonView = FindObj
         //initiating bullet counts.
-        weaponProjectileMananger.InitBullets();    
+        _weaponProjectileMananger.InitBullets();    
     }
 
     // Update is called once per frame
@@ -36,7 +36,7 @@ public class Weapon_WeaponController : MonoBehaviour
            // Destroy(GetComponentInChildren<Camera>().gameObject);
         }
 
-        weaponProjectileMananger.UpdateChildTransform();
+        _weaponProjectileMananger.UpdateChildTransform();
      
         
     }

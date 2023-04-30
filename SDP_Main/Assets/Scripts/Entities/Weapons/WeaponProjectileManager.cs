@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class Weapon_ProjectileManager : MonoBehaviour
+public class WeaponProjectileManager : MonoBehaviour
 {
 
-    [SerializeField] Weapon_WeaponInfo weaponInfo;
-    [SerializeField] internal List<Weapon_Bullet> localBullets;
+    [SerializeField] WeaponInfo weaponInfo;
+    [SerializeField] internal List<WeaponBullet> localBullets;
     internal Coroutine currentCoroutine;
     internal Vector3 pos, fw, up;
     [SerializeField] internal Transform fakeParent;
+    [SerializeField] private int weaponAmmo;
+    [SerializeField] private int weaponClip;
     void Start()
     {
     //    fakeParent = Camera.main.transform;
@@ -56,14 +58,14 @@ public class Weapon_ProjectileManager : MonoBehaviour
             hitObject.name = "[" + i + "] hit Objects"; 
 
             bulletObject.SetActive(false);
-            localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
+            localBullets.Add(bulletObject.GetComponent<WeaponBullet>());
         }
 
     }
     public IEnumerator GetShoot(float delaySecond)
     {
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
-        foreach(Weapon_Bullet bullet in localBullets)
+        foreach(WeaponBullet bullet in localBullets)
         {
             if (!bullet.gameObject.activeSelf)
             {
@@ -79,7 +81,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     public void GetShoot(bool isDebug)
     {
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
-        foreach (Weapon_Bullet bullet in localBullets)
+        foreach (WeaponBullet bullet in localBullets)
         {
             if (!bullet.gameObject.activeSelf)
             {
@@ -91,20 +93,20 @@ public class Weapon_ProjectileManager : MonoBehaviour
             //bullet.gameObject.SetActive(false);
         }
     }
-    public void InitShoot(Weapon_E_Firetype fireType)
+    public void InitShoot(WeaponFiretype fireType)
     {
         switch (fireType) {
-            case Weapon_E_Firetype.AUTO:
+            case WeaponFiretype.AUTO:
                 {
                     currentCoroutine = StartCoroutine(GetShoot(0.1f));
                     break;
                 }
-            case Weapon_E_Firetype.BURST:
+            case WeaponFiretype.BURST:
                 {
 
                     break;
                 }
-            case Weapon_E_Firetype.SEMI:
+            case WeaponFiretype.SEMI:
                 {
                     GetShoot(false);
                     break;
