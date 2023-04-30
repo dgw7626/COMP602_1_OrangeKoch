@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum WeaponFiretype
 {
-    SEMI,
-    AUTO,
-    BURST,
+    Semi,
+    Auto,
+    Burst,
 }

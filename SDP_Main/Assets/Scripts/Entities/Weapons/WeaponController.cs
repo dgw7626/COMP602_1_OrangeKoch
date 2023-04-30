@@ -6,34 +6,31 @@ using Photon.Pun;
 [RequireComponent(typeof(WeaponProjectileManager))]
 public class WeaponController : MonoBehaviour
 {
-    private Player_InputManager _inputHandler;
+    private PhotonView _photonView;
     private WeaponProjectileManager _weaponProjectileMananger;
-
-   [SerializeField] private PhotonView _photonView;
-    private bool _isMultiplayer;
     void Awake()
     {
-        _photonView = GetComponentInParent<PhotonView>();
-        _inputHandler = GetComponentInParent<Player_InputManager>();
+       
+        _photonView = GetComponentInParent<PhotonView>(); 
         _weaponProjectileMananger = GetComponent<WeaponProjectileManager>();
     }
     void Start()
     {
-        _isMultiplayer = Game_RuntimeData.isMultiplayer;
+        if (!_photonView.IsMine)
+        {
+            return;
+        }
+        GuardClause.InspectGuardClauseNullRef<WeaponProjectileManager>(this._weaponProjectileMananger, nameof(this._weaponProjectileMananger));
         _weaponProjectileMananger.InitBullets();    
     }
 
 
     void Update()
     {
-        //dont need to add guard clause on this you only put the one made.
         if (!_photonView.IsMine)
         {
             return;
         }
-
         _weaponProjectileMananger.UpdateChildTransform();
-     
-        
     }
 }

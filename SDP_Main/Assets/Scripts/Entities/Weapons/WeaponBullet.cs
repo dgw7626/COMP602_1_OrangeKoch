@@ -5,10 +5,10 @@ using UnityEngine;
 public class WeaponBullet : MonoBehaviour, IWeaponFireable
 {
     // need a direction to determin the hit point of the surface.
-    internal GameObject hitObject;
-    internal GameObject bulletObject;
-    internal Coroutine currentCoroutine;
-
+    internal GameObject _hitObject;
+    internal GameObject _bulletObject;
+    internal Coroutine _currentCoroutine;
+    
     public void Fire(Transform origin)
     {
         transform.position = origin.position;
@@ -29,10 +29,10 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
                 hitVfx.position = hit.point;
                 hitVfx.parent = null;
                 bulletVfx.parent = null;
-                bulletObject = bulletVfx.gameObject;
-                hitObject = hitVfx.gameObject;
+                _bulletObject = bulletVfx.gameObject;
+                _hitObject = hitVfx.gameObject;
                 hitVfx.GetComponent<AudioSource>().Play();
-                currentCoroutine = StartCoroutine(DisableBullet(transform.GetComponent<AudioSource>().clip.length));
+                _currentCoroutine = StartCoroutine(DisableBullet(transform.GetComponent<AudioSource>().clip.length));
                 return;
             }           
         }
@@ -52,15 +52,15 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
         }
 
     }
-
+   
     internal IEnumerator DisableBullet(float delaySecond)
     {
         yield return new WaitForSeconds(delaySecond);
-        Transform tempPos = bulletObject.transform;
-        bulletObject.transform.SetParent(transform);
-        bulletObject.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)), GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0);
-        hitObject.transform.SetParent(transform);
+        Transform tempPos = _bulletObject.transform;
+        _bulletObject.transform.SetParent(transform);
+        _bulletObject.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)), GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0);
+        _hitObject.transform.SetParent(transform);
         transform.gameObject.SetActive(false);
-        StopCoroutine(currentCoroutine);
+        StopCoroutine(_currentCoroutine);
     }
 }

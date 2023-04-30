@@ -4,12 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="WeaponData", menuName ="Weapons/WeaponData")]
 public class WeaponInfo : ScriptableObject
 {
-   public string weaponName;
-   public int bulletCounts;
-   public int clipCounts;
-   public ParticleSystem muzzleFlash;
-    public ParticleSystem bulletTrace;
-   public AudioClip shootEffect;
-   public AudioClip reloadEffect;
-    public AudioClip hitEffect;
+   
+   public string WeaponName;
+   public int BulletCounts;
+   public int ClipCounts;
+   public ParticleSystem MuzzleFlash;
+   public ParticleSystem BulletTrace;
+   public AudioClip ShootEffect;
+   public AudioClip ReloadEffect;
+   public AudioClip HitEffect;
 }

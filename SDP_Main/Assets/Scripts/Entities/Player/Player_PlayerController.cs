@@ -235,7 +235,12 @@ public class Player_PlayerController : MonoBehaviour
        // shooting
         if (inputHandler.GetFireInputDown())
         {
-            _projectMananger.InitShoot(WeaponFiretype.SEMI);
+            _projectMananger.InitShoot(WeaponFiretype.Semi);
+        }
+        //Reaload
+        if (inputHandler.GetReloadButtonDown())
+        {
+            _projectMananger.Reload();
         }
     }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
- public enum ErrorTypes
+ public enum ErrorType
  {
      NullRef,
      MissingComponent

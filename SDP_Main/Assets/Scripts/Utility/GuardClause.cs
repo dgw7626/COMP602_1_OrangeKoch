@@ -13,7 +13,7 @@ public static class GuardClause
     /// <returns>returns current type of the object.</returns>
     public static T InspectGuardClause<T>(T currentType, string message)
     {
-        if (currentType == null)
+        if (!currentType.Equals(typeof(T)))
         {
             Debug.LogError(message + nameof(T));
             return default(T);
@@ -28,28 +28,46 @@ public static class GuardClause
     /// <param name="currentType"></param>
     /// <param name="error"></param>
     /// <returns>returns current type of the object.</returns>
-    public static T InspectGuardClause<T,C>(T currentType, ErrorTypes error)
+    public static T InspectGuardClause<T,C>(T currentType,  string parameterName, ErrorType error)
     {
-        if (currentType == null)
+        if (!currentType.Equals(typeof(T)))
         {
             switch (error)
             {
-                case ErrorTypes.NullRef:
+                case ErrorType.NullRef:
                     {
-                        Debug.LogError("[" + error.ToString() + "]: Missing " + currentType.GetType().Name + ", this reference is required to run the current script.");
+                        Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName + ", Type: (" + currentType.GetType() + ") , -----HERE-----" +
+                         "\n \t\t[Comment]: Missing " + currentType.GetType() + ", this reference is required to run the current script.");
                         return default(T);
                     }
-                case ErrorTypes.MissingComponent:
+                case ErrorType.MissingComponent:
                     {
-                        Debug.LogError("[" + error.ToString() + "]: Missing Component of " + currentType.GetType().Name + ", this Component requires "+nameof(C));
+                        Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName + ", Type: (" + currentType.GetType() + ") , -----HERE-----" +
+                        "\n \t\t[Comment]: Missing " + currentType.GetType() + ", Missing Component of (" + currentType.ToString() + "), this Component requires " + nameof(C));
                         return default(T);
                     }
                 default:
                     {
-                        Debug.LogError("[" + error.ToString() + "]: Unexpected error occured please check your syntax");
+                        Debug.LogWarning("[Custom." + error.ToString() + "]: Unexpected error occured please check your syntax");
                         return default(T);
                     }
             }
+        }
+        return currentType;
+    }
+    /// <summary>
+    /// This method checks the GuardClause of the type, if the object type is null it will throw unity debug error message. parameter only requires error type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="currentType"></param>
+    /// <returns>returns current type of the object.</returns>
+    public static T InspectGuardClauseNullRef<T>(T currentType, string parameterName)
+    {
+        if (!currentType.Equals(typeof(T)))
+        {
+            Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName +  ", Type: (" + currentType.GetType() +") , -----HERE-----" +
+                "\n \t\t[Comment]: Missing " + currentType.GetType() + ", this reference is required to run the current script.");
+            return default(T);
         }
         return currentType;
     }
