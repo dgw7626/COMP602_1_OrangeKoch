@@ -184,4 +184,9 @@ public class Player_InputManager : MonoBehaviour
         // Check if Mute button is being pressed
         return Input.GetButtonDown("ProximityVoiceMute");
     }
+    public bool GetPTTButtonIsPressed()
+    {
+        // Check if Push To Talk button is being pressed
+        return Input.GetButton("PTTVoice");
+    }
 }
