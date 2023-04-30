@@ -9,7 +9,8 @@ public class WeaponInfo : ScriptableObject
    public int BulletCounts;
    public int ClipCounts;
    public ParticleSystem MuzzleFlash;
-   public ParticleSystem BulletTrace;
+   public TrailRenderer BulletTrace;
+    public GameObject BulletShell;
    public AudioClip ShootEffect;
    public AudioClip ReloadEffect;
    public AudioClip HitEffect;

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Glock
   m_EditorClassIdentifier: 
   WeaponName: Glock
-  BulletCounts: 7
-  ClipCounts: 3
+  BulletCounts: 30
+  ClipCounts: 10
   MuzzleFlash: {fileID: 2021418561459885581, guid: 20b49fc10cad53c42bbe10b3be821b6a, type: 3}
-  BulletTrace: {fileID: 1987089397244880712, guid: 11a34b16644642f45959f544577e2293, type: 3}
+  BulletTrace: {fileID: 2784783252625149933, guid: ee6b5408240ba124fbfee27a0ff55eef, type: 3}
+  BulletShell: {fileID: 5651563773622528468, guid: bceef990cd56aa5418759ba66df4cc12, type: 3}
   ShootEffect: {fileID: 8300000, guid: e730d1593f127d94887ca2c16b3826d4, type: 3}
   ReloadEffect: {fileID: 8300000, guid: f4438bab9e436884b95522f3363a5e09, type: 3}
   HitEffect: {fileID: 8300000, guid: 1aef24b3f583fd24a80af7e72760dcd8, type: 3}

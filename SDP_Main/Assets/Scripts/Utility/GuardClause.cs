@@ -13,7 +13,7 @@ public static class GuardClause
     /// <returns>returns current type of the object.</returns>
     public static T InspectGuardClause<T>(T currentType, string message)
     {
-        if (!currentType.Equals(typeof(T)))
+        if (currentType.Equals(null))
         {
             Debug.LogError(message + nameof(T));
             return default(T);
@@ -30,7 +30,7 @@ public static class GuardClause
     /// <returns>returns current type of the object.</returns>
     public static T InspectGuardClause<T,C>(T currentType,  string parameterName, ErrorType error)
     {
-        if (!currentType.Equals(typeof(T)))
+        if (currentType.Equals(null))
         {
             switch (error)
             {
@@ -63,7 +63,7 @@ public static class GuardClause
     /// <returns>returns current type of the object.</returns>
     public static T InspectGuardClauseNullRef<T>(T currentType, string parameterName)
     {
-        if (!currentType.Equals(typeof(T)))
+        if (currentType.Equals(null))
         {
             Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName +  ", Type: (" + currentType.GetType() +") , -----HERE-----" +
                 "\n \t\t[Comment]: Missing " + currentType.GetType() + ", this reference is required to run the current script.");
