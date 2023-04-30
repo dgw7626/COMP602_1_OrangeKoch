@@ -116,7 +116,7 @@ public class Player_PlayerController : MonoBehaviour
         }
     }
 
-    WeaponProjectileManager projectMananger;
+   private  WeaponProjectileManager  _projectMananger;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -134,7 +134,7 @@ public class Player_PlayerController : MonoBehaviour
     {
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
         photonView = GetComponent<PhotonView>();
-
+        _projectMananger = GetComponentInParent<WeaponProjectileManager>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if(soundManager == null )
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
@@ -174,7 +174,7 @@ public class Player_PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         inputHandler = GetComponent<Player_InputManager>();
-        projectMananger = GetComponentInChildren<WeaponProjectileManager>();
+         _projectMananger = GetComponentInChildren<WeaponProjectileManager>();
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
@@ -232,10 +232,10 @@ public class Player_PlayerController : MonoBehaviour
 
         HandleCharacterMovement();
 
-       
+       // shooting
         if (inputHandler.GetFireInputDown())
         {
-           projectMananger.InitShoot(WeaponFiretype.SEMI);
+            _projectMananger.InitShoot(WeaponFiretype.SEMI);
         }
     }
 

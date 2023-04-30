@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using Photon.Pun;
 public class WeaponProjectileManager : MonoBehaviour
 {
 
@@ -13,9 +13,18 @@ public class WeaponProjectileManager : MonoBehaviour
     [SerializeField] internal Transform fakeParent;
     [SerializeField] private int weaponAmmo;
     [SerializeField] private int weaponClip;
+    [SerializeField] private AmmunitionUI ammo;
     void Start()
     {
-    //    fakeParent = Camera.main.transform;
+        if (!transform.GetComponentInParent<PhotonView>().IsMine)
+        {
+            return;
+        }
+        weaponAmmo = weaponInfo.bulletCounts;
+        weaponClip = weaponInfo.clipCounts;
+        ammo = transform.parent.GetComponentInChildren<AmmunitionUI>();
+       ammo.SetAmmunition(weaponAmmo, weaponClip);
+        //    fakeParent = Camera.main.transform;
         pos = fakeParent.transform.InverseTransformPoint(transform.position);
         fw = fakeParent.transform.InverseTransformDirection(transform.forward);
         up = fakeParent.transform.InverseTransformDirection(transform.up);
@@ -32,7 +41,13 @@ public class WeaponProjectileManager : MonoBehaviour
     
     public void InitBullets()
     {
-        Transform bullets = transform.Find("Bullets");
+        Transform bullets;
+        if (transform.Find("Bullets") == null)
+        {
+            bullets = new GameObject("Bullets").transform;
+            bullets.SetParent(transform);
+        }
+        bullets = transform.Find("Bullets");
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
         for(int i = 0; i < weaponInfo.bulletCounts; i++)
         {
@@ -78,19 +93,24 @@ public class WeaponProjectileManager : MonoBehaviour
         }
         StopCoroutine(currentCoroutine);
     }
-    public void GetShoot(bool isDebug)
+    public void GetShoot()
     {
-        Transform firePos = transform.GetChild(0).GetChild(0).transform;
-        foreach (WeaponBullet bullet in localBullets)
+        if (weaponAmmo >= 0)
         {
-            if (!bullet.gameObject.activeSelf)
+            Transform firePos = transform.GetChild(0).GetChild(0).transform;
+            weaponAmmo--;
+            ammo.UpdateUI(weaponAmmo, weaponClip);
+            foreach (WeaponBullet bullet in localBullets)
             {
-                bullet.gameObject.SetActive(true);
-                //   (isDebug  == true)? bullet.Hit(firePos) : bullet.Fire(firePos);
-                bullet.Fire(firePos);
-                return;
+                if (!bullet.gameObject.activeSelf)
+                {
+                    bullet.gameObject.SetActive(true);
+                    //   (isDebug  == true)? bullet.Hit(firePos) : bullet.Fire(firePos);
+                    bullet.Fire(firePos);
+                    return;
+                }
+                //bullet.gameObject.SetActive(false);
             }
-            //bullet.gameObject.SetActive(false);
         }
     }
     public void InitShoot(WeaponFiretype fireType)
@@ -108,7 +128,7 @@ public class WeaponProjectileManager : MonoBehaviour
                 }
             case WeaponFiretype.SEMI:
                 {
-                    GetShoot(false);
+                    GetShoot();
                     break;
                 }
             default:
