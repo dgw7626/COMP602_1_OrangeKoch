@@ -25,8 +25,8 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
         this._shellObject = shellObj.gameObject;
         this._shellObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this._shellObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        this._shellObject.transform.position = origin.position;
-        this._shellObject.GetComponent<Rigidbody>().AddForce((transform.up * 100) + (transform.right * 100));
+        this._shellObject.transform.position = this.transform.parent.parent.GetChild(0).Find("BulletShellPos").position;
+        this._shellObject.GetComponent<Rigidbody>().AddForce((transform.up * Random.Range(80,100)) + (transform.right * Random.Range(80, 100)));
         muzzleVfx.GetComponent<ParticleSystem>().Play();
         transform.GetComponent<AudioSource>().Play();
         if (Physics.Raycast(origin.position, Camera.main.transform.forward, out RaycastHit hit,Mathf.Infinity))

@@ -67,16 +67,17 @@ public class WeaponProjectileManager : MonoBehaviour
         GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
         for(int i = 0; i < _weaponInfo.BulletCounts; i++)
         {
-            var bulletObject = Instantiate(Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject, Vector3.zero, Quaternion.identity,bullets.transform);
+            var bulletObject = Instantiate(Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject, Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity,bullets.transform);
             bulletObject.name = "("+  i + ")" + bullets.name;
             bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
-            var muzzleFlash = Instantiate(_weaponInfo.MuzzleFlash.gameObject, Vector3.zero, Quaternion.identity, bulletObject.transform);
+            var muzzleFlash = Instantiate(_weaponInfo.MuzzleFlash.gameObject, Vector3.zero + new Vector3(0,0,5), Quaternion.identity, bulletObject.transform);
             muzzleFlash.name = "(" + i + ")" + muzzleFlash.name;
             var bulletTrace = Instantiate(_weaponInfo.BulletTrace.gameObject, (firePos.position + new Vector3(0, -3f, 0)), _weaponInfo.BulletTrace.transform.rotation, bulletObject.transform);
             bulletTrace.name = "(" + i + ")" + bulletTrace.name;
-            var shellObject = Instantiate(_weaponInfo.BulletShell, Vector3.zero, Quaternion.identity, bulletObject.transform);
+            var shellObject = Instantiate(_weaponInfo.BulletShell, Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, bulletObject.transform);
             shellObject.name = "(" + i + ")" + shellObject.name;
             var hitObject = new GameObject();
+            hitObject.transform.position = new Vector3(0, 0, 5);
             hitObject.layer = 2;
             hitObject.AddComponent<AudioSource>().playOnAwake = false;
             hitObject.GetComponent<AudioSource>().clip = _weaponInfo.HitEffect;
