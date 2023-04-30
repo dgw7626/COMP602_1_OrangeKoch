@@ -16,7 +16,6 @@ public class GameMode_Standard : IgameMode
     public List<int> teamScores {  get; private set; }
     public void InitGame()
     {
-        // Initialize Countdown
 
         teamScores = new List<int>();
 
@@ -36,6 +35,7 @@ public class GameMode_Standard : IgameMode
             Game_RuntimeData.teams[team].Add(Game_RuntimeData.instantiatedPlayers[i]);
         }
 
+        // Initialize Countdown
         if (PhotonNetwork.IsMasterClient)
         {
             GameMode_Manager.gameTime =  MAX_GAME_TIME_SECONDS;

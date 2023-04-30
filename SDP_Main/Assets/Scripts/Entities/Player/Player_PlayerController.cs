@@ -205,6 +205,7 @@ public class Player_PlayerController : MonoBehaviour
                             break;
                         }
                         Player target = targetView.Owner;
+                        Debug.Log("Take Damage being called on me!");
 
                         photonView.RPC("OnDamageRecieved", target, 1f);
                     }

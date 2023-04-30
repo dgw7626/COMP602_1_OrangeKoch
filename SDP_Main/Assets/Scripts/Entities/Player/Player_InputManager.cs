@@ -47,7 +47,7 @@ public class Player_InputManager : MonoBehaviour
 
     public bool OnTest()
     {
-        return Input.GetButton("Test");
+        return Input.GetButtonDown("Test");
     }
 
     public float GetLookInputsHorizontal()

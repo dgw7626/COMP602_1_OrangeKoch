@@ -43,9 +43,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         {
             //if (e.GetComponent<PhotonView>().IsMine)
             {
-                Debug.Log("Trying to add ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
                 Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
-                Debug.Log("Added ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
             }
         }
         gameMode.InitGame();
@@ -76,9 +74,6 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         base.OnPlayerLeftRoom(otherPlayer);
         gameMode.OnPlayerLeftMatch(otherPlayer);
     }
-
-
-
     public static void SetSynchronousTimerValue()
     {
         if (PhotonNetwork.IsMasterClient)
