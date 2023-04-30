@@ -317,6 +317,7 @@ MonoBehaviour:
   fakeParent: {fileID: 156926678}
   weaponAmmo: 0
   weaponClip: 0
+  ammo: {fileID: 0}
 --- !u!114 &8247537134390108511
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,6 +31,8 @@ public class WeaponProjectileManager : MonoBehaviour
     }
     public void UpdateChildTransform()
     {
+        //checking if the fakeparent is not null and present.
+        GuardClause.InspectGuardClause<Transform,Transform> (fakeParent.transform, ErrorTypes.NullRef);
         var newpos = fakeParent.transform.TransformPoint(pos);
         var newfw = fakeParent.transform.TransformDirection(fw);
         var newup = fakeParent.transform.TransformDirection(up);
@@ -38,7 +40,7 @@ public class WeaponProjectileManager : MonoBehaviour
         transform.position = newpos;
         transform.rotation = newrot;
     }
-    
+
     public void InitBullets()
     {
         Transform bullets;
@@ -95,7 +97,7 @@ public class WeaponProjectileManager : MonoBehaviour
     }
     public void GetShoot()
     {
-        if (weaponAmmo >= 0)
+        if (weaponAmmo >= 1)
         {
             Transform firePos = transform.GetChild(0).GetChild(0).transform;
             weaponAmmo--;
