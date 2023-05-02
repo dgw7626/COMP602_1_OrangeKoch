@@ -45,6 +45,11 @@ public class Player_InputManager : MonoBehaviour
         return move;
     }
 
+    public bool OnTest()
+    {
+        return Input.GetButtonDown("Test");
+    }
+
     public float GetLookInputsHorizontal()
     {
         return GetMouseLookAxis("Mouse X");

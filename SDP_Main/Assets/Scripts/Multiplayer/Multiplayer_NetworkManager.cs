@@ -69,6 +69,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
 
         // Randomly set a player name for each person joining Multiplayer
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        Debug.Log(PhotonNetwork.NickName + " Joined Lobby");
     }
 
     /*
@@ -88,7 +89,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     {
         Multiplayer_MenuManager.Instance.OpenMenu("room");
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
-        Debug.Log("Room "+roomNameText.text + " was joined by "+PhotonNetwork.NickName+"."); 
+        Debug.Log("Room "+roomNameText.text + " was joined by "+PhotonNetwork.NickName+".");
 
         Player[] players = PhotonNetwork.PlayerList;    //Sets the player list
 
@@ -145,12 +146,12 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            if (!PhotonNetwork.IsConnected) { 
-                break;    
+            if (!PhotonNetwork.IsConnected) {
+                break;
             }
             yield return null;
         }
-        
+
         SceneManager.LoadScene("Lobby");
     }
 
