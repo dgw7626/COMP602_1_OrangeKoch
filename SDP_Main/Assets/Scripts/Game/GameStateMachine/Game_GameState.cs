@@ -43,7 +43,7 @@ public static class Game_GameState
             if (!s.Contains(Data_Scenes.GameMap_Prefix)) //Check the scene name to ensure include GameMap Prefix
                 continue;
 
-            Debug.Log("Game Map: "+ s + " add to Map List.");
+            Debug.Log("Game Map: " + s + " add to Map List.");
             MapList.Add(s); //Add the GameMap String to a MapList
         }
 
