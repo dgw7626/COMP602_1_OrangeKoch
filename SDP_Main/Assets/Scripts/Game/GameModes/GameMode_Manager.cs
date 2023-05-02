@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,13 +9,15 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 {
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
-    
+    public static int gameTime;
+
+
     /**
      * Fetch the gameMode from Game_RuntimeData and Invoke InitGame on that gameMode.
-     * 
+     *
      * If GameMode is null, it will be set to the default game mode.
-     * 
-     * The delay before Init() gives the Player_MultiplayerEntity's time to 
+     *
+     * The delay before Init() gives the Player_MultiplayerEntity's time to
      * instantiate and register themselves with Game_RunTimeData.
      */
     void Awake()
@@ -29,7 +32,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     }
 
     /**
-     * Calls the GameMode's Init after a delay(GAME_START_DELAY_SECONDS), 
+     * Calls the GameMode's Init after a delay(GAME_START_DELAY_SECONDS),
      * and starts the game Timer.
      */
     void Init()
@@ -40,12 +43,12 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         {
             //if (e.GetComponent<PhotonView>().IsMine)
             {
-                Debug.Log("Trying to add ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
-                Game_RuntimeData.activePlayers.Add(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
-                Debug.Log("Added ID: " + e.GetComponent<PhotonView>().Owner.ActorNumber);
+                Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
             }
         }
         gameMode.InitGame();
+
+
         StartCoroutine(gameMode.OnOneSecondCountdown());
     }
 
@@ -61,7 +64,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     {
         base.OnPlayerEnteredRoom(newPlayer);
         StartCoroutine(gameMode.OnPlayerEnterMatch(newPlayer));
-        
+
     }
     public override void OnJoinedRoom()
     {
@@ -70,5 +73,12 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     {
         base.OnPlayerLeftRoom(otherPlayer);
         gameMode.OnPlayerLeftMatch(otherPlayer);
+    }
+    public static void SetSynchronousTimerValue()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameTime--;
+        }
     }
 }

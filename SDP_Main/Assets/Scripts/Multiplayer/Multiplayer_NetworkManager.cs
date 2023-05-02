@@ -17,17 +17,17 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playerListItemPrefab;   // Object for each players name that has joined a room
     [SerializeField] GameObject startGameButton;        // Object for master player to start game
 
-    /*
-     * Creates a unique instance of Multiplayer_NetworkManager
-     */
+    /// <summary>
+    /// Creates a unique instance of Multiplayer_NetworkManager
+    /// </summary>
     void Awake()
     {
         Instance = this;
     }
 
-    /*
-     * Start method which is called when this instance is created.
-     */
+    /// <summary>
+    /// Start method which is called when this instance is created.
+    /// </summary>
     void Start()
     {
         Debug.Log("Connecting to Dion Server");
@@ -35,9 +35,9 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    /*
-     * Override method for player disconnecting to set multiplayer status
-     */
+    /// <summary>
+    /// Override method for player disconnecting to set multiplayer status
+    /// </summary>
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("Disconnected from Photon Server");
@@ -47,12 +47,12 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
 
     }
 
-    /*
-     * Override method upon player connecting to server.
-     */
+    /// <summary>
+    /// Override method upon player connecting to server.
+    /// </summary>
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Connected to Dion Server");
+        Debug.Log("Connected to Photon Server");
         PhotonNetwork.JoinLobby();  // Join the main lobby of multiplayer
         PhotonNetwork.AutomaticallySyncScene = true;    //Syncs all slave clients to start scene when the Master changes
         Game_RuntimeData.isMultiplayer = true;      //Sets the multiplayer flag to true
@@ -61,9 +61,9 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         Game_GameState.GetGameMapScenes();
     }
 
-    /*
-     * Override method upon player successfully joining the lobby set photon nickname and open multiplayer menu.
-     */
+     /// <summary>
+     /// Override method upon player successfully joining the lobby set photon nickname and open multiplayer menu.
+     /// </summary>
     public override void OnJoinedLobby()
     {
         Multiplayer_MenuManager.Instance.OpenMenu("title");
@@ -71,11 +71,12 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
 
         // Randomly set a player name for each person joining Multiplayer
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        Debug.Log(PhotonNetwork.NickName + " Joined Lobby");
     }
 
-    /*
-     * Find Room method to join the existing game or create new if non existent.
-     */
+    /// <summary>
+    /// Find Room method to join the existing game or create new if non existent.
+    /// </summary>
     public void FindRoom()
     {
         RoomOptions options = new RoomOptions();    //Creates a RoomOptions object to be set for the room
@@ -83,14 +84,14 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinOrCreateRoom("default_room",options, TypedLobby.Default);     //Creates or joins the room
     }
 
-    /*
-     * Override method upon player succesfully joining the room. Updates all clients for player names and changes.
-     */
+    /// <summary>
+    /// Override method upon player succesfully joining the room. Updates all clients for player names and changes.
+    /// </summary>
     public override void OnJoinedRoom()
     {
         Multiplayer_MenuManager.Instance.OpenMenu("room");
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
-        Debug.Log("Room "+roomNameText.text + " was joined by "+PhotonNetwork.NickName+"."); 
+        Debug.Log("Room "+roomNameText.text + " was joined by "+PhotonNetwork.NickName+".");
 
         Player[] players = PhotonNetwork.PlayerList;    //Sets the player list
 
@@ -109,17 +110,16 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         startGameButton.SetActive(PhotonNetwork.IsMasterClient); //Sets the start game visible for Master Client
     }
 
-    /*
-     *  Override method for master client visible objects.
-     */
+    /// <summary>
+    /// Override method for master client visible objects.
+    /// </summary>
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);    //Permits master player to see and start game
     }
-
-    /*
-     * Override method if room creation fails
-     */
+    /// <summary>
+    /// Override method if room creation fails
+    /// </summary>
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         errorText.text = "Room Creation Failed: " + message;
@@ -127,9 +127,9 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Error: Room Failed to Create.");
     }
 
-    /*
-     * Method to quit multiplayer and return to Main Multiplayer_MenuItem.
-     */
+    /// <summary>
+    /// Method to quit multiplayer and return to Main Multiplayer_MenuItem.
+    /// </summary>
     public void QuitMultiplayer()
     {
         Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
@@ -140,54 +140,53 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         StartCoroutine(QuitAfterDelay());
     }
 
-    /*
-     * Method to delay quitting and wait to disconnect from Photon Server.
-     */
+     /// <summary>
+     /// Method to delay quitting and wait to disconnect from Photon Server.
+     /// </summary>
     IEnumerator QuitAfterDelay()
     {
         while (true)
         {
-            if (!PhotonNetwork.IsConnected) { 
-                break;    
+            if (!PhotonNetwork.IsConnected) {
+                break;
             }
             yield return null;
         }
         Game_GameState.NextScene("Lobby");
     }
 
-    /*
-     * Method to permit player to leave the room.
-     */
+    /// <summary>
+    /// Method to permit player to leave the room.
+    /// </summary>
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
         Multiplayer_MenuManager.Instance.OpenMenu("loading");
     }
 
-    /*
-     * Override method upon player successfully leaving room, opens multiplayer menu
-     */
+    /// <summary>
+    /// Override method upon player successfully leaving room, opens multiplayer menu
+    /// </summary>
     public override void OnLeftRoom()
     {
         Debug.Log("Player left the room.");
         Multiplayer_MenuManager.Instance.OpenMenu("title");
     }
 
-    /*
-     * Override Method to create instance of a player object joining the room
-     */
+    /// <summary>
+    /// Override Method to create instance of a player object joining the room
+    /// </summary>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Instantiate(playerListItemPrefab, playerListContent).GetComponent<Multiplayer_PlayerListItem>().SetUp(newPlayer);
     }
 
-    /*
-     * Method to start the game and change scenes
-     */
+    /// <summary>
+    /// Method to start the game and change scenes
+    /// </summary>
     public void StartGame()
     {
         Debug.Log(PhotonNetwork.NickName+" has started a Game!");
-        //PhotonNetwork.LoadLevel("GameMap_default");
         PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Default);
     }
 }

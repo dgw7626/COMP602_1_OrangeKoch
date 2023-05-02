@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
+using Photon.Realtime;
 
 [RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
@@ -183,6 +184,36 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
+        //--------------------------------------------------------------------------------------------------
+        /**
+         * TODO: TEMPORARY
+         * This is being used to simulate a player being shot.
+         */
+        if(inputHandler.OnTest())
+        {
+            if(Game_RuntimeData.activePlayers.Count > 1 )
+            {
+                foreach(KeyValuePair<int, Player_MultiplayerEntity> e in Game_RuntimeData.activePlayers)
+                {
+                    if(e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
+                    {
+                        Data_DamageData d = new Data_DamageData();
+                        PhotonView targetView = e.Value.GetComponent<PhotonView>();
+                        if(targetView.IsMine)
+                        {
+                            Debug.Log("The target is me, so I wont call it.");
+                            break;
+                        }
+                        Player target = targetView.Owner;
+                        Debug.Log("Take Damage being called on me!");
+
+                        photonView.RPC("OnDamageRecieved", target, 1f);
+                    }
+                }
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
+
         if (IsMultiplayer && !photonView.IsMine)
             return;
 
@@ -217,7 +248,7 @@ public class Player_PlayerController : MonoBehaviour
             else
             {
                 // land SFX
-                soundManager.PLayLand(); ;
+                soundManager.PlayLand(); ;
             }
         }
 
