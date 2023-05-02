@@ -41,12 +41,6 @@ public class Player_MultiplayerEntity : MonoBehaviour
         }
     }*/
 
-    public bool RegisterUniqueID(string uniqueID)
-    {
-        this.uniqueID = uniqueID;
-        //TODO
-        return false;
-    }
     private void Start()
     {
         // Finde the PlayerController within this game object
