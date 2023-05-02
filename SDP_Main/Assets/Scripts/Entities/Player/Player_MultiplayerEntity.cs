@@ -33,14 +33,6 @@ public class Player_MultiplayerEntity : MonoBehaviour
         return true;
     }
 
- /*   public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if(stream.IsWriting)
-        {
-            stream.SendNext(uniqueID);
-        }
-    }*/
-
     private void Start()
     {
         // Finde the PlayerController within this game object

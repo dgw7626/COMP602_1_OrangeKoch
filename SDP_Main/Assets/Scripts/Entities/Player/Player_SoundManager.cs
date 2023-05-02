@@ -91,7 +91,7 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void OnMuteButtonPressed()
     {
-        // Invert VoiceChat Variable 
+        // Invert VoiceChat Variable
         proximityVoiceMute = !proximityVoiceMute;
         Debug.Log("Mute Button Pressed!");
 
@@ -114,7 +114,7 @@ public class Player_SoundManager : MonoBehaviour
 
                 //Set Player Transform reference
                 Transform playerTransform = player.transform;
-                
+
                 //Loop through Player Objects
                 for (int j = 0; j < playerTransform.childCount; j++)
                 {
