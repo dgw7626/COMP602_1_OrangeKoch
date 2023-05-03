@@ -116,7 +116,7 @@ public class GameMode_Standard : IgameMode
         yield return new WaitForSeconds(0.5f);
 
         int id = newPlayer.ActorNumber;
-        
+
         foreach (Player_MultiplayerEntity e in Game_RuntimeData.instantiatedPlayers)
         {
             if (e.GetComponent<PhotonView>().Owner.ActorNumber == id)

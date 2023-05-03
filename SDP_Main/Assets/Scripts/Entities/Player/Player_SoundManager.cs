@@ -32,6 +32,10 @@ public class Player_SoundManager : MonoBehaviour
 
     public TextMeshProUGUI proximityMuteText;
     public TextMeshProUGUI pushToTalkText;
+
+    /// <summary>
+    /// Functions to run once, when object is instantiated
+    /// </summary>
     private void Awake()
     {
         //Do not load if the instance does not belong to me
@@ -54,6 +58,9 @@ public class Player_SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update method to constantly check for changes.
+    /// </summary>
     private void Update()
     {
         //Do not load if the instance does not belong to me
@@ -79,9 +86,12 @@ public class Player_SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Toggles the Mute for incoming player voice channel
+    /// </summary>
     private void OnMuteButtonPressed()
     {
-        // Invert VoiceChat Variable 
+        // Invert VoiceChat Variable
         proximityVoiceMute = !proximityVoiceMute;
         Debug.Log("Mute Button Pressed!");
 
@@ -104,7 +114,7 @@ public class Player_SoundManager : MonoBehaviour
 
                 //Set Player Transform reference
                 Transform playerTransform = player.transform;
-                
+
                 //Loop through Player Objects
                 for (int j = 0; j < playerTransform.childCount; j++)
                 {
@@ -131,10 +141,14 @@ public class Player_SoundManager : MonoBehaviour
             pushToTalkText.text = "(Press \"LEFT ALT\") PTT: OFF";
         }
     }
+    /// <summary>
+    /// Action performed to enable microphone when PTT key is pressed
+    /// </summary>
     private void OnPTTButtonPressed()
     {
         if(proximityVoiceMute)
         {
+            //Prevent Transmitting Voice
             Debug.Log("Proximity Muted, cannot PTT!");
             return;
         }
@@ -149,6 +163,9 @@ public class Player_SoundManager : MonoBehaviour
             //Continue Transmitting Voice
         }
     }
+    /// <summary>
+    /// Action performed to disable microphone when PTT key is released
+    /// </summary>
     private void OnPTTButtonReleased()
     {
         Debug.Log("PTT Button Released!");
