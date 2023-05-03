@@ -37,7 +37,13 @@ public class Player_SoundManager : MonoBehaviour
     /// Functions to run once, when object is instantiated
     /// </summary>
     private void Awake()
-    {
+    {        
+        Debug.Log("Mutiplayer State: "+Game_RuntimeData.isMultiplayer);
+        if(!Game_RuntimeData.isMultiplayer)
+            return;
+
+        Debug.Log("Mutiplayer State: "+Game_RuntimeData.isMultiplayer);
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -63,6 +69,10 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+
+        if(!Game_RuntimeData.isMultiplayer)
+        return;
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {

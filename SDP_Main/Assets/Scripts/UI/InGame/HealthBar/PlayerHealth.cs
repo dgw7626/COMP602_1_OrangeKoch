@@ -34,7 +34,7 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
-            TakeDamage(100);
+            TakeDamage(50);
             print(currentHealth);
         }
 
