@@ -1,3 +1,5 @@
+using System.IO;
+using System.Security.AccessControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +14,7 @@ public class PlayerDetail
     public int deaths;
     public int won;
 
+// The constructor assign player detail with scoreboard features.
     public PlayerDetail()
     {
         playerName = ScoreBoard.playerName;
