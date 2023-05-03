@@ -116,7 +116,7 @@ public class Player_PlayerController : MonoBehaviour
             return 1f;
         }
     }
-
+    private WeaponProjectileManager _projectMananger;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -134,9 +134,9 @@ public class Player_PlayerController : MonoBehaviour
     {
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
         photonView = GetComponent<PhotonView>();
-
+        _projectMananger = GetComponentInParent<WeaponProjectileManager>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
-        if(soundManager == null )
+        if (soundManager == null)
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
 
         if (photonView == null)
@@ -174,7 +174,7 @@ public class Player_PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         inputHandler = GetComponent<Player_InputManager>();
-
+        _projectMananger = GetComponentInChildren<WeaponProjectileManager>();
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
@@ -189,17 +189,17 @@ public class Player_PlayerController : MonoBehaviour
          * TODO: TEMPORARY
          * This is being used to simulate a player being shot.
          */
-        if(inputHandler.OnTest())
+        if (inputHandler.OnTest())
         {
-            if(Game_RuntimeData.activePlayers.Count > 1 )
+            if (Game_RuntimeData.activePlayers.Count > 1)
             {
-                foreach(KeyValuePair<int, Player_MultiplayerEntity> e in Game_RuntimeData.activePlayers)
+                foreach (KeyValuePair<int, Player_MultiplayerEntity> e in Game_RuntimeData.activePlayers)
                 {
-                    if(e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
+                    if (e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
                     {
                         Data_DamageData d = new Data_DamageData();
                         PhotonView targetView = e.Value.GetComponent<PhotonView>();
-                        if(targetView.IsMine)
+                        if (targetView.IsMine)
                         {
                             Debug.Log("The target is me, so I wont call it.");
                             break;
@@ -262,13 +262,15 @@ public class Player_PlayerController : MonoBehaviour
 
         HandleCharacterMovement();
 
+        // shooting
+        if (inputHandler.GetFireInputDown())
+        {
+            _projectMananger.InitShoot(WeaponFiretype.Semi);
+        }
+        //Reaload
         if (inputHandler.GetReloadButtonDown())
         {
-            //currentWeapon.Reload();
-        }
-        if (inputHandler.GetFireInputHeld())
-        {
-            //currentWeapon.TryToShoot();
+            _projectMananger.Reload();
         }
     }
 
