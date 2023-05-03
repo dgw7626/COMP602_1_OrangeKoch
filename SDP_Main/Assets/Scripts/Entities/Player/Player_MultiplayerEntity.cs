@@ -89,5 +89,30 @@ public class Player_MultiplayerEntity : MonoBehaviour
     {
         GameMode_Manager.gameTime = value;
     }
+
+    /// <summary>
+    /// PunRPC callback. You are being informed that another player was killed in the match.
+    /// The player that was killed will broadcast this message to all other players.
+    /// </summary>
+    /// <param name="killerId"></param>
+    /// <param name="killedTeamNumber"></param>
+    [PunRPC]
+    public void OnPlayerKilled(int killerId, int killedTeamNumber)
+    {
+        if(PhotonNetwork.IsMasterClient)
+        {
+            //TODO: calculate team scores.
+        }
+    }
+
+    /// <summary>
+    /// PunRPC callback. The master client has announced that the game has ended, and is telling you the score.
+    /// </summary>
+    [PunRPC]
+    public void OnGameEnded(string gameScoreStructJSON)
+    {
+        //TODO: Read JSON into Game_RuntimeData memory
+        GameMode_Manager.gameIsRunning = false;
+    }
 }
  

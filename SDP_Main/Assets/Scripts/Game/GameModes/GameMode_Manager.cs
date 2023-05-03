@@ -10,7 +10,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
     public static int gameTime;
-
+    public static bool gameIsRunning = false;  
 
     /**
      * Fetch the gameMode from Game_RuntimeData and Invoke InitGame on that gameMode.
@@ -48,8 +48,10 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         }
         gameMode.InitGame();
 
+        gameIsRunning = true;
 
         StartCoroutine(gameMode.OnOneSecondCountdown());
+
     }
 
     /**

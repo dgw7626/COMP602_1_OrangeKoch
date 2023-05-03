@@ -64,18 +64,30 @@ public class GameMode_Standard : IgameMode
         {
             p.playerController.IsInputLocked = true;
         }
+
         //TODO: Cleanup
     }
 
     public IEnumerator OnOneSecondCountdown()
     {
         Debug.Log("Begin! ");
-        while(true)
+        while(GameMode_Manager.gameIsRunning)
         {
             if(PhotonNetwork.IsMasterClient)
             {
                 GameMode_Manager.SetSynchronousTimerValue();
                 Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
+
+                // If the timer expires, tell the other players what the score is.
+                if(GameMode_Manager.gameTime == -1)
+                {
+                    Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
+                        nameof(Player_MultiplayerEntity.OnGameEnded), 
+                        RpcTarget.Others, 
+                        JsonUtility.ToJson(Game_RuntimeData.gameScore));
+                    
+                    GameMode_Manager.gameIsRunning = false;
+                }
             }
 
             Debug.Log(GameMode_Manager.gameTime);
