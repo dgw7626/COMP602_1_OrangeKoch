@@ -13,41 +13,41 @@ public class WeaponProjectileManager : MonoBehaviour
     [SerializeField] private AmmunitionUI _ammunitionUI;
 
     internal Coroutine _currentCoroutine;
-    private Vector3 _pos, _fw, _up;
-    private Transform _fakeParent;
+    private Vector3 _fw, _up;
+    private Transform _camera;
  
-    void Start()
+    void Awake()
     {
         if (!transform.GetComponentInParent<PhotonView>().IsMine)
         {
             return;
         }
-        this._fakeParent = this.transform.parent.GetComponentInChildren<Camera>().transform;
-        GuardClause.InspectGuardClauseNullRef<Transform>(this._fakeParent, nameof(this._fakeParent));
+        this._camera = this.transform.parent.GetComponentInChildren<Camera>().transform;
+        GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
+        this._fw = _camera.transform.InverseTransformDirection(transform.forward);
+        GuardClause.InspectGuardClauseNullRef<Vector3>(this._fw, nameof(this._fw));
+        this._up = _camera.transform.InverseTransformDirection(transform.up);
+        GuardClause.InspectGuardClauseNullRef<Vector3>(this._up, nameof(this._up));
+    }
+    void Start()
+    {
         _weaponAmmo = _weaponInfo.BulletCounts;
         _weaponClip = _weaponInfo.ClipCounts;
         _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(this._ammunitionUI, nameof(this._ammunitionUI));
         _ammunitionUI.SetAmmunition(_weaponAmmo, _weaponClip);
-        GuardClause.InspectGuardClauseNullRef<Vector3>(this._pos, nameof(this._pos));
-        this._pos = _fakeParent.transform.InverseTransformPoint(transform.position);
-        GuardClause.InspectGuardClauseNullRef<Vector3>(this._fw, nameof(this._fw));
-        this._fw = _fakeParent.transform.InverseTransformDirection(transform.forward);
-        GuardClause.InspectGuardClauseNullRef<Vector3>(this._up, nameof(this._up));
-        this._up = _fakeParent.transform.InverseTransformDirection(transform.up);
     }
     /// <summary>
     /// This method will update the target object of the postion and rotation, the position values will be duplicated from parent object.
     /// </summary>
     public void UpdateChildTransform()
     {
-        GuardClause.InspectGuardClauseNullRef<Transform>(this._fakeParent, nameof(this._fakeParent));
-        var newpos = _fakeParent.transform.TransformPoint(_pos);
-        var newfw = _fakeParent.transform.TransformDirection(_fw);
-        var newup = _fakeParent.transform.TransformDirection(_up);
-        var newrot = Quaternion.LookRotation(newfw, newup);
-        this.transform.position = newpos;
-        this.transform.rotation = newrot;
+        GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
+        var newFw = _camera.transform.TransformDirection(_fw);
+        var newUp = _camera.transform.TransformDirection(_up);
+        var newRot = Quaternion.LookRotation(newFw, newUp);
+        this.transform.position = _camera.transform.position;
+        this.transform.rotation = newRot;
         return;
     }
     /// <summary>
