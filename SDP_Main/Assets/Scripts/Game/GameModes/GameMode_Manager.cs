@@ -14,10 +14,10 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 
     /**
      * Fetch the gameMode from Game_RuntimeData and Invoke InitGame on that gameMode.
-     * 
+     *
      * If GameMode is null, it will be set to the default game mode.
-     * 
-     * The delay before Init() gives the Player_MultiplayerEntity's time to 
+     *
+     * The delay before Init() gives the Player_MultiplayerEntity's time to
      * instantiate and register themselves with Game_RunTimeData.
      */
     void Awake()
@@ -32,7 +32,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     }
 
     /**
-     * Calls the GameMode's Init after a delay(GAME_START_DELAY_SECONDS), 
+     * Calls the GameMode's Init after a delay(GAME_START_DELAY_SECONDS),
      * and starts the game Timer.
      */
     void Init()
@@ -66,7 +66,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     {
         base.OnPlayerEnteredRoom(newPlayer);
         StartCoroutine(gameMode.OnPlayerEnterMatch(newPlayer));
-        
+
     }
     public override void OnJoinedRoom()
     {

@@ -12,25 +12,29 @@ public class Game_RuntimeData
     public static List<Player_MultiplayerEntity> instantiatedPlayers = new List<Player_MultiplayerEntity>();
 
     /// <summary>
-    /// List of team lists of Multiplayer Entities 
+    /// List of team lists of Multiplayer Entities
     /// </summary>
     public static List<List<Player_MultiplayerEntity>> teams = new List<List<Player_MultiplayerEntity>>();
 
     /// <summary>
     /// Key-Value pairs of Unique ID's and active Multiplayer Entities.
     /// </summary>
-    public static Dictionary<int, Player_MultiplayerEntity> activePlayers = new Dictionary<int, Player_MultiplayerEntity>(); 
-    
+    public static Dictionary<int, Player_MultiplayerEntity> activePlayers = new Dictionary<int, Player_MultiplayerEntity>();
+
     /// <summary>
     /// This can prevent many multiplayer-specific action during a single player match
     /// </summary>
     public static bool isMultiplayer = true;
-    
+
     /// <summary>
-    /// Will be set to Standard if not other type has been selected from the menu. 
+    /// Will be set to Standard if not other type has been selected from the menu.
     /// </summary>
     public static IgameMode gameMode = null;
-    
+
+    /// <summary>
+    /// A list set to store all the GameMaps that can be used to change scene
+    /// </summary>
+    public static List<string> GameMap_List;
     /// <summary>
     /// The Photon View belonging to the local player
     /// </summary>
@@ -45,13 +49,13 @@ public class Game_RuntimeData
     /// <summary>
     /// Key-value-pair of all currently active players in a multiplayer match.
     /// Triggered once at the start of a match, by the GameModeManager. All MultiplayerEntities in instantiatedPlayers will be added.
-    /// 
-    /// Triggered again by the Pun RPC callback OnPlayerEnteredRoom, which is handled by the specific game mode. 
+    ///
+    /// Triggered again by the Pun RPC callback OnPlayerEnteredRoom, which is handled by the specific game mode.
     /// This allows players who joined after the start of a match to be listed.
     /// </summary>
-    /// 
+    ///
     /// <param name="id">A unique ID assigend to a player by Photon.</param>
-    /// 
+    ///
     /// <param name="entity">The players Player_MultiplayerEnitity</param>
     public static void RegisterNewMultiplayerPlayer(int id, Player_MultiplayerEntity entity)
     {
@@ -68,18 +72,18 @@ public class Game_RuntimeData
     public static void DebugPrintMP_PlayerInfo()
     {
         Debug.Log("List of all instatiated players:");
-        
-        foreach(Player_MultiplayerEntity ent in instantiatedPlayers) 
+
+        foreach(Player_MultiplayerEntity ent in instantiatedPlayers)
         {
             Debug.Log(ent.gameObject.name);
         }
 
 
         Debug.Log("List of active players players:");
-        
+
         foreach(KeyValuePair<int, Player_MultiplayerEntity> ent in activePlayers)
         {
-            Debug.Log("ID: " + ent.Value.GetComponent<PhotonView>().Owner.ActorNumber + 
+            Debug.Log("ID: " + ent.Value.GetComponent<PhotonView>().Owner.ActorNumber +
                 " Name: " + ent.Value.uniqueID);
         }
 

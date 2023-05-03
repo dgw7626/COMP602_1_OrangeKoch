@@ -127,6 +127,14 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetButtonDown("Reload");
     }
+    //Weapon Script for semi.
+    public bool GetFireInputDown()
+    {
+        if (InputIsLocked())
+            return false;
+
+        return Input.GetButtonDown("Shoot");
+    }
     public int GetSwitchWeaponInput()
     {
         if (InputIsLocked())
@@ -184,11 +192,17 @@ public class Player_InputManager : MonoBehaviour
         i *= 0.01f;
         return i;
     }
+    /// <summary>
+    /// Returns true or false if the Proximity Voice button is pressed
+    /// </summary>
     public bool GetVoiceMuteButtonIsPressed()
     {
         // Check if Mute button is being pressed
         return Input.GetButtonDown("ProximityVoiceMute");
     }
+    /// <summary>
+    /// Returns true or false if the Push to Talk button is pressed
+    /// </summary>
     public bool GetPTTButtonIsPressed()
     {
         // Check if Push To Talk button is being pressed

@@ -10,7 +10,7 @@ using UnityEngine;
 /// <summary>
 /// Represents an active player. Contains PunRPC callbacks for all multiplayer network actions.
 /// This class is attatched to the Player prefab, so will be present even in singleplayer.
-/// 
+///
 /// </summary>
 public class Player_MultiplayerEntity : MonoBehaviour
 {
@@ -21,9 +21,9 @@ public class Player_MultiplayerEntity : MonoBehaviour
     public int teamNumber;
 
     //--------------------------------------------------------------------------------------------------------------
-    
+
     //TODO: May be redundant. A Unique ID is stored as a key-value pair in Game_RuntimeData upon entering a match.
-    // May be used in future for account sign-in. 
+    // May be used in future for account sign-in.
     public bool RegisterUniqueID(string uniqueID)
     {
         if (this.uniqueID != null)
@@ -37,7 +37,7 @@ public class Player_MultiplayerEntity : MonoBehaviour
     {
         // Finde the PlayerController within this game object
         playerController = GetComponent<Player_PlayerController>();
-        
+
         if (Game_RuntimeData.isMultiplayer)
         {
             // Lock input. The GameMode will unlock input when it is neccecary.
@@ -46,7 +46,7 @@ public class Player_MultiplayerEntity : MonoBehaviour
             // Add to list of all Multiplayers that were ever instantiated.
             // May be used for statistics.
             Game_RuntimeData.instantiatedPlayers.Add(this);
-            
+
             // Register the PhotnView with the local machine
             if(playerController.photonView.IsMine)
             {
@@ -60,12 +60,12 @@ public class Player_MultiplayerEntity : MonoBehaviour
     /// The damage dealer will track how much damage they have delt.
     /// It is up to the damage reciever to decide whether they should die. If so, they must broadcast
     /// a message to all other players to inform them.
-    /// 
+    ///
     /// </summary>
     /// The ammount of damage recieved. This is decided by the calller.
     /// <param name="damage"></param>
     [PunRPC]
-    public void OnDamageRecieved(float damage) 
+    public void OnDamageRecieved(float damage)
     {
         /*if (!playerController.photonView.IsMine)
         {
@@ -79,7 +79,7 @@ public class Player_MultiplayerEntity : MonoBehaviour
     /// <summary>
     /// Gets the sychronous clock time from the Master Client.
     /// The Master Client triggers this callback on all other active players, once every second.
-    /// 
+    ///
     /// </summary>
     /// The synchronous clock time
     /// <param name="value"></param>
@@ -115,4 +115,3 @@ public class Player_MultiplayerEntity : MonoBehaviour
         GameMode_Manager.gameIsRunning = false;
     }
 }
- 
