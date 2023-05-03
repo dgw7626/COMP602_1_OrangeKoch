@@ -9,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth = 100;
     public float currentHealth;
     public float currentUIHealth;
-    public float UI_HealthTime = 0.05f;
+    public float UI_HealthTime = 0.16f;
 
     public HealthBar healthBar;
 
@@ -28,16 +28,9 @@ public class PlayerHealth : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-        if(currentHealth<=0)
         {
-            return;
+            TakeDamage(10);
         }
-        else
-        {
-            TakeDamage(100);
-            print(currentHealth);
-        }
-
     }
 
     void TakeDamage(float damage)
@@ -51,14 +44,14 @@ public class PlayerHealth : MonoBehaviour
         {
             if(currentUIHealth > currentHealth)
             {
-                float speed = 10f;
+                float speed = 1f;
                 if((currentUIHealth - currentHealth) > 20)
                 {
-                    speed = 12f;
+                    speed = 8f;
                 }
                 Debug.Log("UI changing");
                 currentUIHealth -= speed;
-            
+
                 healthBar.SetHealth(currentUIHealth);
             }
             yield return new WaitForSeconds(UI_HealthTime);

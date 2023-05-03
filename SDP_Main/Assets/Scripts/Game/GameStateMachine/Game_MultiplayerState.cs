@@ -8,7 +8,7 @@ public class Game_MultiplayerState : AbstractState
     public override AbstractState RunState(object param)
     {
         // Zero out multiplayer RuntimeData
-        Game_RuntimeData.activePlayers.Clear();
+        Game_RuntimeData.instantiatedPlayers.Clear();
         Game_RuntimeData.teams.Clear();
         Game_RuntimeData.isMultiplayer = true;
 
