@@ -29,6 +29,6 @@ public class Multiplayer_PlayerManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 }
