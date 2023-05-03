@@ -119,7 +119,14 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetButtonUp("Crouch");
     }
+    //Weapon Script for semi.
+    public bool GetFireInputDown()
+    {
+        if (InputIsLocked())
+            return false;
 
+        return Input.GetButtonDown("Shoot");
+    }
     public bool GetReloadButtonDown()
     {
         if (InputIsLocked())
