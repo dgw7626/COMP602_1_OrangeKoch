@@ -24,7 +24,7 @@ public class Game_RuntimeData
     /// <summary>
     /// This can prevent many multiplayer-specific action during a single player match
     /// </summary>
-    public static bool isMultiplayer =false;
+    public static bool isMultiplayer = false;
 
     /// <summary>
     /// Will be set to Standard if not other type has been selected from the menu.

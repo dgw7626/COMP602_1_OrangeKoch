@@ -127,6 +127,14 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetButtonDown("Reload");
     }
+    //Weapon Script for semi.
+    public bool GetFireInputDown()
+    {
+        if (InputIsLocked())
+            return false;
+
+        return Input.GetButtonDown("Shoot");
+    }
     public int GetSwitchWeaponInput()
     {
         if (InputIsLocked())
