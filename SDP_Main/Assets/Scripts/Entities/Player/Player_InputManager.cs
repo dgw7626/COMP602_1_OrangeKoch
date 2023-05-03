@@ -9,12 +9,12 @@ public class Player_InputManager : MonoBehaviour
     [Tooltip("Used to flip the vertical input axis")]
     public bool invertY = false;
 
-    Player_PlayerController playerControllercript;
+    Player_PlayerController playerControllerscript;
     bool isShootHeld;
 
     void Start()
     {
-        playerControllercript = GetComponent<Player_PlayerController>();
+        playerControllerscript = GetComponent<Player_PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -43,6 +43,11 @@ public class Player_InputManager : MonoBehaviour
         move = Vector3.ClampMagnitude(move, 1);
 
         return move;
+    }
+
+    public bool OnTest()
+    {
+        return Input.GetButtonDown("Test");
     }
 
     public float GetLookInputsHorizontal()
@@ -178,5 +183,21 @@ public class Player_InputManager : MonoBehaviour
         // reduce mouse input amount
         i *= 0.01f;
         return i;
+    }
+    /// <summary>
+    /// Returns true or false if the Proximity Voice button is pressed
+    /// </summary>
+    public bool GetVoiceMuteButtonIsPressed()
+    {
+        // Check if Mute button is being pressed
+        return Input.GetButtonDown("ProximityVoiceMute");
+    }
+    /// <summary>
+    /// Returns true or false if the Push to Talk button is pressed
+    /// </summary>
+    public bool GetPTTButtonIsPressed()
+    {
+        // Check if Push To Talk button is being pressed
+        return Input.GetButton("PTTVoice");
     }
 }
