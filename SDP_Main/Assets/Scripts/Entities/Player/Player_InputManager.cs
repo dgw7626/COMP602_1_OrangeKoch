@@ -119,6 +119,14 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetButtonUp("Crouch");
     }
+
+    public bool GetReloadButtonDown()
+    {
+        if (InputIsLocked())
+            return false;
+
+        return Input.GetButtonDown("Reload");
+    }
     //Weapon Script for semi.
     public bool GetFireInputDown()
     {
@@ -126,13 +134,6 @@ public class Player_InputManager : MonoBehaviour
             return false;
 
         return Input.GetButtonDown("Shoot");
-    }
-    public bool GetReloadButtonDown()
-    {
-        if (InputIsLocked())
-            return false;
-
-        return Input.GetButtonDown("Reload");
     }
     public int GetSwitchWeaponInput()
     {
