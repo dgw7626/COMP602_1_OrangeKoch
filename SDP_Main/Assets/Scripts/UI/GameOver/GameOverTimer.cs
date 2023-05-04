@@ -14,7 +14,7 @@ using UnityEngine.UI;
 using Color = UnityEngine.Color;
 
 
-public class CountdownTimer : MonoBehaviour
+public class GameOverTimer : MonoBehaviour
 {
     public float startTime = 120f;
     public float currentTime = 0;
@@ -35,9 +35,9 @@ public class CountdownTimer : MonoBehaviour
 
         textColoum.text = "Time " + currentTime.ToString("000");
 
-       Color red = Color.red;
+        Color red = Color.red;
 
-       if(currentTime <= 5)
+        if (currentTime <= 5)
         {
             textColoum.color = red;
         }
@@ -48,5 +48,5 @@ public class CountdownTimer : MonoBehaviour
         }
     }
 
-    
+
 }

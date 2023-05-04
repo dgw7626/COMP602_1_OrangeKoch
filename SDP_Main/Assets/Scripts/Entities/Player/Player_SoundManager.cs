@@ -38,6 +38,10 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        //Return if not playing multiplayer, such that it is single.
+        if (!Game_RuntimeData.isMultiplayer)
+            return;
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -63,6 +67,10 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        //Return if not playing multiplayer, such that it is single.
+        if (!Game_RuntimeData.isMultiplayer)
+            return;
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
