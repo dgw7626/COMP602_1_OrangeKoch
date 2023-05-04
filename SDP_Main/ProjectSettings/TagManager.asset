@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - SoundSystem
+  - Player_Model
   layers:
   - Default
   - TransparentFX

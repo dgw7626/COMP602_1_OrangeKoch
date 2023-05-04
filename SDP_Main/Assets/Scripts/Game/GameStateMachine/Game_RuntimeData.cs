@@ -39,7 +39,17 @@ public class Game_RuntimeData
     /// The Photon View belonging to the local player
     /// </summary>
     public static PhotonView thisMachinesPlayersPhotonView = null;
+    /// <summary>
+    /// The Photon View belonging to the local player
+    /// </summary>
+    public static Player_MultiplayerEntity thisMachinesMultiplayerEntity = null;
 
+    /// <summary>
+    /// Informattion about the game score. Will be updated only by the master client, who
+    /// will broadcast the struct at the end of a match.
+    /// </summary>
+    public static s_GameScore gameScore;
+    
     /// <summary>
     /// Key-value-pair of all currently active players in a multiplayer match.
     /// Triggered once at the start of a match, by the GameModeManager. All MultiplayerEntities in instantiatedPlayers will be added.
