@@ -55,7 +55,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Connected to Photon Server");
         PhotonNetwork.JoinLobby();  // Join the main lobby of multiplayer
         PhotonNetwork.AutomaticallySyncScene = true;    //Syncs all slave clients to start scene when the Master changes
-        Game_RuntimeData.isMultiplayer = true;      //Sets the multiplayer flag to true
+        Game_RuntimeData.isMultiplayer = true;      //Sets the multiplayer state to true
         Debug.Log("isMultiplayer has been set to: " + Game_RuntimeData.isMultiplayer);
 
         Game_GameState.GetGameMapScenes();
@@ -136,6 +136,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         PhotonView PV = GetComponent<PhotonView>();
         PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
         PhotonNetwork.Disconnect();
+        Game_RuntimeData.isMultiplayer = false;      //Sets the multiplayer state to false
 
         StartCoroutine(QuitAfterDelay());
     }

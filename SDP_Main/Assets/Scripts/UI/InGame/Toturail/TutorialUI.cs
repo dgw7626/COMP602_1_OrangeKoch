@@ -11,8 +11,15 @@ public class TutorialUI : MonoBehaviour
     public TextMeshProUGUI jumpText;
     private void Start()
     {
-        // Show the movement tip text at beginning
-        moveText.gameObject.SetActive(true);
-        jumpText.gameObject.SetActive(false);
+        if(!Game_RuntimeData.isMultiplayer)
+        {
+            moveText = transform.Find("MoveText").GetComponent<TextMeshProUGUI>();
+            jumpText = transform.Find("JumpText").GetComponent<TextMeshProUGUI>();
+            // Show the movement tip text at beginning
+            transform.parent.gameObject.SetActive(true);
+            moveText.gameObject.SetActive(true);
+            jumpText.gameObject.SetActive(false);
+
+        }
     }
 }

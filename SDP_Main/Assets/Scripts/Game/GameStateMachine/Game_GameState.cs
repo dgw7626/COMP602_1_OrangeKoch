@@ -16,10 +16,15 @@ public static class Game_GameState
 
     public static void NextScene(string sceneName)
     {
+        int sceneCount = SceneManager.sceneCountInBuildSettings;
+
         Debug.Log("Loading next scene: " + sceneName);
-        for (int i = 0; i < SceneManager.sceneCount; i++)
+        for (int i = 0; i < sceneCount; i++)
         {
-            if (SceneManager.GetSceneAt(i).name == sceneName)
+            string tmpScene = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i)); //Temporarily store the Scene Path as String
+
+            Debug.Log("Scene ("+i+"): "+SceneManager.GetSceneAt(i).name);
+            if (tmpScene == sceneName)
             {
                 SceneManager.LoadScene(i);
                 return;
@@ -51,4 +56,5 @@ public static class Game_GameState
             Debug.LogError("No Game Maps Found.");
         return MapList;
     }
+
 }
