@@ -156,11 +156,13 @@ public class Player_MultiplayerEntity : MonoBehaviour
     [PunRPC]
     public void OnGameEnded(string gameScoreStructJSON)
     {
-        if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
-        {
-            //TODO: Read JSON into Game_RuntimeData memory
-            //TODO: store the data into DB?
-        }
+        s_GameScore gameScoreStruct = (s_GameScore)JsonUtility.FromJson(gameScoreStructJSON, typeof(s_GameScore));
+        
+        //TODO: store the data into DB?
+
+        // MunishesScoreStuff.HereIsTheScore(gameScoreStruct);
+
+
         GameMode_Manager.gameIsRunning = false;
     }
 }

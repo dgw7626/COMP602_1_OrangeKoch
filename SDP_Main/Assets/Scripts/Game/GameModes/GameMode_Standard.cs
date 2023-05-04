@@ -13,17 +13,18 @@ public class GameMode_Standard : IgameMode
     private const int NUM_TEAMS = 2;
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
-    public List<int> teamScores {  get; private set; }
+    public s_GameScore teamScores;
     public void InitGame()
     {
 
-        teamScores = new List<int>();
+        teamScores = new s_GameScore();
+        teamScores.killsPerTeam = new List<int>();
 
         // Make teams
         for (int i = 0; i < NUM_TEAMS; i++)
         {
             Game_RuntimeData.teams.Add(new List<Player_MultiplayerEntity>());
-            teamScores.Add(INITIAL_SCORE);
+            teamScores.killsPerTeam.Add(INITIAL_SCORE);
         }
 
         //Divy players up into teams
@@ -64,7 +65,10 @@ public class GameMode_Standard : IgameMode
         {
             p.playerController.IsInputLocked = true;
         }
-
+        if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
+        {
+            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnGameEnded), RpcTarget.All, JsonUtility.ToJson(teamScores));
+        }
         //TODO: Cleanup
     }
 
@@ -106,7 +110,7 @@ public class GameMode_Standard : IgameMode
         if (teamNumber > NUM_TEAMS || teamNumber < 0)
             Debug.LogError("ERROR: Team " + teamNumber + " does not exist! Cannot assign points to team");
 
-        teamScores[teamNumber] += score;
+        teamScores.killsPerTeam[teamNumber] += score;
     }
     public void OnPlayerKilled(Player_MultiplayerEntity playerKilled)
     {

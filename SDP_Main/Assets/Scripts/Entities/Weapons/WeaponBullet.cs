@@ -33,7 +33,7 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
         {
             if(hit.transform != null)
             {
-                //Edit by Corey Knight - 04/05/23
+                // Edit by Corey Knight - 04/05/23
                 //--------------------------------
                 if(hit.transform.tag == "Player_Model")
                 {
