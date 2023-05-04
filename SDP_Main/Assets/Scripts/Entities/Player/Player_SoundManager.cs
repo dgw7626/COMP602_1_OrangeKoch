@@ -131,7 +131,6 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void OnPTTButtonPressed()
     {
-        Player_UIManager UIManager = transform.parent.GetComponent<Player_UIManager>();
         if (proximityVoiceMute)
         {
             //Prevent Transmitting Voice
@@ -143,7 +142,7 @@ public class Player_SoundManager : MonoBehaviour
             //Start Transmitting Voice
             Debug.Log("PTT Button Pressed!");
             transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = true;
-            UIManager.SetPTTtext("(Press \"LEFT ALT\") PTT: ON");
+            transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().SetPTTtext("(Press \"LEFT ALT\") PTT: ON");
         } else
         {
             //Continue Transmitting Voice
@@ -154,10 +153,9 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void OnPTTButtonReleased()
     {
-        Player_UIManager UIManager = transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>();
         Debug.Log("PTT Button Released!");
         transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = false;
-        UIManager.SetPTTtext("(Press \"LEFT ALT\") PTT: OFF");
+        transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().SetPTTtext("(Press \"LEFT ALT\") PTT: OFF");
     }
 
     internal void PlayFallDamage()
