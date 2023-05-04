@@ -4,11 +4,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+public enum e_BodyPart
+{
+    NONE,
+    HEAD,
+    FACE,
+    BODY,
+    ARMS,
+    LEGS
+}
+
+[Serializable]
 public struct s_GameScore
 {
-    int numTeams;
-
+    public int numTeams;
+    public List<int> killsPerTeam;
 }
+
+[Serializable]
+public struct s_DamageInfo
+{
+    public int dmgDealerId;
+    public int dmgDeltId;
+    public float dmgValue;
+    public e_BodyPart bodyPart;
+}
+
 public class Data_RPCdata : MonoBehaviour
 {
     // Start is called before the first frame update

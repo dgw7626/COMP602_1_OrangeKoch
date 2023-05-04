@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /*
@@ -16,6 +17,11 @@ public class Player_MultiplayerEntity : MonoBehaviour
 {
     // The controller that is attatched to this PlayerPrefab
     public Player_PlayerController playerController;
+
+    //-----------------------------------
+    //public Player_Health playerHealth;
+    //-----------------------------------
+
     // A unique identifier for multiplayer matches
     public string uniqueID {  get; private set; }
     public int teamNumber;
@@ -38,6 +44,16 @@ public class Player_MultiplayerEntity : MonoBehaviour
         // Finde the PlayerController within this game object
         playerController = GetComponent<Player_PlayerController>();
 
+
+        //-------------------------------------------------------------
+        // Kevin: Put your hp component here.
+        // The component should be attached to the player prefab, so you will need to retrive it.
+        //
+        // For example:
+        // playerHealth = gameObject.GetComponent<[yourComponentNameHere]>();
+        //
+        //-------------------------------------------------------------
+
         if (Game_RuntimeData.isMultiplayer)
         {
             // Lock input. The GameMode will unlock input when it is neccecary.
@@ -51,8 +67,21 @@ public class Player_MultiplayerEntity : MonoBehaviour
             if(playerController.photonView.IsMine)
             {
                 Game_RuntimeData.thisMachinesPlayersPhotonView = playerController.photonView;
+                Game_RuntimeData.thisMachinesMultiplayerEntity = this;
             }
         }
+    }
+
+    public void DamagePlayer(int idOfShotPlayer)
+    {
+        Debug.Log("I " + playerController.photonView.Owner.ActorNumber + " am shooting: " + idOfShotPlayer);
+
+        s_DamageInfo dmg = new s_DamageInfo();
+        dmg.dmgDeltId = idOfShotPlayer;
+        dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+        dmg.bodyPart = e_BodyPart.NONE;
+
+        Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(OnDamageRecieved), RpcTarget.All, JsonUtility.ToJson(dmg));
     }
 
     /// <summary>
@@ -65,15 +94,30 @@ public class Player_MultiplayerEntity : MonoBehaviour
     /// The ammount of damage recieved. This is decided by the calller.
     /// <param name="damage"></param>
     [PunRPC]
-    public void OnDamageRecieved(float damage)
+    public void OnDamageRecieved(string damageInfo)
     {
-        /*if (!playerController.photonView.IsMine)
+        s_DamageInfo dmgInfo = (s_DamageInfo)JsonUtility.FromJson(damageInfo, typeof(s_DamageInfo));
+        
+        if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine && 
+            dmgInfo.dmgDeltId == Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber)
         {
-            Debug.Log("I am Not executing because it is not me");
-            return;
-        }*/
-        Debug.Log("I am executing because it is me!");
-        //TODO: Calculate Damage
+            Debug.Log("I " + dmgInfo.dmgDeltId + "have been shot by: " + dmgInfo.dmgDealerId);
+     
+            // TODO: Call HP damage
+            // TODO: Calculate damage based on weapon type and bodypart hit
+            
+            //-------------------------------------------------------------
+            // Kevin: Put your hp damage call here.
+            // The ammount has not been calculated yet, so hardcode a value in the mean time
+            // [yourScriptName].[yourMethodName]([hardcodedValue]);
+            //
+            // For example:
+            // HPcomponent.TakeDamage(10.0f);
+            //
+            //
+            //-------------------------------------------------------------
+            
+        }
     }
 
     /// <summary>
@@ -97,11 +141,12 @@ public class Player_MultiplayerEntity : MonoBehaviour
     /// <param name="killerId"></param>
     /// <param name="killedTeamNumber"></param>
     [PunRPC]
-    public void OnPlayerKilled(int killerId, int killedTeamNumber)
+    public void OnPlayerKilled(int killerTeamNumber, int killedTeamNumber)
     {
         if(PhotonNetwork.IsMasterClient)
         {
             //TODO: calculate team scores.
+            Game_RuntimeData.gameScore.killsPerTeam[killedTeamNumber] += 1;
         }
     }
 
@@ -111,7 +156,11 @@ public class Player_MultiplayerEntity : MonoBehaviour
     [PunRPC]
     public void OnGameEnded(string gameScoreStructJSON)
     {
-        //TODO: Read JSON into Game_RuntimeData memory
+        if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
+        {
+            //TODO: Read JSON into Game_RuntimeData memory
+            //TODO: store the data into DB?
+        }
         GameMode_Manager.gameIsRunning = false;
     }
 }

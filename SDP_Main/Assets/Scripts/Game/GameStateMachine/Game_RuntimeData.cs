@@ -39,6 +39,10 @@ public class Game_RuntimeData
     /// The Photon View belonging to the local player
     /// </summary>
     public static PhotonView thisMachinesPlayersPhotonView = null;
+    /// <summary>
+    /// The Photon View belonging to the local player
+    /// </summary>
+    public static Player_MultiplayerEntity thisMachinesMultiplayerEntity = null;
 
     /// <summary>
     /// Informattion about the game score. Will be updated only by the master client, who
