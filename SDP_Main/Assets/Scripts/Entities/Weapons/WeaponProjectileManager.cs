@@ -42,6 +42,7 @@ public class WeaponProjectileManager : MonoBehaviour
 
     void Start()
     {
+        _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         _ammunitionUI.gameObject.SetActive(false);
         // Check if the view is mine
          
@@ -51,7 +52,7 @@ public class WeaponProjectileManager : MonoBehaviour
         }
         _weaponAmmo = _weaponInfo.BulletCounts;
         _weaponClip = _weaponInfo.ClipCounts;
-        _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
+     
         GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
             this._ammunitionUI,
             nameof(this._ammunitionUI)
