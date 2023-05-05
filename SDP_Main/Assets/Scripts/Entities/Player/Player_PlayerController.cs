@@ -98,7 +98,8 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
-
+    
+    [SerializeField]private ScoreBoard _scoreBoard;
     //private List<Weapon> weapons = new List<Weapon>();
     //private Weapon currentWeapon = null;
 
@@ -135,6 +136,7 @@ public class Player_PlayerController : MonoBehaviour
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
         photonView = GetComponent<PhotonView>();
         _projectMananger = GetComponentInParent<WeaponProjectileManager>();
+        _scoreBoard = GetComponentInChildren<ScoreBoard>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
@@ -271,6 +273,10 @@ public class Player_PlayerController : MonoBehaviour
         if (inputHandler.GetReloadButtonDown())
         {
             _projectMananger.Reload();
+        }
+        //checking Scoreboard
+        if(inputHandler.GetScoreBoardInputDown()){
+            _scoreBoard.GetScoreboard();
         }
     }
 
