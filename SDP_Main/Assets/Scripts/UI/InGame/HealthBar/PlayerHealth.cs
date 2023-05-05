@@ -14,9 +14,15 @@ public class PlayerHealth : MonoBehaviour
     public HealthBar healthBar;
 
     private IEnumerator conroutine;
+
     void Start()
     {
-        conroutine= UpdateUI();
+        //Do not load if the instance does not belong to me
+        if (!Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+        {
+            return;
+        }
+        conroutine = UpdateUI();
         StartCoroutine(conroutine);
 
         currentHealth = maxHealth;
@@ -27,17 +33,21 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        if(currentHealth<=0)
+          //Do not load if the instance does not belong to me
+        if (!Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
         {
             return;
         }
-        else
-        {
-            TakeDamage(50);
-            print(currentHealth);
-        }
-
+        if (Input.GetKeyDown(KeyCode.B))
+            if (currentHealth <= 0)
+            {
+                return;
+            }
+            else
+            {
+                TakeDamage(10);
+                print(currentHealth);
+            }
     }
 
     void TakeDamage(float damage)
@@ -47,23 +57,21 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator UpdateUI()
     {
-        while(true)
+        while (true)
         {
-            if(currentUIHealth > currentHealth)
+            if (currentUIHealth > currentHealth)
             {
                 float speed = 10f;
-                if((currentUIHealth - currentHealth) > 20)
+                if ((currentUIHealth - currentHealth) > 20)
                 {
                     speed = 12f;
                 }
                 Debug.Log("UI changing");
                 currentUIHealth -= speed;
-            
+
                 healthBar.SetHealth(currentUIHealth);
             }
             yield return new WaitForSeconds(UI_HealthTime);
         }
-        
-
     }
 }

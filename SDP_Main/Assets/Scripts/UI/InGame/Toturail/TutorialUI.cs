@@ -12,6 +12,7 @@ public class TutorialUI : MonoBehaviour
     private void Start()
     {
         // Show the movement tip text at beginning
+        Debug.Log(Game_RuntimeData.isMultiplayer);
         moveText.gameObject.SetActive(true);
         jumpText.gameObject.SetActive(false);
     }

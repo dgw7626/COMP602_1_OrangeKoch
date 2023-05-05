@@ -897,8 +897,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1067338510}
   m_LocalRotation: {x: -0, y: -0.7080087, z: -0, w: 0.70620376}
-  m_LocalPosition: {x: -26.4, y: 0.077307135, z: 67.9}
-  m_LocalScale: {x: 3.3392391, y: 1, z: 17.379532}
+  m_LocalPosition: {x: -26.9421, y: 0.0773, z: 280.2526}
+  m_LocalScale: {x: 45.81002, y: 1, z: 17.379532}
   m_Children: []
   m_Father: {fileID: 206245548}
   m_RootOrder: 1
@@ -1383,7 +1383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6531818648858474800, guid: 6cc687c0469f22042b3bdc9929682b8c, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6537497983719227995, guid: 6cc687c0469f22042b3bdc9929682b8c, type: 3}
       propertyPath: m_fontSize
@@ -1544,7 +1544,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: using wsad to move
+  m_text: 'Using WSAD to move
+
+    Move to the Green Area'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -1806,8 +1808,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1535358414}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8056202, y: -0.28595254, z: 6.679878}
-  m_LocalScale: {x: 19.188229, y: 0.930759, z: 24.264078}
+  m_LocalPosition: {x: 1.8221, y: -0.286, z: 10.834}
+  m_LocalScale: {x: 19.22085, y: 0.930759, z: 15.956058}
   m_Children: []
   m_Father: {fileID: 811291677}
   m_RootOrder: 0
@@ -1899,7 +1901,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Speace to jump
+  m_text: Using space to jump
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}

@@ -13,8 +13,8 @@ public class MainMenu : MonoBehaviour
     }
     public void Tutorial ()
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SceneManager.LoadScene("Tutorial");
+        // SceneManager.LoadScene("");
+        SceneManager.LoadScene("TutorialMap");
     }
 
     public void QuitGame ()
