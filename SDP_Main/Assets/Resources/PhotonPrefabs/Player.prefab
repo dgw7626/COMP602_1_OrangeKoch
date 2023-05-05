@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 3261135226639761469}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -625,7 +625,7 @@ GameObject:
   - component: {fileID: 662058136216022273}
   m_Layer: 0
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -899,7 +899,7 @@ GameObject:
   - component: {fileID: 1870711492275946646}
   m_Layer: 0
   m_Name: Arms
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -994,7 +994,7 @@ GameObject:
   - component: {fileID: 8383351526428856731}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1072,7 +1072,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 4939327671449671106}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -1225,7 +1225,7 @@ GameObject:
   - component: {fileID: 3894513874079924080}
   m_Layer: 0
   m_Name: Face
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -33,6 +33,17 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
         {
             if(hit.transform != null)
             {
+                // Edit by Corey Knight - 04/05/23
+                //--------------------------------
+                if(hit.transform.tag == "Player_Model")
+                {
+                    Player_MultiplayerEntity e = hit.transform.GetComponentInParent<Player_MultiplayerEntity>();
+
+                    Game_RuntimeData.thisMachinesMultiplayerEntity.DamagePlayer(e.playerController.photonView.Owner.ActorNumber);
+                   /* Debug.Log("A Player was hit by " + Game_RuntimeData.thisMachinesPlayersPhotonView.ViewID + ". " +
+                        "\nThe player that was hit was: " + e.uniqueID);*/
+                }
+                //--------------------------------
                 Debug.DrawLine(origin.position,hit.point, Color.red);
                 Debug.unityLogger.logEnabled = true;
                 Debug.Log("Tagged Object : " + hit.transform.name);
