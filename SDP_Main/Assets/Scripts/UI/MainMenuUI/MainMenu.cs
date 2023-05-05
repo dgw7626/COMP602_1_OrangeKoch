@@ -25,7 +25,7 @@ public class MainMenu : MonoBehaviour
     public void Tutorial ()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SceneManager.LoadScene("TestMap");
+        SceneManager.LoadScene("TutorialMap");
     }
 
     public void QuitGame ()
