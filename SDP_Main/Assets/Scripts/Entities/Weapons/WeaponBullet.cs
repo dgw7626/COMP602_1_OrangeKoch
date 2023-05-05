@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class WeaponBullet : MonoBehaviour, IWeaponFireable
 {
@@ -8,7 +9,7 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
     internal GameObject _bulletObject;
     internal GameObject _shellObject;
     internal Coroutine _currentCoroutine;
-    
+ 
     public void Fire(Transform origin)
     {
         GuardClause.InspectGuardClauseNullRef<Transform>(origin, nameof(origin));
@@ -75,7 +76,7 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
         }
 
     }
-   
+    
     internal IEnumerator DisableBullet( float delaySecond)
     {
         GuardClause.InspectGuardClauseNullRef<GameObject>(this._bulletObject, nameof(this._bulletObject));

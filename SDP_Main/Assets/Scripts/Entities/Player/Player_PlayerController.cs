@@ -133,7 +133,7 @@ public class Player_PlayerController : MonoBehaviour
     void Awake()
     {
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
-        photonView = GetComponent<PhotonView>();
+        photonView = GetComponentInParent<PhotonView>();
         _projectMananger = GetComponentInParent<WeaponProjectileManager>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
@@ -265,15 +265,18 @@ public class Player_PlayerController : MonoBehaviour
         // shooting
         if (inputHandler.GetFireInputDown())
         {
-            _projectMananger.InitShoot(WeaponFiretype.Semi);
+            _projectMananger.photonView.RPC(nameof(_projectMananger.InitShoot), RpcTarget.All, WeaponFiretype.Semi);
+          //  _projectMananger.InitShoot(WeaponFiretype.Semi);
         }
         //Reaload
         if (inputHandler.GetReloadButtonDown())
         {
-            _projectMananger.Reload();
+
+            _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
+            
         }
     }
-
+    
     void OnDie()
     {
         IsDead = true;

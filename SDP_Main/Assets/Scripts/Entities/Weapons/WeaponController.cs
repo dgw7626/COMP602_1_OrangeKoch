@@ -6,31 +6,30 @@ using Photon.Pun;
 [RequireComponent(typeof(WeaponProjectileManager))]
 public class WeaponController : MonoBehaviour
 {
-    private PhotonView _photonView;
+    public PhotonView PhotonView { get; private set; }
     private WeaponProjectileManager _weaponProjectileMananger;
     void Awake()
     {
        
-        _photonView = GetComponentInParent<PhotonView>(); 
+        PhotonView = GetComponent<PhotonView>();
         _weaponProjectileMananger = GetComponent<WeaponProjectileManager>();
     }
     void Start()
     {
-        if (!_photonView.IsMine)
+        if (!PhotonView.IsMine)
         {
             return;
         }
-        GuardClause.InspectGuardClauseNullRef<WeaponProjectileManager>(this._weaponProjectileMananger, nameof(this._weaponProjectileMananger));
-        _weaponProjectileMananger.InitBullets();    
+        PhotonView.RPC(nameof(_weaponProjectileMananger.InitBullets), RpcTarget.All);
     }
-
-
     void Update()
     {
-        if (!_photonView.IsMine)
+        if (!PhotonView.IsMine)
         {
             return;
         }
-        _weaponProjectileMananger.UpdateChildTransform();
+        PhotonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
     }
+
+ 
 }

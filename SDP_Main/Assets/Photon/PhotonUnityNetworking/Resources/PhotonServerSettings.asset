@@ -43,6 +43,16 @@ MonoBehaviour:
   - HeresWhy
   - OnPlayerKilled
   - OnGameEnded
+  - Fire
+  - Shoot
+  - InitBullets
+  - GetShoot
+  - InitiBullets
+  - UpdateChildTransform
+  - Bitch
+  - RPC_Bitch
+  - Reload
+  - InitShoot
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

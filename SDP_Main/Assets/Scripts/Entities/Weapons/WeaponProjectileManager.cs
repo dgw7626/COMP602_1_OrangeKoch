@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Photon.Pun;
-public class WeaponProjectileManager : MonoBehaviour
+using Newtonsoft.Json.Serialization;
+
+public class WeaponProjectileManager : MonoBehaviourPun
 {
 
     [SerializeField] private WeaponInfo _weaponInfo;
@@ -11,7 +13,7 @@ public class WeaponProjectileManager : MonoBehaviour
     [SerializeField] private int _weaponAmmo;
     [SerializeField] private int _weaponClip;
     [SerializeField] private AmmunitionUI _ammunitionUI;
-
+    [SerializeField] private WeaponController _weaponController;
     internal Coroutine _currentCoroutine;
     private Vector3 _fw, _up;
     private Transform _camera;
@@ -36,10 +38,14 @@ public class WeaponProjectileManager : MonoBehaviour
         _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(this._ammunitionUI, nameof(this._ammunitionUI));
         _ammunitionUI.SetAmmunition(_weaponAmmo, _weaponClip);
+
+        _weaponController = GetComponent<WeaponController>();
+
     }
     /// <summary>
     /// This method will update the target object of the postion and rotation, the position values will be duplicated from parent object.
     /// </summary>
+    [PunRPC]
     public void UpdateChildTransform()
     {
         GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
@@ -53,6 +59,7 @@ public class WeaponProjectileManager : MonoBehaviour
     /// <summary>
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
+    [PunRPC]
     public void InitBullets()
     {
         Transform bullets;
@@ -117,6 +124,7 @@ public class WeaponProjectileManager : MonoBehaviour
     /// <summary>
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
+
     public void GetShoot()
     {
         GuardClause.InspectGuardClauseNullRef<int>(_weaponAmmo, nameof(_weaponAmmo));
@@ -139,6 +147,7 @@ public class WeaponProjectileManager : MonoBehaviour
     /// <summary>
     ///  This method reloads the current gun, ammo display will be refreshed after reload.
     /// </summary>
+    [PunRPC]
     public void Reload()
     {
         GuardClause.InspectGuardClauseNullRef<int>(this._weaponClip, nameof(this._weaponClip));
@@ -155,6 +164,7 @@ public class WeaponProjectileManager : MonoBehaviour
     /// This method initialize the shooting type of the weapon there are three options (Auto, Burst, Semi).
     /// </summary>
     /// <param name="fireType"></param>
+    [PunRPC]
     public void InitShoot(WeaponFiretype fireType)
     {
         switch (fireType) {
@@ -170,6 +180,8 @@ public class WeaponProjectileManager : MonoBehaviour
                 }
             case WeaponFiretype.Semi:
                 {
+                    
+                  //  transform.GetComponentInParent<PhotonView>().RPC(nameof(GetShoot), RpcTarget.All);
                     GetShoot();
                     break;
                 }
