@@ -6,6 +6,11 @@ using UnityEngine;
 public class Game_RuntimeData
 {
     /// <summary>
+    /// Reference to game mode manager to be accessed from instantiated environment.
+    /// </summary>
+    public static GameMode_Manager gameMode_Manager = null;
+
+    /// <summary>
     /// List of all Multiplayer Entities that were ever instantiated.
     /// Persists even if a player leaves a match.
     /// </summary>
@@ -39,7 +44,17 @@ public class Game_RuntimeData
     /// The Photon View belonging to the local player
     /// </summary>
     public static PhotonView thisMachinesPlayersPhotonView = null;
+    /// <summary>
+    /// The Photon View belonging to the local player
+    /// </summary>
+    public static Player_MultiplayerEntity thisMachinesMultiplayerEntity = null;
 
+    /// <summary>
+    /// Informattion about the game score. Will be updated only by the master client, who
+    /// will broadcast the struct at the end of a match.
+    /// </summary>
+    public static s_GameScore gameScore;
+    
     /// <summary>
     /// Key-value-pair of all currently active players in a multiplayer match.
     /// Triggered once at the start of a match, by the GameModeManager. All MultiplayerEntities in instantiatedPlayers will be added.
@@ -63,6 +78,7 @@ public class Game_RuntimeData
         entity.RegisterUniqueID("" + id);
         Debug.Log("Registered new player: " + id);
     }
+
     public static void DebugPrintMP_PlayerInfo()
     {
         Debug.Log("List of all instatiated players:");
@@ -80,6 +96,26 @@ public class Game_RuntimeData
             Debug.Log("ID: " + ent.Value.GetComponent<PhotonView>().Owner.ActorNumber +
                 " Name: " + ent.Value.uniqueID);
         }
+
+    }
+
+
+    /// <summary>
+    /// Cleanup and destroy objects when exiting Multiplayer Game
+    /// </summary>
+    public static void CleanUp_Multiplayer_Data()
+    {
+        Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
+        PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
+        PhotonNetwork.Disconnect();
+
+        gameMode_Manager = null;
+        instantiatedPlayers = new List<Player_MultiplayerEntity>();
+        teams = new List<List<Player_MultiplayerEntity>>();
+        activePlayers = null;
+        isMultiplayer = false;
+        gameMode = null;
+        thisMachinesPlayersPhotonView = null;
 
     }
 }
