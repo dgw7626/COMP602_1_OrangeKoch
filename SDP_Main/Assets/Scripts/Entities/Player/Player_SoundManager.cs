@@ -124,7 +124,7 @@ public class Player_SoundManager : MonoBehaviour
             }
         }
 
-        transform.parent.GetComponent<Player_UIManager>().UpdateVoiceChatUI(proximityVoiceMute);
+        transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().UpdateVoiceChatUI(proximityVoiceMute);
     }
     /// <summary>
     /// Action performed to enable microphone when PTT key is pressed
