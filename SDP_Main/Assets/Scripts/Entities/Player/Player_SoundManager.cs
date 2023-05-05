@@ -30,31 +30,19 @@ public class Player_SoundManager : MonoBehaviour
 
     float m_FootstepDistanceCounter;
 
-    public TextMeshProUGUI proximityMuteText;
-    public TextMeshProUGUI pushToTalkText;
-
     /// <summary>
     /// Functions to run once, when object is instantiated
     /// </summary>
     private void Awake()
     {
+        //Return if not playing multiplayer, such that it is single.
+        if (!Game_RuntimeData.isMultiplayer)
+            return;
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
             return;
-        }
-
-        //Load if the instance belongs to me
-        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
-        {
-
-            proximityMuteText.enabled = true;
-            pushToTalkText.enabled = true;
-            proximityVoiceMute = false;
-            proximityMuteText = transform.parent.Find("PlayerUI").Find("ProximityMute_Text").GetComponent<TextMeshProUGUI>();
-            proximityMuteText.text = "(Press \"M\") Mute: " + ((proximityVoiceMute) ? "MUTE" : "UNMUTE");
-            pushToTalkText = transform.parent.Find("PlayerUI").Find("PTT_Text").GetComponent<TextMeshProUGUI>();
-            pushToTalkText.text = "(Press \"LEFT ALT\") PTT: OFF";
         }
     }
 
@@ -63,6 +51,10 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        //Return if not playing multiplayer, such that it is single.
+        if (!Game_RuntimeData.isMultiplayer)
+            return;
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -131,22 +123,15 @@ public class Player_SoundManager : MonoBehaviour
                 }
             }
         }
-        // Update VoiceChat UI Display
-        proximityMuteText.text = "(Press \"M\") Mute: " + ((proximityVoiceMute) ? "MUTE" : "UNMUTE");
-        if(proximityVoiceMute)
-        {
-            pushToTalkText.text = "PTT: Disabled, Proximity Muted!";
-        } else
-        {
-            pushToTalkText.text = "(Press \"LEFT ALT\") PTT: OFF";
-        }
+
+        transform.parent.GetComponent<Player_UIManager>().UpdateVoiceChatUI(proximityVoiceMute);
     }
     /// <summary>
     /// Action performed to enable microphone when PTT key is pressed
     /// </summary>
     private void OnPTTButtonPressed()
     {
-        if(proximityVoiceMute)
+        if (proximityVoiceMute)
         {
             //Prevent Transmitting Voice
             Debug.Log("Proximity Muted, cannot PTT!");
@@ -157,7 +142,7 @@ public class Player_SoundManager : MonoBehaviour
             //Start Transmitting Voice
             Debug.Log("PTT Button Pressed!");
             transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = true;
-            pushToTalkText.text = "(Press \"LEFT ALT\") PTT: ON";
+            transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().SetPTTtext("(Press \"LEFT ALT\") PTT: ON");
         } else
         {
             //Continue Transmitting Voice
@@ -170,7 +155,7 @@ public class Player_SoundManager : MonoBehaviour
     {
         Debug.Log("PTT Button Released!");
         transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = false;
-        pushToTalkText.text = "(Press \"LEFT ALT\") PTT: OFF";
+        transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().SetPTTtext("(Press \"LEFT ALT\") PTT: OFF");
     }
 
     internal void PlayFallDamage()
