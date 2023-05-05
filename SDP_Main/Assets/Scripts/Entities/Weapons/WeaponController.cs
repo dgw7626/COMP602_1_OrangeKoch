@@ -29,6 +29,7 @@ public class WeaponController : MonoBehaviour
             return;
         }
         PhotonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
+      //  _weaponProjectileMananger.UpdateChildTransform();
     }
 
  

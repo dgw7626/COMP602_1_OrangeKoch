@@ -9,7 +9,7 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
     internal GameObject _bulletObject;
     internal GameObject _shellObject;
     internal Coroutine _currentCoroutine;
- 
+    [PunRPC]
     public void Fire(Transform origin)
     {
         GuardClause.InspectGuardClauseNullRef<Transform>(origin, nameof(origin));

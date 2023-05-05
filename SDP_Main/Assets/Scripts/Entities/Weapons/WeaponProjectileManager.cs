@@ -113,7 +113,7 @@ public class WeaponProjectileManager : MonoBehaviourPun
         {
             if (!bullet.gameObject.activeSelf)
             {
-                bullet.Fire(firePos);
+                GetComponent<PhotonView>().RPC(nameof(bullet.Fire),RpcTarget.All, firePos);
                 bullet.gameObject.SetActive(true);
 
             }
@@ -124,7 +124,7 @@ public class WeaponProjectileManager : MonoBehaviourPun
     /// <summary>
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
-
+    [PunRPC]
     public void GetShoot()
     {
         GuardClause.InspectGuardClauseNullRef<int>(_weaponAmmo, nameof(_weaponAmmo));
@@ -180,9 +180,9 @@ public class WeaponProjectileManager : MonoBehaviourPun
                 }
             case WeaponFiretype.Semi:
                 {
-                    
+                    GetComponent<PhotonView>().RPC("GetShoot", RpcTarget.All);
                   //  transform.GetComponentInParent<PhotonView>().RPC(nameof(GetShoot), RpcTarget.All);
-                    GetShoot();
+                    //GetShoot();
                     break;
                 }
             default:
