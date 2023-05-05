@@ -8,12 +8,11 @@ using System.Net.Mime;
 
 public class ScoreBoard : MonoBehaviour
 {
-    
 // Assiging the Text attribute.
     public Text playerNameText_1;
     public Text playerKillsText_1;
     public Text playerDeathsText_1;
-    //public Text playerWonText_1;
+    public Text playerWonText_1;
 
     public Text playerNameText_2;
     public Text playerKillsText_2;

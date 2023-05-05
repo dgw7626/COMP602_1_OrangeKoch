@@ -1649,7 +1649,7 @@ GameObject:
   - component: {fileID: 3261135226639761469}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2053,7 +2053,7 @@ GameObject:
   - component: {fileID: 662058136216022273}
   m_Layer: 0
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2327,7 +2327,7 @@ GameObject:
   - component: {fileID: 1870711492275946646}
   m_Layer: 0
   m_Name: Arms
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2422,7 +2422,7 @@ GameObject:
   - component: {fileID: 8383351526428856731}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2500,7 +2500,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 4939327671449671106}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -2653,7 +2653,7 @@ GameObject:
   - component: {fileID: 3894513874079924080}
   m_Layer: 0
   m_Name: Face
-  m_TagString: Untagged
+  m_TagString: Player_Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2995,6 +2995,7 @@ GameObject:
   - component: {fileID: 8380650363493761703}
   - component: {fileID: 7839544411530030526}
   - component: {fileID: 5622637745393185312}
+  - component: {fileID: 3255898779213423478}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
@@ -3089,6 +3090,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3255898779213423478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6821953248771522266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99687e74732cf4844b038dc955bd7a9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proximityMuteText: {fileID: 0}
+  pushToTalkText: {fileID: 0}
 --- !u!1 &7663682148274534915
 GameObject:
   m_ObjectHideFlags: 0
@@ -3102,7 +3117,7 @@ GameObject:
   - component: {fileID: 8167696013445777441}
   m_Layer: 0
   m_Name: SoundSystem
-  m_TagString: Untagged
+  m_TagString: SoundSystem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3142,8 +3157,6 @@ MonoBehaviour:
   LandSfx: {fileID: 8300000, guid: 1c1a70f8220c5b34294d7b79d4fc1216, type: 3}
   FallDamageSfx: {fileID: 0}
   proximityVoiceMute: 0
-  proximityMuteText: {fileID: 1784866073537345953}
-  pushToTalkText: {fileID: 3635317774692603674}
 --- !u!82 &8167696013445777441
 AudioSource:
   m_ObjectHideFlags: 0
