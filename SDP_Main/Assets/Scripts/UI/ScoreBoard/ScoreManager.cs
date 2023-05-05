@@ -12,7 +12,7 @@ public class ScoreManager
     public int won;
 
 // The constructor takes player details and put data on Firebase Database.
-    public ScoreManager(string playerName, int kills, int deaths, int won)
+    public ScoreManager(string playerName, int kills, int deaths)
     {
         this.playerName = playerName;
         this.kills = kills;
