@@ -53,7 +53,15 @@ public class GameMode_Standard : IgameMode
         {
             p.playerController.IsMultiplayer = true;
             p.playerController.IsInputLocked = false;
+      
+            if(p.playerController.photonView.IsMine)
+            {
+                Game_RuntimeData.thisMachinesPlayersPhotonView = p.playerController.photonView;
+                Debug.Log("At START GAME: ThisMachines PhotonView is mine, and my number is: " + PhotonNetwork.LocalPlayer.ActorNumber + 
+                    " " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber);
+            }
         }
+
     }
 
     public void OnStopGame()

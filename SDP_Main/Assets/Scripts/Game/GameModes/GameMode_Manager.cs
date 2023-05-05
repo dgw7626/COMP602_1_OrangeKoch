@@ -41,10 +41,8 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 
         foreach (Player_MultiplayerEntity e in Game_RuntimeData.instantiatedPlayers)
         {
-            //if (e.GetComponent<PhotonView>().IsMine)
-            {
-                Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
-            }
+            Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
+            e.playerHealth.Begin(e);
         }
         gameMode.InitGame();
 

@@ -1961,6 +1961,7 @@ GameObject:
   - component: {fileID: 6531818648858474800}
   - component: {fileID: -2966379466193596973}
   - component: {fileID: 6850991498742217655}
+  - component: {fileID: -8458251855809000015}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2018,6 +2019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
+  playerHealth: {fileID: 0}
   teamNumber: 0
 --- !u!114 &5236005440239454224
 MonoBehaviour:
@@ -2125,6 +2127,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-8458251855809000015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9033863217191558649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea484f6ebfd074c4f9a367923131cf68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  currentUIHealth: 0
+  UI_HealthTime: 0.16
+  healthBar: {fileID: 4142007182795401793}
 --- !u!1001 &5573682601461916444
 PrefabInstance:
   m_ObjectHideFlags: 0
