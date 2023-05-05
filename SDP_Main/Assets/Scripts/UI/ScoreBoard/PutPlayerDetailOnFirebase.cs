@@ -18,8 +18,6 @@ public class PutPlayerDetailOnFirebase : MonoBehaviour
 
      void Update()
      {
-          //ScoreManager("Sky", 5, 5);
-          //ScoreManager("Harry", 10, 10);
           
          //RestClient.Delete("https://project-10bbb-default-rtdb.firebaseio.com/.json");
      }
