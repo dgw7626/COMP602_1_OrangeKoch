@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -54,11 +51,24 @@ public class Player_UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method to Quit the game back to Menu.
+    /// </summary>
     private void OnQuitGameButtonPressed()
     {
-        throw new NotImplementedException();
+        Debug.Log("Player quit game.");
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
+        } else
+        {
+            Game_RuntimeData.gameMode_Manager.QuitSinglePlayer();
+        }
     }
 
+    /// <summary>
+    /// Preload one instance of Voice UI for my view
+    /// </summary>
     private void PreLoadVoiceUI()
     {
         if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
@@ -75,6 +85,9 @@ public class Player_UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update the Voice UI when Proximity Voice Mute is Toggled.
+    /// </summary>
     public void UpdateVoiceChatUI(bool proximityVoiceMute)
     {
         // Update VoiceChat UI Display
@@ -89,6 +102,9 @@ public class Player_UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the Push to Talk VoiceUI text
+    /// </summary>
     public void SetPTTtext(string text)
     {
         pushToTalkText.text = text;

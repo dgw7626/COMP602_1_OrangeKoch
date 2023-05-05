@@ -6,6 +6,11 @@ using UnityEngine;
 public class Game_RuntimeData
 {
     /// <summary>
+    /// Reference to game mode manager to be accessed from instantiated environment.
+    /// </summary>
+    public static GameMode_Manager gameMode_Manager = null;
+
+    /// <summary>
     /// List of all Multiplayer Entities that were ever instantiated.
     /// Persists even if a player leaves a match.
     /// </summary>
@@ -63,6 +68,7 @@ public class Game_RuntimeData
         entity.RegisterUniqueID("" + id);
         Debug.Log("Registered new player: " + id);
     }
+
     public static void DebugPrintMP_PlayerInfo()
     {
         Debug.Log("List of all instatiated players:");
@@ -80,6 +86,26 @@ public class Game_RuntimeData
             Debug.Log("ID: " + ent.Value.GetComponent<PhotonView>().Owner.ActorNumber +
                 " Name: " + ent.Value.uniqueID);
         }
+
+    }
+
+
+    /// <summary>
+    /// Cleanup and destroy objects when exiting Multiplayer Game
+    /// </summary>
+    public static void CleanUp_Multiplayer_Data()
+    {
+        Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
+        PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
+        PhotonNetwork.Disconnect();
+
+        gameMode_Manager = null;
+        instantiatedPlayers = new List<Player_MultiplayerEntity>();
+        teams = new List<List<Player_MultiplayerEntity>>();
+        activePlayers = null;
+        isMultiplayer = false;
+        gameMode = null;
+        thisMachinesPlayersPhotonView = null;
 
     }
 }

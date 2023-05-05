@@ -14,16 +14,23 @@ public static class Game_GameState
         state = state.RunState(param);
     }
 
+    /// <summary>
+    /// Transition to a new scene
+    /// </summary>
     public static void NextScene(string sceneName)
     {
+        //Get number of scenes in build settings
         int sceneCount = SceneManager.sceneCountInBuildSettings;
 
         Debug.Log("Loading next scene: " + sceneName);
+
+        //Loop through all scenes
         for (int i = 0; i < sceneCount; i++)
         {
+            //set temp scene name
             string tmpScene = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i)); //Temporarily store the Scene Path as String
 
-            Debug.Log("Scene ("+i+"): "+SceneManager.GetSceneAt(i).name);
+            //Check temp scene if matching desired scene to change to
             if (tmpScene == sceneName)
             {
                 SceneManager.LoadScene(i);

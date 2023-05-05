@@ -30,9 +30,11 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     /// </summary>
     void Start()
     {
-        Debug.Log("Connecting to Dion Server");
-        //Connect to the Photon Server
-        PhotonNetwork.ConnectUsingSettings();
+        if (!Game_RuntimeData.isMultiplayer) {
+            Debug.Log("Connecting to Photon Server");
+            //Connect to the Photon Server
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     /// <summary>
@@ -117,6 +119,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     {
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);    //Permits master player to see and start game
     }
+
     /// <summary>
     /// Override method if room creation fails
     /// </summary>
@@ -128,15 +131,20 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// Method to quit multiplayer and return to Main Multiplayer_MenuItem.
+    /// Method to quit multiplayer and return to Lobby.
     /// </summary>
     public void QuitMultiplayer()
     {
-        Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
-        PhotonView PV = GetComponent<PhotonView>();
-        PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
-        PhotonNetwork.Disconnect();
-        Game_RuntimeData.isMultiplayer = false;      //Sets the multiplayer state to false
+        Debug.Log("Quit Multiplayer Invoked - Returning to Lobby.");
+        Game_RuntimeData.CleanUp_Multiplayer_Data();
+
+        // Get a reference to the Photon Voice Manager object
+        var voiceManager = GameObject.Find("VoiceManager");
+        // If the object exists, stop and destroy the voice service
+        if (voiceManager != null)
+        {
+            Destroy(voiceManager);
+        }
 
         StartCoroutine(QuitAfterDelay());
     }

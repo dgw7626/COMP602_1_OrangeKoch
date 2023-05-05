@@ -6,6 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private void Start()
+    {
+        // Show the cursor
+        Cursor.visible = true;
+
+        // Unlock the cursor
+        Cursor.lockState = CursorLockMode.None;
+
+        //Set multiplayer to false
+        Game_RuntimeData.isMultiplayer = false;
+    }
     public void Multiplayer()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
