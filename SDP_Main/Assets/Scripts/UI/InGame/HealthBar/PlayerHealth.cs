@@ -49,7 +49,7 @@ public class PlayerHealth : MonoBehaviour
                 print(currentHealth);
             }
     }
-
+    // plauyerHealth_Manager.cs
     void TakeDamage(float damage)
     {
         currentHealth -= damage;

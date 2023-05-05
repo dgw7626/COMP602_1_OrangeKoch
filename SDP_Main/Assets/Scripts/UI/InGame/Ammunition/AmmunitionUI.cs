@@ -12,7 +12,9 @@ public class AmmunitionUI : MonoBehaviour
         Text.text = currentBullet + " / " + bulletmag;
         
     }
-
+    /// <summary>
+    /// This method aim to set the Aumunition number to UI
+    /// </summary>
 
         public void UpdateUI(int currentBullet,int bulletmag)
     {
