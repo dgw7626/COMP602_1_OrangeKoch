@@ -148,6 +148,14 @@ public class Player_InputManager : MonoBehaviour
             return 0;
     }
 
+    public bool GetScoreBoardInputDown(){
+        if(InputIsLocked())
+            return false;
+        
+        return Input.GetButtonDown("Scoreboard");
+
+    }
+
     public int GetSelectWeaponInput()
     {
         if (InputIsLocked())
@@ -207,5 +215,14 @@ public class Player_InputManager : MonoBehaviour
     {
         // Check if Push To Talk button is being pressed
         return Input.GetButton("PTTVoice");
+    }
+
+    /// <summary>
+    /// Returns true or false if the Quit Game button is pressed
+    /// </summary>
+    public bool GetQuitGameButtonIsPressed()
+    {
+        // Check if Quit Game button is being pressed
+        return Input.GetButton("QuitGame");
     }
 }

@@ -1,3 +1,30 @@
-I just made this because I didn't like the repo being empty
-I just added to this, because one line is never enough.
-I just accepted the request.
+[-------------------------------------------------------------------------------------------]
+Paper Name: COMP621
+Team Name: Orange Koch
+[-------------------------------------------------------------------------------------------]
+
+Project: Orange Koch's First Person Shooter
+About  : this project is 6 vs 6 first person shooter game.
+Theme  : Dark Universe, Matrix, Machine, Manipulating by AI, Prisoners trying to escape
+         from dream world.
+
+Input  : 
+       - Player movement W,A,S,D keys
+       - Mouse Button right to shoot 
+       - R Key to relaod ammo
+       - Tab Key to show scoreboard.
+
+-Before you download the file please follow the instructions below-
+
+-Introduction Of Running Game-
+Link: ///Game Link///
+download above link and unzip the folder and run the "orangeKoch.exe" executable.
+
+-Introduction Of Running Unity Project-
+Required files (Please open the package manager from unity and enable in unity registry).
+-URP (Universal Rendering Pipeline)
+-Text Mesh Pro
+Note: once you download the folder you will have "Text Mesh Pro" pop up. you will
+    have to install UI to make display it on unity.
+
+[-------------------------------------------------------------------------------------------]

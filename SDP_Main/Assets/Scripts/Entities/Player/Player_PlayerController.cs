@@ -14,10 +14,10 @@ public class Player_PlayerController : MonoBehaviour
 
     [Header("General")]
     [Tooltip("Force applied downward when in the air")]
-    public float GravityDownForce = 20f;
+    public float GravityForce = 20f;
 
-    [Tooltip("Physic layers checked to consider the player grounded")]
-    public LayerMask GroundCheckLayers = -1;
+    [Tooltip("Physics layer checked for to consider if the player is grounded")]
+    public LayerMask GroundCheckLayer = -1;
 
     [Tooltip("distance from the bottom of the character controller capsule to test for grounded")]
     public float GroundCheckDistance = 0.05f;
@@ -41,10 +41,10 @@ public class Player_PlayerController : MonoBehaviour
     public float AccelerationSpeedInAir = 25f;
 
     [Tooltip("Multiplicator for the sprint speed (based on grounded speed)")]
-    public float SprintSpeedModifier = 2f;
+    public float SprintSpeedModifier = 3f;
 
     [Tooltip("Height at which the player dies instantly when falling off the map")]
-    public float KillHeight = -50f;
+    public float MaxNegativeY = -50f;
 
     [Header("Rotation")]
     [Tooltip("Rotation speed for moving the camera")]
@@ -98,7 +98,8 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
-
+    
+    [SerializeField]private ScoreBoard _scoreBoard;
     //private List<Weapon> weapons = new List<Weapon>();
     //private Weapon currentWeapon = null;
 
@@ -135,6 +136,7 @@ public class Player_PlayerController : MonoBehaviour
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
         photonView = GetComponent<PhotonView>();
         _projectMananger = GetComponentInParent<WeaponProjectileManager>();
+        _scoreBoard = GetComponentInChildren<ScoreBoard>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
@@ -178,7 +180,7 @@ public class Player_PlayerController : MonoBehaviour
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
-        SetCrouchingState(false, true);
+        CanCrouchOrJump(false, true);
         UpdateCharacterHeight(true);
     }
 
@@ -270,7 +272,7 @@ public class Player_PlayerController : MonoBehaviour
         // crouching
         if (inputHandler.GetCrouchInputDown())
         {
-            SetCrouchingState(!IsCrouching, false);
+            CanCrouchOrJump(!IsCrouching, false);
         }
 
         UpdateCharacterHeight(false);
@@ -286,6 +288,10 @@ public class Player_PlayerController : MonoBehaviour
         if (inputHandler.GetReloadButtonDown())
         {
             _projectMananger.Reload();
+        }
+        //checking Scoreboard
+        if(inputHandler.GetScoreBoardInputDown()){
+            _scoreBoard.GetScoreboard();
         }
     }
 
@@ -315,7 +321,7 @@ public class Player_PlayerController : MonoBehaviour
         {
             // if we're grounded, collect info about the ground normal with a downward capsule cast representing our character capsule
             if (Physics.CapsuleCast(GetCapsuleBottomHemisphere(), GetCapsuleTopHemisphere(controller.height),
-                controller.radius, Vector3.down, out RaycastHit hit, chosenGroundCheckDistance, GroundCheckLayers,
+                controller.radius, Vector3.down, out RaycastHit hit, chosenGroundCheckDistance, GroundCheckLayer,
                 QueryTriggerInteraction.Ignore))
             {
                 // storing the upward direction for the surface found
@@ -365,7 +371,7 @@ public class Player_PlayerController : MonoBehaviour
         {
             if (isSprinting)
             {
-                isSprinting = SetCrouchingState(false, false);
+                isSprinting = CanCrouchOrJump(false, false);
             }
 
             float speedModifier = isSprinting ? SprintSpeedModifier : 1f;
@@ -392,7 +398,7 @@ public class Player_PlayerController : MonoBehaviour
                 if (IsGrounded && inputHandler.IsJumping())
                 {
                     // force the crouch state to false
-                    if (SetCrouchingState(false, false))
+                    if (CanCrouchOrJump(false, false))
                     {
                         // start by canceling out the vertical component of our velocity
                         CharacterVelocity = new Vector3(CharacterVelocity.x, 0f, CharacterVelocity.z);
@@ -429,7 +435,7 @@ public class Player_PlayerController : MonoBehaviour
                 CharacterVelocity = horizontalVelocity + (Vector3.up * verticalVelocity);
 
                 // apply the gravity to the velocity
-                CharacterVelocity += Vector3.down * GravityDownForce * Time.deltaTime;
+                CharacterVelocity += Vector3.down * GravityForce * Time.deltaTime;
             }
         }
 
@@ -500,8 +506,8 @@ public class Player_PlayerController : MonoBehaviour
         }
     }
 
-    // returns false if there was an obstruction
-    bool SetCrouchingState(bool crouched, bool ignoreObstructions)
+    // Checks for collisions in a radius
+    bool CanCrouchOrJump(bool crouched, bool ignoreObstructions)
     {
         // set appropriate heights
         if (crouched)
@@ -510,7 +516,6 @@ public class Player_PlayerController : MonoBehaviour
         }
         else
         {
-            // Detect obstructions
             if (!ignoreObstructions)
             {
                 Collider[] standingOverlaps = Physics.OverlapCapsule(
@@ -521,7 +526,7 @@ public class Player_PlayerController : MonoBehaviour
                     QueryTriggerInteraction.Ignore);
                 foreach (Collider c in standingOverlaps)
                 {
-                    if (c != controller)
+                    if (c != controller && c.tag != "Player_Model")
                     {
                         return false;
                     }
