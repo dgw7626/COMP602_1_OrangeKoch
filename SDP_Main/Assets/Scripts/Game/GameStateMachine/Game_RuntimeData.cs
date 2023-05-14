@@ -8,7 +8,12 @@ public class Game_RuntimeData
     /// <summary>
     /// Reference to game mode manager to be accessed from instantiated environment.
     /// </summary>
-    public static GameMode_Manager gameMode_Manager = null;
+    public static GameMode_Manager gameMode_Manager = null;    
+    
+    /// <summary>
+    /// Reference to player manager to be accessed from instantiated environment.
+    /// </summary>
+    public static Game_PlayerManager playerManager = null;
 
     /// <summary>
     /// List of all Multiplayer Entities that were ever instantiated.
