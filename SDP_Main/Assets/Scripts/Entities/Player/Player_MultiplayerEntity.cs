@@ -105,20 +105,25 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     {
         s_DamageInfo dmgInfo = (s_DamageInfo)JsonUtility.FromJson(damageInfo, typeof(s_DamageInfo));
 
-        Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgDeltId);
+        //Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgDeltId);
+        Debug.Log("SHOULD ONLY BE PLAYER: I am the player: " + playerController.photonView.Owner.ActorNumber + "\nBut I should be: " + PhotonNetwork.LocalPlayer.ActorNumber);
         if(playerController.photonView.IsMine)
         {
-            Debug.Log("The PV is mine");
+            Debug.Log("The PV is mine (" + dmgInfo.dmgDeltId + ")and I was shot by " + dmgInfo.dmgDealerId);
         }
-        Debug.Log("I am the player: " + playerController.photonView.Owner.ActorNumber + "\nBut I should be: " + PhotonNetwork.LocalPlayer.ActorNumber);
+/*        else
+        {
+            return;
+        }*/
 
         //    dmgInfo.dmgDeltId == playerController.photonView.Owner.ActorNumber)
 
-        //if (playerController.photonView.IsMine)
+        if (playerController.photonView.IsMine)
         {
             Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber)    );
             Debug.Log("The actor who was shot: " + dmgInfo.dmgDeltId);
-            playerHealth.TakeDamage(10.0f);
+            dmgInfo.dmgValue = 10f;
+            playerHealth.TakeDamage(dmgInfo);
                 
         }
 

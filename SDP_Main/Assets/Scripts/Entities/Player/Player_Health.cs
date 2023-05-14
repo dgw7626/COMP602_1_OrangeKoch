@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Health : MonoBehaviour
+public class Player_Health : MonoBehaviour, IDamageable
 {
     // Start is called before the first frame update
 
@@ -45,19 +45,17 @@ public class Player_Health : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(s_DamageInfo damageInfo)
     {
         Debug.Log("===============================================================\n=============================================================");
-        currentHealth -= damage;
+        currentHealth -= damageInfo.dmgValue;
         //if (healthBar.gameObject.activeSelf)
         {
             healthBar.SetHealth(currentHealth);
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            Debug.Log("My id is:");
-            Debug.Log("I am " + gameObject.GetComponent<Player_PlayerController>().photonView.Owner.ActorNumber.ToString());
-            Debug.Log("My health bar is active: " + healthBar.gameObject.activeSelf);
-            Debug.Log("PV is mine: " + pvIsMine);
+            Debug.Log("My id is:\nI am " + gameObject.GetComponent<Player_PlayerController>().photonView.Owner.ActorNumber.ToString()
+                + "\nMy health bar is active: " + healthBar.gameObject.activeSelf + "\nPV is mine: " + pvIsMine);
         }
+
     }
 
     IEnumerator UpdateUI()

@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,11 +39,8 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
                 //--------------------------------
                 if(hit.transform.tag == "Player_Model")
                 {
-                    Player_MultiplayerEntity e = hit.transform.GetComponentInParent<Player_MultiplayerEntity>();
+                    HitPlayer(hit);
 
-                    Game_RuntimeData.thisMachinesMultiplayerEntity.DamagePlayer(e.playerController.photonView.Owner.ActorNumber);
-                   /* Debug.Log("A Player was hit by " + Game_RuntimeData.thisMachinesPlayersPhotonView.ViewID + ". " +
-                        "\nThe player that was hit was: " + e.uniqueID);*/
                 }
                 //--------------------------------
                 Debug.DrawLine(origin.position,hit.point, Color.red);
@@ -58,6 +57,28 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
                 return;
             }           
         }
+    }
+
+    private void HitPlayer(RaycastHit hit)
+    {
+        PhotonView pv = hit.transform.GetComponentInParent<Player_PlayerController>().photonView;
+        if(pv == null)
+        {
+            Debug.LogError("WARNING: The player who was shot has no Photon View!");
+            return;
+        }
+
+        s_DamageInfo dmg = new s_DamageInfo();
+        dmg.bodyPart = e_BodyPart.NONE;
+        dmg.dmgValue = 10f;
+        dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+        dmg.dmgDeltId = pv.Owner.ActorNumber;
+        pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
+        //Player_MultiplayerEntity e = hit.transform.GetComponentInParent<Player_MultiplayerEntity>();
+
+       // Game_RuntimeData.thisMachinesMultiplayerEntity.DamagePlayer(e.playerController.photonView.Owner.ActorNumber);
+        /* Debug.Log("A Player was hit by " + Game_RuntimeData.thisMachinesPlayersPhotonView.ViewID + ". " +
+             "\nThe player that was hit was: " + e.uniqueID);*/
     }
 
     public void Hit(Transform origin)
