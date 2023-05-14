@@ -6,6 +6,7 @@ using Photon.Pun;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Realtime;
 using System;
+using Newtonsoft.Json.Schema;
 
 public class GameMode_Standard : IgameMode
 {
@@ -53,7 +54,15 @@ public class GameMode_Standard : IgameMode
         {
             p.playerController.IsMultiplayer = true;
             p.playerController.IsInputLocked = false;
+      
+            if(p.playerController.photonView.IsMine)
+            {
+                Game_RuntimeData.thisMachinesPlayersPhotonView = p.playerController.photonView;
+                Debug.Log("At START GAME: ThisMachines PhotonView is mine, and my number is: " + PhotonNetwork.LocalPlayer.ActorNumber + 
+                    " " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber);
+            }
         }
+
     }
 
     public void OnStopGame()
@@ -112,8 +121,17 @@ public class GameMode_Standard : IgameMode
 
         teamScores.killsPerTeam[teamNumber] += score;
     }
-    public void OnPlayerKilled(Player_MultiplayerEntity playerKilled)
+    public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
+        //TODO: Find player and respwan/destroy them here
+        foreach(KeyValuePair<int, Player_MultiplayerEntity> value in Game_RuntimeData.activePlayers)
+        {
+            if(value.Key == deathInfoStruct.diedId) 
+            {
+                value.Value.gameObject.transform.position = new Vector3(0, 0, 0);
+                return;
+            }
+        }
     }
 
     public void LeaveScene(string sceneName)
