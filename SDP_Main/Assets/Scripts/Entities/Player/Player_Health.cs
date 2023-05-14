@@ -47,15 +47,24 @@ public class Player_Health : MonoBehaviour, IDamageable
 
     public void TakeDamage(s_DamageInfo damageInfo)
     {
-        Debug.Log("===============================================================\n=============================================================");
         currentHealth -= damageInfo.dmgValue;
-        //if (healthBar.gameObject.activeSelf)
+        if(currentHealth < 0) 
         {
-            healthBar.SetHealth(currentHealth);
-            Debug.Log("My id is:\nI am " + gameObject.GetComponent<Player_PlayerController>().photonView.Owner.ActorNumber.ToString()
-                + "\nMy health bar is active: " + healthBar.gameObject.activeSelf + "\nPV is mine: " + pvIsMine);
-        }
+            s_DeathInfo deathInfo = new s_DeathInfo();
+            //TODO: TEAMS
+            deathInfo.killerTeam = 0;
+            deathInfo.diedTeam = 0;
+            deathInfo.killerId = damageInfo.dmgDealerId;
+            deathInfo.diedId = damageInfo.dmgRecievedId;
 
+            gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
+                nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, JsonUtility.ToJson(deathInfo));
+
+            currentHealth = maxHealth;
+        }
+        healthBar.SetHealth(currentHealth);
+        Debug.Log("My id is:\nI am " + gameObject.GetComponent<Player_PlayerController>().photonView.Owner.ActorNumber.ToString()
+            + "\nMy health bar is active: " + healthBar.gameObject.activeSelf + "\nPV is mine: " + pvIsMine);
     }
 
     IEnumerator UpdateUI()

@@ -64,33 +64,6 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         }
     }
 
-    public void DamagePlayer(int idOfShotPlayer)
-    {
-        Debug.Log("I " + playerController.photonView.Owner.ActorNumber + " am shooting: " + idOfShotPlayer);
-
-        s_DamageInfo dmg = new s_DamageInfo();
-        dmg.dmgDeltId = idOfShotPlayer;
-        //dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
-        dmg.dmgDealerId = playerController.photonView.Owner.ActorNumber;
-        dmg.bodyPart = e_BodyPart.NONE;
-
-        PhotonView pv = null;
-        foreach (KeyValuePair<int, Player_MultiplayerEntity> kv in Game_RuntimeData.activePlayers)
-        {
-            if (kv.Key == dmg.dmgDeltId)
-            {
-                pv = kv.Value.playerController.photonView;
-                break;
-            }
-        }
-        if (pv == null)
-        {
-            Debug.LogError("NULL PV");
-        }
-
-        playerController.photonView.RPC(nameof(OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
-    }
-
     /// <summary>
     /// PunRPC callback to register damage taken within a player.
     /// The damage dealer will track how much damage they have delt.
@@ -105,38 +78,21 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     {
         s_DamageInfo dmgInfo = (s_DamageInfo)JsonUtility.FromJson(damageInfo, typeof(s_DamageInfo));
 
-        //Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgDeltId);
+        //Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgRecievedId);
         Debug.Log("SHOULD ONLY BE PLAYER: I am the player: " + playerController.photonView.Owner.ActorNumber + "\nBut I should be: " + PhotonNetwork.LocalPlayer.ActorNumber);
         if(playerController.photonView.IsMine)
         {
-            Debug.Log("The PV is mine (" + dmgInfo.dmgDeltId + ")and I was shot by " + dmgInfo.dmgDealerId);
+            Debug.Log("The PV is mine (" + dmgInfo.dmgRecievedId + ")and I was shot by " + dmgInfo.dmgDealerId);
         }
-/*        else
-        {
-            return;
-        }*/
-
-        //    dmgInfo.dmgDeltId == playerController.photonView.Owner.ActorNumber)
 
         if (playerController.photonView.IsMine)
         {
             Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber)    );
-            Debug.Log("The actor who was shot: " + dmgInfo.dmgDeltId);
+            Debug.Log("The actor who was shot: " + dmgInfo.dmgRecievedId);
             dmgInfo.dmgValue = 10f;
             playerHealth.TakeDamage(dmgInfo);
                 
         }
-
-   /*     if (*//*playerController.photonView.IsMine &&*//* 
-            dmgInfo.dmgDeltId == playerController.photonView.Owner.ActorNumber)
-        {
-            Debug.Log("FROM STRUCT: I " + dmgInfo.dmgDeltId + " have been shot by: " + dmgInfo.dmgDealerId);
-            Debug.Log("FROM OBJ: I am: " + playerController.photonView.Owner.ActorNumber);
-            // TODO: Call HP damage
-            // TODO: Calculate damage based on weapon type and bodypart hit
-            
-            playerHealth.TakeDamage(10.0f);
-        }*/
     }
 
     /// <summary>
@@ -160,12 +116,17 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     /// <param name="killerId"></param>
     /// <param name="killedTeamNumber"></param>
     [PunRPC]
-    public void OnPlayerKilled(int killerTeamNumber, int killedTeamNumber)
+    public void OnPlayerKilled(string deathInfoStructJSON)
     {
+        s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
         if(PhotonNetwork.IsMasterClient)
         {
             //TODO: calculate team scores.
-            Game_RuntimeData.gameScore.killsPerTeam[killedTeamNumber] += 1;
+            //Game_RuntimeData.gameScore.killsPerTeam[info.killerTeam] += 1;
+        }
+        if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+        {
+            Game_RuntimeData.gameMode.OnPlayerKilled(info);
         }
     }
 

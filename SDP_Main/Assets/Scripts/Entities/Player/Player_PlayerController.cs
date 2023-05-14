@@ -196,7 +196,7 @@ public class Player_PlayerController : MonoBehaviour
         if (inputHandler.OnTest())
         {
             s_DamageInfo d = new s_DamageInfo();
-            d.dmgDeltId = 1;
+            d.dmgRecievedId = 1;
             d.dmgDealerId = photonView.Owner.ActorNumber;
             d.dmgValue = 0;
             d.bodyPart = 0;
