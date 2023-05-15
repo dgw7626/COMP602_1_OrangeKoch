@@ -26,16 +26,9 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     void Start()
     {
         IsMultiplayer = PhotonNetwork.IsConnected;
-        if (!IsMultiplayer)
-        {
-            // In solo
-            respawnPosition = new Vector3(-25,0,-25);
-            // respawnPosition = transform.position;
-            Debug.Log(respawnPosition);
-            Debug.Log("In Solo game");
 
-        }
-       
+        respawnPosition = new Vector3(-25, 0, -25);
+
         conroutine = UpdateUI();
         StartCoroutine(conroutine);
 
@@ -93,20 +86,26 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
 
     void Die()
     {
-        Respawn();
 
-        // if (gameMode_Standard != null)
-        // {
-        //     // Call the OnPlayerKilled() method of the GameMode_Standard object,
-        //     // passing the Player_MultiplayerEntity object representing the killed player
-        //     gameMode_Standard.OnPlayerKilled(this.GetComponent<Player_MultiplayerEntity>());
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Unable to find GameMode_Standard object.");
-        // }
+        if (!IsMultiplayer)
+        {
+            SoloRespawn();
+        }
+        else if(!IsMultiplayer)
+        {
+            if (gameMode_Standard != null)
+            {
+                // Call the OnPlayerKilled() method of the GameMode_Standard object,
+                // passing the Player_MultiplayerEntity object representing the killed player
+                gameMode_Standard.OnPlayerKilled(this.GetComponent<Player_MultiplayerEntity>());
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find GameMode_Standard object.");
+            }
+        }
     }
-    void Respawn()
+    void SoloRespawn()
     {
         // Reset
         transform.position = respawnPosition;
