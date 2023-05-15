@@ -11,34 +11,35 @@ public class TriggerScript : MonoBehaviour
     public TextMeshProUGUI JumpText;
 
     public TextMeshProUGUI SprintText;
-    public GameObject trigger1;  
-    public GameObject trigger2;  
+    public GameObject trigger1;
+    public GameObject trigger2;
 
-    private bool trigger1Activated = false;  
+    private bool trigger1Activated = false;
     private bool trigger2Activated = false;
     private void OnTriggerEnter(Collider other)
     {
-  
-        if (!trigger1Activated && other.CompareTag("Player") && trigger1.CompareTag("Player") )
+        Debug.Log("Trigger entered!");
+
+        if (!trigger1Activated && other.CompareTag("Player") && trigger1.CompareTag("Player"))
         {
-            Debug.Log("1 work");
-            
+            Debug.Log("Trigger1 entered!");
+
             MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
 
-        
+
             JumpText.gameObject.SetActive(true);
 
-     
+
             trigger1.SetActive(false);
 
-       
+
             trigger2.SetActive(true);
 
             trigger1Activated = true;
         }
         else if (!trigger2Activated && other.CompareTag("Player") && other.gameObject == trigger2)
         {
-     
+
             MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
             JumpText.rectTransform.anchoredPosition -= new Vector2(0, 50);
 

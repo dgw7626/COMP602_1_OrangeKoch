@@ -112,7 +112,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         transform.position = respawnPosition;
         Debug.Log(transform.position);
         currentHealth = maxHealth;
-
+        Physics.SyncTransforms();
         // Update UI
         currentUIHealth = maxHealth;
         healthBar.SetHealth(currentUIHealth);
