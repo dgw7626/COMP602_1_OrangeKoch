@@ -12,6 +12,8 @@ public interface IgameMode
     public IEnumerator OnPlayerEnterMatch(Photon.Realtime.Player newPlayer);
     public void OnPerFrameUpdate();
     public void OnPlayerKilled(Player_MultiplayerEntity playerKilled);
+    // public void OnPlayerKilled();
+
     public void OnPlayerLeftMatch(Player playerLeftMatch);
     public void OnScoreEvent(int score, int teamNumber);
     public void OnStopGame();

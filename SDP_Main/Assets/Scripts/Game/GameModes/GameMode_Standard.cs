@@ -114,6 +114,7 @@ public class GameMode_Standard : IgameMode
     }
     public void OnPlayerKilled(Player_MultiplayerEntity playerKilled)
     {
+       PhotonNetwork.Destroy(playerKilled.gameObject);
     }
 
     public void LeaveScene(string sceneName)
