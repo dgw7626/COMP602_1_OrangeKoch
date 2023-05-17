@@ -57,7 +57,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
-            Die();
+           
         }
     }
 
@@ -96,7 +96,6 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
             {
                 // Call the OnPlayerKilled() method of the GameMode_Standard object,
                 // passing the Player_MultiplayerEntity object representing the killed player
-                gameMode_Standard.OnPlayerKilled(this.GetComponent<Player_MultiplayerEntity>());
             }
             else
             {
@@ -110,6 +109,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
         gameObject.transform.position = respawnPosition;
         Debug.Log(transform.position);
         currentHealth = maxHealth;
+        // Weird hack, don't know why this works
         Physics.SyncTransforms();
         // Update UI
         currentUIHealth = maxHealth;
