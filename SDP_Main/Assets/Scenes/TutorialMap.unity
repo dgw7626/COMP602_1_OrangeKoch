@@ -1203,7 +1203,6 @@ GameObject:
   m_Component:
   - component: {fileID: 811291677}
   - component: {fileID: 811291678}
-  - component: {fileID: 811291679}
   m_Layer: 0
   m_Name: TriggerControl
   m_TagString: Untagged
@@ -1244,19 +1243,6 @@ MonoBehaviour:
   SprintText: {fileID: 1201040288}
   trigger1: {fileID: 1535358414}
   trigger2: {fileID: 829711003}
---- !u!65 &811291679
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811291676}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &819598508
 GameObject:
   m_ObjectHideFlags: 0

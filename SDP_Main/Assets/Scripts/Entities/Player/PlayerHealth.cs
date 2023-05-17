@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviourPunCallbacks
 {
-    // Start is called before the first frame update
-
+   
 
     public float maxHealth = 100;
     public float currentHealth;
@@ -108,7 +107,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks
     void SoloRespawn()
     {
         // Reset
-        transform.position = respawnPosition;
+        gameObject.transform.position = respawnPosition;
         Debug.Log(transform.position);
         currentHealth = maxHealth;
         Physics.SyncTransforms();
