@@ -186,6 +186,8 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (IsMultiplayer && !photonView.IsMine)
+            return;
         //--------------------------------------------------------------------------------------------------
         /**
          * TODO: TEMPORARY
@@ -193,31 +195,44 @@ public class Player_PlayerController : MonoBehaviour
          */
         if (inputHandler.OnTest())
         {
-            if (Game_RuntimeData.activePlayers.Count > 1)
-            {
-                foreach (KeyValuePair<int, Player_MultiplayerEntity> e in Game_RuntimeData.activePlayers)
-                {
-                    if (e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
-                    {
-                        Data_DamageData d = new Data_DamageData();
-                        PhotonView targetView = e.Value.GetComponent<PhotonView>();
-                        if (targetView.IsMine)
-                        {
-                            Debug.Log("The target is me, so I wont call it.");
-                            break;
-                        }
-                        Player target = targetView.Owner;
-                        Debug.Log("Take Damage being called on me!");
+            s_DamageInfo d = new s_DamageInfo();
+            d.dmgRecievedId = 1;
+            d.dmgDealerId = photonView.Owner.ActorNumber;
+            d.dmgValue = 0;
+            d.bodyPart = 0;
 
-                        photonView.RPC("OnDamageRecieved", target, 1f);
-                    }
+            /*Player p = null;
+            foreach (KeyValuePair<int, Player> pl in PhotonNetwork.CurrentRoom.Players)
+            {
+                if(pl.Value. == 1)
+                {
+                    p = pl.Value;
+
                 }
             }
+            if(p == null)
+            {
+                Debug.LogError("Null player targeted");
+            }*/
+            Debug.Log("I am " + PhotonNetwork.LocalPlayer.ActorNumber + ", and I am calling shoot on Player 1");
+            PhotonView pv = null;
+            
+            foreach(KeyValuePair<int, Player_MultiplayerEntity> kv in Game_RuntimeData.activePlayers)
+            {
+                if(kv.Key == 1)
+                {
+                    pv = kv.Value.playerController.photonView;
+                    break;
+                }
+            }
+            if(pv == null)
+            {
+                Debug.LogError("NULL PV");
+            }
+            photonView.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(d));
         }
         //--------------------------------------------------------------------------------------------------
 
-        if (IsMultiplayer && !photonView.IsMine)
-            return;
 
         if (IsInputLocked)
             return;

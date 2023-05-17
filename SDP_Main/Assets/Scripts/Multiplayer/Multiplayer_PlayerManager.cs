@@ -21,6 +21,9 @@ public class Multiplayer_PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This is how the local player is instantiate. Other players are automatically instantiated by Photon as clones of this object. 
+    /// </summary>
     void CreateController()
     {
         Debug.Log("Instantiated Player Controller");
