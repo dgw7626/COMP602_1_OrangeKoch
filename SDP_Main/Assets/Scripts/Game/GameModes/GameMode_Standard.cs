@@ -1,4 +1,3 @@
-using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,7 +77,11 @@ public class GameMode_Standard : IgameMode
         {
             Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnGameEnded), RpcTarget.All, JsonUtility.ToJson(teamScores));
         }
+        
         //TODO: Cleanup
+
+        //TODO: Score Board
+        Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
     }
 
     public IEnumerator OnOneSecondCountdown()
@@ -92,7 +95,7 @@ public class GameMode_Standard : IgameMode
                 Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
 
                 // If the timer expires, tell the other players what the score is.
-                if(GameMode_Manager.gameTime == -1)
+                if(GameMode_Manager.gameTime < 1)
                 {
                     Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
                         nameof(Player_MultiplayerEntity.OnGameEnded), 
