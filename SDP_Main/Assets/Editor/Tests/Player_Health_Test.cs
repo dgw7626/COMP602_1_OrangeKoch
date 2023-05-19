@@ -1,16 +1,29 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using NUnit.Framework;
-// using UnityEngine;
-// using UnityEngine.TestTools;
+using System.Collections;
+using System.Collections.Generic;
+using NUnit.Framework;
+using UnityEngine;
 
+[TestFixture]
+public class Player_Health_Test
+{
+    [Test]
+    public void Test()
+    {
+        int a = 3;
+        int b = 4;
+        int c = 12;
 
-// [TestFixture]
-// public class PlayerHealthTests
-// {
+        // ACT
+        int Cal = a * b;
+
+        // ARRANGE
+        Assert.That(Cal,Is.EqualTo(c));
+        // ASSERT
+    }
+} // {
 //     public Player_Health playerHealth;
 //     void Start(){
-//         playerHealth = 
+//         playerHealth =
 //     }
 //     [SetUp]
 //     public void Setup()
