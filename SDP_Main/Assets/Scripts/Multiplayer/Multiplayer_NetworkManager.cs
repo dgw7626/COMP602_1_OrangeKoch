@@ -6,6 +6,7 @@ using Photon.Realtime;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
+
 public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
 {
     public const float quitDelay = 0.5f;
@@ -16,7 +17,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] Transform playerListContent;       // Transform component for all the player item prefabs
     [SerializeField] GameObject playerListItemPrefab;   // Object for each players name that has joined a room
     [SerializeField] GameObject startGameButton;        // Object for master player to start game
-
+    [SerializeField] GameObject uiErrorMessage;         // Object for error ui message.
     /// <summary>
     /// Creates a unique instance of Multiplayer_NetworkManager
     /// </summary>
@@ -34,6 +35,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log("Connecting to Photon Server");
             //Connect to the Photon Server
             PhotonNetwork.ConnectUsingSettings();
+            uiErrorMessage.SetActive(false);
         }
     }
 
@@ -81,11 +83,22 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void FindRoom()
     {
+
         RoomOptions options = new RoomOptions();    //Creates a RoomOptions object to be set for the room
         options.MaxPlayers = 16;        //Limit the room to X players
-        PhotonNetwork.JoinOrCreateRoom("default_room",options, TypedLobby.Default);     //Creates or joins the room
+          //Creates or joins the room
+        PhotonNetwork.JoinOrCreateRoom("default_room",options, TypedLobby.Default);
     }
 
+    public override void OnJoinRoomFailed (short returnCode, string message)
+    {
+        uiErrorMessage.SetActive(true);
+        uiErrorMessage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Game Error: game is still running";
+        Invoke(nameof(DisableErrorMessage), 1.2f);
+    }
+    internal void DisableErrorMessage(){
+        uiErrorMessage.SetActive(false);
+    }
     /// <summary>
     /// Override method upon player succesfully joining the room. Updates all clients for player names and changes.
     /// </summary>
@@ -197,5 +210,6 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(PhotonNetwork.NickName+" has started a Game!");
         PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Default);
+        PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 }
