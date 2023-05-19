@@ -1714,9 +1714,13 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4421130603208223025, guid: c5f76a884b109294d8e38a1a95a9933f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5308136332642947037, guid: c5f76a884b109294d8e38a1a95a9933f, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6531818648858474800, guid: c5f76a884b109294d8e38a1a95a9933f, type: 3}
       propertyPath: sceneViewId
