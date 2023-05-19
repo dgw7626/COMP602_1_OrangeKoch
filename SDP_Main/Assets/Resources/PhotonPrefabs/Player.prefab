@@ -3304,6 +3304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
+  playerHealth: {fileID: 0}
   teamNumber: 0
 --- !u!114 &5236005440239454224
 MonoBehaviour:

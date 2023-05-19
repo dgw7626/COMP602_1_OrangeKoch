@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Data_DamageData
+public interface IDamageable
 {
-    public float damageTotal;
+    void TakeDamage(s_DamageInfo damageInfo);
 }
