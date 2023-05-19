@@ -17,14 +17,15 @@ public class ScoreBoard : MonoBehaviour
     public Text playerNameText_2;
     public Text playerKillsText_2;
     public Text playerDeathsText_2;
-    public Text playerWonText_2;
-    
+    //public Text playerWonText_2;
+    internal bool _activeSelf;
+
    PlayerDetail playerdetail = new PlayerDetail();
        
      public static string playerName;
      public static int playerKills;
      public static int playerDeaths;
-     public static int playerWon;
+     //public static int playerWon;
 
 // This methode update player 1 detail print on Scoreboard.
      public void UpdatePlayerDetail_1()
@@ -32,7 +33,7 @@ public class ScoreBoard : MonoBehaviour
       playerNameText_1.text = playerdetail.playerName;
       playerKillsText_1.text = playerdetail.kills.ToString();
       playerDeathsText_1.text = playerdetail.deaths.ToString();
-      playerWonText_1.text = playerdetail.won.ToString();
+      //playerWonText_1.text = playerdetail.won.ToString();
     }
 
 // This methode update player 2 detail print on Scoreboard.
@@ -41,9 +42,17 @@ public class ScoreBoard : MonoBehaviour
       playerNameText_2.text = playerdetail.playerName;
       playerKillsText_2 .text = playerdetail.kills.ToString();
       playerDeathsText_2.text = playerdetail.deaths.ToString();
-      playerWonText_2.text = playerdetail.won.ToString();
+      //playerWonText_2.text = playerdetail.won.ToString();
     }
-
+    private void Start(){
+      this._activeSelf = false;
+      transform.gameObject.SetActive(this._activeSelf);
+    }
+    public void GetScoreboard(){
+      this._activeSelf = !_activeSelf;
+      transform.gameObject.SetActive(this._activeSelf);
+      return;
+    }
    private void Update()
    {
      RestClient.Get<PlayerDetail>("https://project-10bbb-default-rtdb.firebaseio.com/" + "/player1" +".json").Then(response =>

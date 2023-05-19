@@ -148,6 +148,14 @@ public class Player_InputManager : MonoBehaviour
             return 0;
     }
 
+    public bool GetScoreBoardInputDown(){
+        if(InputIsLocked())
+            return false;
+        
+        return Input.GetButtonDown("Scoreboard");
+
+    }
+
     public int GetSelectWeaponInput()
     {
         if (InputIsLocked())

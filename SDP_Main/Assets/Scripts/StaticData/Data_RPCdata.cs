@@ -25,22 +25,15 @@ public struct s_GameScore
 public struct s_DamageInfo
 {
     public int dmgDealerId;
-    public int dmgDeltId;
+    public int dmgRecievedId;
     public float dmgValue;
     public e_BodyPart bodyPart;
 }
-
-public class Data_RPCdata : MonoBehaviour
+[Serializable]
+public struct s_DeathInfo
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int diedId;
+    public int diedTeam;
+    public int killerId;
+    public int killerTeam;
 }

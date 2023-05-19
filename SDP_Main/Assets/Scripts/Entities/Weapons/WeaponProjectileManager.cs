@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Photon.Pun;
-using Newtonsoft.Json.Serialization;
 
-public class WeaponProjectileManager : MonoBehaviourPun
+public class WeaponProjectileManager : MonoBehaviour
 {
+    [SerializeField]
+    private WeaponInfo _weaponInfo;
 
-    [SerializeField] private WeaponInfo _weaponInfo;
-    [SerializeField] internal List<WeaponBullet> _localBullets;
-    [SerializeField] private int _weaponAmmo;
-    [SerializeField] private int _weaponClip;
-    [SerializeField] private AmmunitionUI _ammunitionUI;
-    [SerializeField] private WeaponController _weaponController;
+    [SerializeField]
+    internal List<WeaponBullet> _localBullets;
+
+    [SerializeField]
+    private int _weaponAmmo;
+
+    [SerializeField]
+    private int _weaponClip;
+
+    [SerializeField]
+    private AmmunitionUI _ammunitionUI;
+
     internal Coroutine _currentCoroutine;
-    private Vector3 _fw, _up;
+    private Vector3 _fw,
+        _up;
     private Transform _camera;
- 
+
     void Awake()
     {
         if (!transform.GetComponentInParent<PhotonView>().IsMine)
@@ -31,21 +39,30 @@ public class WeaponProjectileManager : MonoBehaviourPun
         this._up = _camera.transform.InverseTransformDirection(transform.up);
         GuardClause.InspectGuardClauseNullRef<Vector3>(this._up, nameof(this._up));
     }
+
     void Start()
     {
+        _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
+        _ammunitionUI.gameObject.SetActive(false);
+        // Check if the view is mine
+         
+        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            _ammunitionUI.gameObject.SetActive(true);
+        }
         _weaponAmmo = _weaponInfo.BulletCounts;
         _weaponClip = _weaponInfo.ClipCounts;
-        _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
-        GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(this._ammunitionUI, nameof(this._ammunitionUI));
+     
+        GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
+            this._ammunitionUI,
+            nameof(this._ammunitionUI)
+        );
         _ammunitionUI.SetAmmunition(_weaponAmmo, _weaponClip);
-
-        _weaponController = GetComponent<WeaponController>();
-
     }
+
     /// <summary>
     /// This method will update the target object of the postion and rotation, the position values will be duplicated from parent object.
     /// </summary>
-    [PunRPC]
     public void UpdateChildTransform()
     {
         GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
@@ -56,10 +73,10 @@ public class WeaponProjectileManager : MonoBehaviourPun
         this.transform.rotation = newRot;
         return;
     }
+
     /// <summary>
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
-    [PunRPC]
     public void InitBullets()
     {
         Transform bullets;
@@ -72,16 +89,36 @@ public class WeaponProjectileManager : MonoBehaviourPun
         GuardClause.InspectGuardClauseNullRef<Transform>(bullets, nameof(bullets));
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
         GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
-        for(int i = 0; i < _weaponInfo.BulletCounts; i++)
+        for (int i = 0; i < _weaponInfo.BulletCounts; i++)
         {
-            var bulletObject = Instantiate(Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject, Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity,bullets.transform);
-            bulletObject.name = "("+  i + ")" + bullets.name;
+            var bulletObject = Instantiate(
+                Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject,
+                Vector3.zero + new Vector3(0, 0, 5),
+                Quaternion.identity,
+                bullets.transform
+            );
+            bulletObject.name = "(" + i + ")" + bullets.name;
             bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
-            var muzzleFlash = Instantiate(_weaponInfo.MuzzleFlash.gameObject, Vector3.zero + new Vector3(0,0,5), Quaternion.identity, bulletObject.transform);
+            var muzzleFlash = Instantiate(
+                _weaponInfo.MuzzleFlash.gameObject,
+                Vector3.zero + new Vector3(0, 0, 5),
+                Quaternion.identity,
+                bulletObject.transform
+            );
             muzzleFlash.name = "(" + i + ")" + muzzleFlash.name;
-            var bulletTrace = Instantiate(_weaponInfo.BulletTrace.gameObject, (firePos.position + new Vector3(0, -3f, 0)), _weaponInfo.BulletTrace.transform.rotation, bulletObject.transform);
+            var bulletTrace = Instantiate(
+                _weaponInfo.BulletTrace.gameObject,
+                (firePos.position + new Vector3(0, -3f, 0)),
+                _weaponInfo.BulletTrace.transform.rotation,
+                bulletObject.transform
+            );
             bulletTrace.name = "(" + i + ")" + bulletTrace.name;
-            var shellObject = Instantiate(_weaponInfo.BulletShell, Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, bulletObject.transform);
+            var shellObject = Instantiate(
+                _weaponInfo.BulletShell,
+                Vector3.zero + new Vector3(0, 0, 5),
+                Quaternion.identity,
+                bulletObject.transform
+            );
             shellObject.name = "(" + i + ")" + shellObject.name;
             var hitObject = new GameObject();
             hitObject.transform.position = new Vector3(0, 0, 5);
@@ -94,12 +131,13 @@ public class WeaponProjectileManager : MonoBehaviourPun
             hitObject.GetComponent<AudioSource>().maxDistance = 20;
             hitObject.transform.SetParent(bulletObject.transform);
             hitObject.name = "(" + i + ")hitObjects";
-          
+
             bulletObject.SetActive(false);
             _localBullets.Add(bulletObject.GetComponent<WeaponBullet>());
         }
         return;
     }
+
     /// <summary>
     /// This method is automatic shoot method.
     /// </summary>
@@ -109,22 +147,21 @@ public class WeaponProjectileManager : MonoBehaviourPun
     {
         var firePos = transform.GetChild(0).GetChild(0).transform;
         GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
-        foreach(WeaponBullet bullet in _localBullets)
+        foreach (WeaponBullet bullet in _localBullets)
         {
             if (!bullet.gameObject.activeSelf)
             {
-                GetComponent<PhotonView>().RPC(nameof(bullet.Fire),RpcTarget.All, firePos);
+                bullet.Fire(firePos);
                 bullet.gameObject.SetActive(true);
-
             }
             yield return new WaitForSeconds(delaySecond);
         }
         StopCoroutine(_currentCoroutine);
     }
+
     /// <summary>
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
-    [PunRPC]
     public void GetShoot()
     {
         GuardClause.InspectGuardClauseNullRef<int>(_weaponAmmo, nameof(_weaponAmmo));
@@ -144,55 +181,53 @@ public class WeaponProjectileManager : MonoBehaviourPun
             }
         }
     }
+
     /// <summary>
     ///  This method reloads the current gun, ammo display will be refreshed after reload.
     /// </summary>
-    [PunRPC]
     public void Reload()
     {
         GuardClause.InspectGuardClauseNullRef<int>(this._weaponClip, nameof(this._weaponClip));
         GuardClause.InspectGuardClauseNullRef<int>(this._weaponAmmo, nameof(this._weaponAmmo));
-        GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(this._ammunitionUI, nameof(this._ammunitionUI));
-        if(this._weaponClip > 0)
+        GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
+            this._ammunitionUI,
+            nameof(this._ammunitionUI)
+        );
+        if (this._weaponClip > 0)
         {
             this._weaponAmmo = _weaponInfo.BulletCounts;
             this._weaponClip--;
             _ammunitionUI.SetAmmunition(this._weaponAmmo, this._weaponClip);
         }
     }
+
     /// <summary>
     /// This method initialize the shooting type of the weapon there are three options (Auto, Burst, Semi).
     /// </summary>
     /// <param name="fireType"></param>
-    [PunRPC]
     public void InitShoot(WeaponFiretype fireType)
     {
-        switch (fireType) {
+        switch (fireType)
+        {
             case WeaponFiretype.Auto:
-                {
-                    _currentCoroutine = StartCoroutine(GetShoot(0.1f));
-                    break;
-                }
+            {
+                _currentCoroutine = StartCoroutine(GetShoot(0.1f));
+                break;
+            }
             case WeaponFiretype.Burst:
-                {
-
-                    break;
-                }
+            {
+                break;
+            }
             case WeaponFiretype.Semi:
-                {
-                    GetComponent<PhotonView>().RPC("GetShoot", RpcTarget.All);
-                  //  transform.GetComponentInParent<PhotonView>().RPC(nameof(GetShoot), RpcTarget.All);
-                    //GetShoot();
-                    break;
-                }
+            {
+                GetShoot();
+                break;
+            }
             default:
-                {
-                    break;
-                }
-         }
+            {
+                break;
+            }
+        }
         return;
     }
-   
-
-
 }

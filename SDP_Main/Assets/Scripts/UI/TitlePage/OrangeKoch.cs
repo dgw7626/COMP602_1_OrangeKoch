@@ -21,7 +21,7 @@ public class OrangeKoch : MonoBehaviour
 
     void Start()
     {
-        Invoke("LoadNextScene", 5f);
+        Invoke("LoadNextScene", 3f);
     }
 
     void LoadNextScene()
