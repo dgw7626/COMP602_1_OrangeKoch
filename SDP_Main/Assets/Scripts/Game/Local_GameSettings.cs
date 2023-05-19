@@ -8,18 +8,28 @@ public class Local_GameSettings : MonoBehaviour
 {
     [Header("Sliders & Toggles")]
     [SerializeField] private Slider mouseSensitivitySlider;
-    //[SerializeField] private TextMeshProUGUI mouseSensitivityText;
+    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Toggle invertYAxisToggle;
 
-    private const string _sliderMouseSensitivity = "sliderMouseSensitiviy";
+    private const string _sliderMouseSensitivity = "sliderMouseSensitivity";
 
     private void Start()
     {
-        //mouseSensitivityText = GetComponentInParent<TextMeshProUGUI>();
-        mouseSensitivitySlider = GetComponent<Slider>();
-        mouseSensitivitySlider.onValueChanged.AddListener((v) => {
-            //mouseSensitivityText.text = v.ToString("0.00");
-            Game_RuntimeData.playerSettings.mouseMovementSpeed = (int) v;
-            
+        mouseSensitivitySlider = GetComponentsInChildren<Slider>()[1];
+        mouseSensitivitySlider.onValueChanged.AddListener((value) => {
+            Game_RuntimeData.playerSettings.lookSensitivity = (int) value;
+        });
+
+
+        invertYAxisToggle = GetComponentsInChildren<Toggle>()[0];
+        invertYAxisToggle.onValueChanged.AddListener((IsOn) => {
+            Game_RuntimeData.playerSettings.invertMouseYAxis = IsOn;
+        });
+
+        //Volume Control
+        volumeSlider = GetComponentsInChildren<Slider>()[0];
+        volumeSlider.onValueChanged.AddListener((value) => {
+            Game_RuntimeData.playerSettings.globalVolume = value;
         });
     }
 }

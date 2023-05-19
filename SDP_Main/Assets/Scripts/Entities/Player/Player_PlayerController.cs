@@ -304,8 +304,6 @@ public class Player_PlayerController : MonoBehaviour
     void HandleCharacterMovement()
     {
         // horizontal character rotation
-        // Set rotation speed
-        RotationSpeed = Game_RuntimeData.playerSettings.mouseMovementSpeed;
         {
             // rotate the transform with the input speed around its local Y axis
             transform.Rotate(

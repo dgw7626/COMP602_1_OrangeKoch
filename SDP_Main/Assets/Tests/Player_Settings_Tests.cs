@@ -34,18 +34,32 @@ public class Player_Settings_Tests
     }
 
     [Test]
-    public void ChangeMouseMovementSpeedTest()
+    public void SetLookSensitivityInsideBoundsTest()
     {
         // ARRANGE
-        int initialMouseMovementSpeed = 200;
+        float initialLookSensitivityMultiplier = 2f;
 
         // ACT
-        playerSettings.setMouseSpeed(initialMouseMovementSpeed);
-        playerSettings.setMouseSpeed(100);
+        playerSettings.setMouseSpeed(initialLookSensitivityMultiplier);
+        playerSettings.setMouseSpeed(1f);
 
         // ASSERT
-        Assert.AreEqual(100, playerSettings.mouseMovementSpeed);
-        Assert.AreNotEqual(initialMouseMovementSpeed, playerSettings.mouseMovementSpeed);
+        Assert.AreEqual(1f, playerSettings.lookSensitivity);
+        Assert.AreNotEqual(initialLookSensitivityMultiplier, playerSettings.lookSensitivity);
+    }
+
+    [Test]
+    public void SetLookSensitivityOutsideBoundsTest()
+    {
+        // ARRANGE
+        float initialLookSensitivityMultiplier = 2f;
+
+        // ACT
+        playerSettings.setMouseSpeed(initialLookSensitivityMultiplier);
+        playerSettings.setMouseSpeed(0.1f);
+
+        // ASSERT
+        Assert.AreEqual(initialLookSensitivityMultiplier, playerSettings.lookSensitivity);
     }
 
     [Test]
@@ -55,10 +69,10 @@ public class Player_Settings_Tests
         float initialGlobalVolume = playerSettings.globalVolume;
 
         // ACT
-        playerSettings.setGlobalVolume(50);
+        playerSettings.setGlobalVolume(0.5f);
 
         // ASSERT
-        Assert.AreEqual(50, playerSettings.globalVolume);
+        Assert.AreEqual(0.5f, playerSettings.globalVolume);
         Assert.AreNotEqual(initialGlobalVolume, playerSettings.globalVolume);
     }
 

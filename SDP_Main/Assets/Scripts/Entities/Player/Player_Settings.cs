@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Player_Settings : MonoBehaviour
 {
-    public bool invertMouseYAxis;
-    public int mouseMovementSpeed;
-    public float globalVolume;
+    public bool invertMouseYAxis = false;
+    public float lookSensitivity = 1;
+    public float globalVolume = 1;
     public void InvertMouseYAxis()
     {
          invertMouseYAxis = !invertMouseYAxis;
     }
-    public void setMouseSpeed(int speed)
+    public void setMouseSpeed(float speedMultiplier)
     {
-        mouseMovementSpeed = speed;
+        //Check bounds
+        if(speedMultiplier >= 0.5f && speedMultiplier <= 2.0f)
+            lookSensitivity = speedMultiplier;
     }
     public void setGlobalVolume(float volume)
     {
