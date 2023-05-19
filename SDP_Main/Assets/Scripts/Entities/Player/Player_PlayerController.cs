@@ -117,7 +117,7 @@ public class Player_PlayerController : MonoBehaviour
             return 1f;
         }
     }
-    private WeaponProjectileManager _projectMananger;
+    private Weapon_ProjectileManager _projectMananger;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -135,7 +135,7 @@ public class Player_PlayerController : MonoBehaviour
     {
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
         photonView = GetComponentInParent<PhotonView>();
-        _projectMananger = GetComponentInParent<WeaponProjectileManager>();
+        _projectMananger = GetComponentInParent<Weapon_ProjectileManager>();
         _scoreBoard = GetComponentInChildren<ScoreBoard>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
@@ -176,7 +176,7 @@ public class Player_PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         inputHandler = GetComponent<Player_InputManager>();
-        _projectMananger = GetComponentInChildren<WeaponProjectileManager>();
+        _projectMananger = GetComponentInChildren<Weapon_ProjectileManager>();
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
@@ -282,15 +282,16 @@ public class Player_PlayerController : MonoBehaviour
         // shooting
         if (inputHandler.GetFireInputDown())
         {
-            _projectMananger.photonView.RPC(nameof(_projectMananger.InitShoot), RpcTarget.All, WeaponFiretype.Semi);
-          //  _projectMananger.InitShoot(WeaponFiretype.Semi);
+            Debug.Log("yes");
+         //   _projectMananger.photonView.RPC(nameof(_projectMananger.InitShoot), RpcTarget.All, WeaponFiretype.Semi);
+            _projectMananger.InitShoot(Weapon_Firetype.Semi);
         }
         //Reaload
         if (inputHandler.GetReloadButtonDown())
         {
 
-            _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
-            
+            //_projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
+            _projectMananger.Reload();
         }
         //checking Scoreboard
         if(inputHandler.GetScoreBoardInputDown()){
