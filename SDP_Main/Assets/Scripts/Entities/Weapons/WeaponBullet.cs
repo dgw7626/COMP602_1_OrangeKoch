@@ -1,62 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< Updated upstream:SDP_Main/Assets/Scripts/Entities/Weapons/WeaponBullet.cs
 using Photon.Pun;
-=======
-using static UnityEngine.UI.Image;
-using System.Text.RegularExpressions;
->>>>>>> Stashed changes:SDP_Main/Assets/Scripts/Entities/Weapons/Weapon_Bullet.cs
 
-public class Weapon_Bullet : MonoBehaviour, IWeapon_Fireable
+public class WeaponBullet : MonoBehaviour, IWeaponFireable
 {
     internal GameObject _hitObject;
     internal GameObject _bulletObject;
     internal GameObject _shellObject;
     internal Coroutine _currentCoroutine;
-<<<<<<< Updated upstream:SDP_Main/Assets/Scripts/Entities/Weapons/WeaponBullet.cs
     [PunRPC]
-=======
-    internal Weapon_ProjectileManager _projectileManager;
-    internal int _bulletIndex;
-
-    private void Start()
-    {
-        _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
-        _bulletIndex = GetIntegerValueFromString(transform.name);
-        print(_projectileManager.muzzleVfxs[_bulletIndex].name);
-    }
-
-    internal int GetIntegerValueFromString(string str)
-    {
-        string pattern = @"\b\d+\b";
-        Regex regex = new Regex(pattern);
-        MatchCollection matches =regex.Matches(str);
-
-        foreach (Match match in matches)
-        {
-            int value = int.Parse(match.Value);
-            return value;
-        }
-        return 0;
-    }
->>>>>>> Stashed changes:SDP_Main/Assets/Scripts/Entities/Weapons/Weapon_Bullet.cs
     public void Fire(Transform origin)
     {
-        //VFX. 
         GuardClause.InspectGuardClauseNullRef<Transform>(origin, nameof(origin));
         transform.position = origin.position;
-        //get the index and compare with the value.
-       
-        var muzzleVfx = transform.Find(transform.ToString().Substring(0,3)+ "MuzzleFlash").transform;
-        var bulletVfx = transform.Find(transform.ToString().Substring(0, 3) + "BulletTracer").transform;
+        var muzzleVfx = transform.Find(transform.ToString().Substring(0,3)+ "MuzzleFlash(Clone)").transform;
+        var bulletVfx = transform.Find(transform.ToString().Substring(0, 3) + "BulletTracer(Clone)").transform;
         this._bulletObject = bulletVfx.gameObject;
         GuardClause.InspectGuardClauseNullRef<GameObject>(this._bulletObject, nameof(this._bulletObject));
         this._bulletObject.transform.position = origin.position;
         var hitVfx = transform.Find(transform.ToString().Substring(0, 3) + "hitObjects").transform;
         this._hitObject = hitVfx.gameObject;
         GuardClause.InspectGuardClauseNullRef<GameObject>(this._hitObject, nameof(this._hitObject));
-        var shellObj = transform.Find(transform.ToString().Substring(0, 3) + "Shell").transform;
+        var shellObj = transform.Find(transform.ToString().Substring(0, 3) + "Shell(Clone)").transform;
         this._shellObject = shellObj.gameObject;
         this._shellObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this._shellObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
@@ -95,35 +61,6 @@ public class Weapon_Bullet : MonoBehaviour, IWeapon_Fireable
         }
     }
 
-<<<<<<< Updated upstream:SDP_Main/Assets/Scripts/Entities/Weapons/WeaponBullet.cs
-=======
-    /// <summary>
-    /// Author: Corey John Knight
-    /// Creates a new damage struct, converts it to JSON. Gets the PV of the player that was hit and uses their
-    /// PV to RPC call themselves to inform that they have been hit. They must then tell others that they were damaged.
-    /// </summary>
-    /// <param name="hit"></param>
-    private void HitPlayer(RaycastHit hit)
-    {
-        PhotonView pv = hit.transform.GetComponentInParent<Player_PlayerController>().photonView;
-        if(pv == null)
-        {
-            Debug.LogError("WARNING: The player who was shot has no Photon View!");
-            return;
-        }
-
-        s_DamageInfo dmg = new s_DamageInfo();
-        dmg.bodyPart = e_BodyPart.NONE;
-        dmg.dmgValue = 10f;
-        dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
-        dmg.dmgRecievedId = pv.Owner.ActorNumber;
-        pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
-    }
-    /// <summary>
-    /// This method is for 
-    /// </summary>
-    /// <param name="origin"></param>
->>>>>>> Stashed changes:SDP_Main/Assets/Scripts/Entities/Weapons/Weapon_Bullet.cs
     public void Hit(Transform origin)
     {
         GuardClause.InspectGuardClauseNullRef<Transform>(origin, nameof(origin));
@@ -139,15 +76,7 @@ public class Weapon_Bullet : MonoBehaviour, IWeapon_Fireable
         }
 
     }
-<<<<<<< Updated upstream:SDP_Main/Assets/Scripts/Entities/Weapons/WeaponBullet.cs
     
-=======
-   /// <summary>
-   /// This method disables the current bullet object of instance.
-   /// </summary>
-   /// <param name="delaySecond"></param>
-   /// <returns></returns>
->>>>>>> Stashed changes:SDP_Main/Assets/Scripts/Entities/Weapons/Weapon_Bullet.cs
     internal IEnumerator DisableBullet( float delaySecond)
     {
         GuardClause.InspectGuardClauseNullRef<GameObject>(this._bulletObject, nameof(this._bulletObject));
