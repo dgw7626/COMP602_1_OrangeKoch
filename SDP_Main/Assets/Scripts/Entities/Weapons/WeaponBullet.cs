@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,11 +39,7 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
                 //--------------------------------
                 if(hit.transform.tag == "Player_Model")
                 {
-                    Player_MultiplayerEntity e = hit.transform.GetComponentInParent<Player_MultiplayerEntity>();
-
-                    Game_RuntimeData.thisMachinesMultiplayerEntity.DamagePlayer(e.playerController.photonView.Owner.ActorNumber);
-                   /* Debug.Log("A Player was hit by " + Game_RuntimeData.thisMachinesPlayersPhotonView.ViewID + ". " +
-                        "\nThe player that was hit was: " + e.uniqueID);*/
+                    HitPlayer(hit);
                 }
                 //--------------------------------
                 Debug.DrawLine(origin.position,hit.point, Color.red);
@@ -58,6 +56,29 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
                 return;
             }           
         }
+    }
+
+    /// <summary>
+    /// Author: Corey John Knight
+    /// Creates a new damage struct, converts it to JSON. Gets the PV of the player that was hit and uses their
+    /// PV to RPC call themselves to inform that they have been hit. They must then tell others that they were damaged.
+    /// </summary>
+    /// <param name="hit"></param>
+    private void HitPlayer(RaycastHit hit)
+    {
+        PhotonView pv = hit.transform.GetComponentInParent<Player_PlayerController>().photonView;
+        if(pv == null)
+        {
+            Debug.LogError("WARNING: The player who was shot has no Photon View!");
+            return;
+        }
+
+        s_DamageInfo dmg = new s_DamageInfo();
+        dmg.bodyPart = e_BodyPart.NONE;
+        dmg.dmgValue = 10f;
+        dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+        dmg.dmgRecievedId = pv.Owner.ActorNumber;
+        pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
     }
 
     public void Hit(Transform origin)
