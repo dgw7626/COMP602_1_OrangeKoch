@@ -4,21 +4,32 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
-public class TriggerScript : MonoBehaviour
+public class TriggerManager : MonoBehaviour
 {
     public TextMeshProUGUI MoveText;
     public TextMeshProUGUI JumpText;
 
     public TextMeshProUGUI SprintText;
+
     public GameObject trigger1;
     public GameObject trigger2;
+    List<GameObject> allTriggerInstances;
 
     //Make the trigger only work one time
     private bool trigger1Activated = false;
     private bool trigger2Activated = false;
 
-    
+
+
+    void Start()
+    {
+        Transform manager = transform;
+        GameObject[] triggers = manager.GetComponentsInChildren<GameObject>(true);
+        foreach(GameObject trigger in triggers){
+            allTriggerInstances.Add(trigger);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger entered!");
@@ -29,12 +40,9 @@ public class TriggerScript : MonoBehaviour
 
             MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
 
-
             JumpText.gameObject.SetActive(true);
 
-
             trigger1.SetActive(false);
-
 
             trigger2.SetActive(true);
 
@@ -42,7 +50,6 @@ public class TriggerScript : MonoBehaviour
         }
         else if (!trigger2Activated && other.CompareTag("Player") && other.gameObject == trigger2)
         {
-
             MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
             JumpText.rectTransform.anchoredPosition -= new Vector2(0, 50);
 

@@ -83,7 +83,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     public void TakeDamage(s_DamageInfo damageInfo)
     {
         currentHealth -= damageInfo.dmgValue;
-        if(currentHealth < 0) 
+        if(currentHealth <= 0) 
         {
             Die(damageInfo);
         }
