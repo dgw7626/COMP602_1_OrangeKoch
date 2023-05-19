@@ -8,15 +8,15 @@ public class Player_Settings : MonoBehaviour
     public float globalVolume;
     public void InvertMouseYAxis()
     {
-        // invertMouseYAxis = !invertMouseYAxis;
+         invertMouseYAxis = !invertMouseYAxis;
     }
     public void setMouseSpeed(int speed)
     {
-        //mouseMovementSpeed = speed;
+        mouseMovementSpeed = speed;
     }
     public void setGlobalVolume(float volume)
     {
-        //mouseMovementSpeed = speed;
+        globalVolume = volume;
     }
     
 }

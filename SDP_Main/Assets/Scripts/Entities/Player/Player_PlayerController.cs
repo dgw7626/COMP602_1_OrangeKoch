@@ -49,6 +49,7 @@ public class Player_PlayerController : MonoBehaviour
     [Header("Rotation")]
     [Tooltip("Rotation speed for moving the camera")]
     public float RotationSpeed = 200f;
+    
 
     [Range(0.1f, 1f)]
     [Tooltip("Rotation speed multiplier when aiming")]
@@ -240,7 +241,7 @@ public class Player_PlayerController : MonoBehaviour
         {
             _projectMananger.InitShoot(WeaponFiretype.Semi);
         }
-        //Reaload
+        //Reload
         if (inputHandler.GetReloadButtonDown())
         {
             _projectMananger.Reload();
@@ -303,6 +304,8 @@ public class Player_PlayerController : MonoBehaviour
     void HandleCharacterMovement()
     {
         // horizontal character rotation
+        // Set rotation speed
+        RotationSpeed = Game_RuntimeData.playerSettings.mouseMovementSpeed;
         {
             // rotate the transform with the input speed around its local Y axis
             transform.Rotate(

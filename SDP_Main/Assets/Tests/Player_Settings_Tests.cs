@@ -10,32 +10,17 @@ public class Player_Settings_Tests
     [SetUp]
     public void Setup()
     {
-        //  playerSettings = new GameObject().AddComponent<Player_Settings>();
+        playerSettings = new GameObject().AddComponent<Player_Settings>();
     }
 
     [TearDown]
     public void Teardown()
     {
-        //Object.DestroyImmediate(playerSettings.gameObject);
+        Object.DestroyImmediate(playerSettings.gameObject);
     }
 
     [Test]
-    public void TrialTest()
-    {
-        // ARRANGE
-        int a = 25;
-        int b = 4;
-        int c = 100;
-
-        // ACT
-        int calc = (a * b);
-
-        // ASSERT
-        Assert.That(calc, Is.EqualTo(c));
-    }
-
-    [Test]
-    public void invertMouseYAxisTest()
+    public void InvertMouseYAxisTest()
     {
         // ARRANGE
         bool initialInvertMouseYAxis = playerSettings.invertMouseYAxis;
@@ -45,20 +30,22 @@ public class Player_Settings_Tests
 
 
         // ASSERT
-        Assert.AreEqual(!initialInvertMouseYAxis, playerSettings.invertMouseYAxis);
+        Assert.AreNotEqual(initialInvertMouseYAxis, playerSettings.invertMouseYAxis);
     }
 
     [Test]
     public void ChangeMouseMovementSpeedTest()
     {
         // ARRANGE
-        int initialMouseMovementSpeed = playerSettings.mouseMovementSpeed;
+        int initialMouseMovementSpeed = 200;
 
         // ACT
+        playerSettings.setMouseSpeed(initialMouseMovementSpeed);
         playerSettings.setMouseSpeed(100);
 
         // ASSERT
         Assert.AreEqual(100, playerSettings.mouseMovementSpeed);
+        Assert.AreNotEqual(initialMouseMovementSpeed, playerSettings.mouseMovementSpeed);
     }
 
     [Test]
@@ -72,5 +59,7 @@ public class Player_Settings_Tests
 
         // ASSERT
         Assert.AreEqual(50, playerSettings.globalVolume);
+        Assert.AreNotEqual(initialGlobalVolume, playerSettings.globalVolume);
     }
+
 }

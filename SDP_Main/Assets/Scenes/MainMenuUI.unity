@@ -2162,9 +2162,9 @@ MonoBehaviour:
   m_FillRect: {fileID: 16445721}
   m_HandleRect: {fileID: 1902853265}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 100
-  m_WholeNumbers: 0
+  m_MinValue: 50
+  m_MaxValue: 400
+  m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2194,7 +2194,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivitySlider: {fileID: 0}
-  mouseSensitivityText: {fileID: 0}
 --- !u!1 &798273905
 GameObject:
   m_ObjectHideFlags: 0
