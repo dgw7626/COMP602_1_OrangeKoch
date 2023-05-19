@@ -26,12 +26,16 @@ public class Multiplayer_PlayerManager : MonoBehaviour
     /// </summary>
     void CreateController()
     {
+        // Game_RespawnManager respawnManager = Game_RespawnManager.Instance;
+        // Transform spawnPoint = Game_RespawnManager.spawnpoints();
+        Transform spawnPoint = SpawnManager.Instance.GetSpawnpoint();
+
         Debug.Log("Instantiated Player Controller");
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), Vector3.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), spawnPoint.position, spawnPoint.rotation);
     }
 
     void Update()
     {
-
+        
     }
 }
