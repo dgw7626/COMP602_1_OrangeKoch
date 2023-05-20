@@ -4,34 +4,34 @@ using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(Weapon_ProjectileManager))]
-
+[RequireComponent(typeof(PhotonView))]
 public class Weapon_Controller : MonoBehaviour
 {
-    public PhotonView PhotonView { get; private set; }
+    public PhotonView photonView { get; private set; }
     private Weapon_ProjectileManager _weaponProjectileMananger;
     void Awake()
     {
-       
-        PhotonView = GetComponent<PhotonView>();
+
+        photonView = GetComponent<PhotonView>();
         _weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
     void Start()
     {
-      // if (!PhotonView.IsMine)
-      // {
-      //     return;
-      // }
-        //   PhotonView.RPC(nameof(_weaponProjectileMananger.InitBullets), RpcTarget.All);
-        _weaponProjectileMananger.InitBullets();
+       if (!photonView.IsMine)
+       {
+           return;
+       }
+        photonView.RPC(nameof(_weaponProjectileMananger.InitBullets_P), RpcTarget.All);
+       //_weaponProjectileMananger.InitBullets();
     }
     void Update()
     {
-      // if (!PhotonView.IsMine)
-      // {
-      //     return;
-      // }
-      //  PhotonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
-        _weaponProjectileMananger.UpdateChildTransform();
+       if (!photonView.IsMine)
+       {
+           return;
+       }
+        photonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
+        //_weaponProjectileMananger.UpdateChildTransform();
     }
 
  

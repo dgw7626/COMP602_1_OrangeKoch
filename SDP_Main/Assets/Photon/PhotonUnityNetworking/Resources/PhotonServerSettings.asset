@@ -53,6 +53,7 @@ MonoBehaviour:
   - RPC_Bitch
   - Reload
   - InitShoot
+  - InitBullets_P
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

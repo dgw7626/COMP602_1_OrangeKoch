@@ -22,7 +22,7 @@ public class Weapon_Bullet : MonoBehaviour, IWeapon_Fireable
     private void Start()
     {
         _currentIndex = GetCurrentBuildIndex(transform.name);
-        if (_bulletIndex == _currentIndex)
+        if (_bulletIndex == _currentIndex && transform.GetComponent<PhotonView>().IsMine)
         {
             _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();  
         }

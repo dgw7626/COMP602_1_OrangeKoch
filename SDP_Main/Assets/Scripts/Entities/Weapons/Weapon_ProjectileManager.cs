@@ -33,6 +33,8 @@ public class Weapon_ProjectileManager : MonoBehaviour
     public List<Transform> hitObjects;
     internal Transform _firePos;
 
+    //for Synchronization
+    public PhotonView photonView;
     void Awake()
     {
         if (!transform.GetComponentInParent<PhotonView>().IsMine)
@@ -55,6 +57,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
          
         if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
+            photonView = GetComponent<PhotonView>();
             _ammunitionUI.gameObject.SetActive(true);
         }
         _weaponAmmo = _weaponInfo.BulletCounts;
@@ -70,6 +73,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// <summary>
     /// This method will update the target object of the postion and rotation, the position values will be duplicated from parent object.
     /// </summary>
+    [PunRPC]
     public void UpdateChildTransform()
     {
         GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
@@ -80,6 +84,65 @@ public class Weapon_ProjectileManager : MonoBehaviour
         this.transform.rotation = newRot;
         return;
     }
+    [PunRPC]
+    public void InitBullets_P()
+    {
+        if (transform.Find("Bullets") == null)
+        {
+            GameObject bullets = new GameObject("Bullets");
+            bullets.transform.SetParent(transform);
+        }
+
+        Transform bulletsTransform = transform.Find("Bullets");
+        GuardClause.InspectGuardClauseNullRef<Transform>(bulletsTransform, nameof(bulletsTransform));
+
+        Transform firePos = transform.GetChild(0).GetChild(0).transform;
+        GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
+
+        for (int i = 0; i < _weaponInfo.BulletCounts; i++)
+        {
+            GameObject bulletObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Bullet"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
+            bulletObject.name = "(" + i + ")Bullet";
+            bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
+            // need to add parent to bullets transform.
+            bulletObject.transform.SetParent(bulletsTransform);
+            bulletObjects.Add(bulletObject.transform);
+            // bulletObjects[i].gameObject.SetActive(true);
+
+            GameObject muzzleFlash = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "MuzzleFlash"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
+            muzzleFlash.name = "(" + i + ")muzzleFlash";
+            muzzleFlash.transform.SetParent(bulletObject.transform);
+            muzzleFlash.SetActive(false);
+            muzzleFlashObjects.Add(muzzleFlash.transform);
+
+            GameObject bulletTrace = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "BulletTracer"), firePos.position + new Vector3(0, -3f, 0), _weaponInfo.BulletTrace.transform.rotation, 0);
+            bulletTrace.name = "(" + i + ")bulletTracer";
+            bulletTrace.transform.SetParent(bulletObject.transform);
+            bulletTrace.SetActive(false);
+            bulletTracerObjects.Add(bulletTrace.transform);
+
+            GameObject shellObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Shell"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
+            shellObject.name = "(" + i + ")shell";
+            shellObject.transform.SetParent(bulletObject.transform);
+            shellObject.SetActive(false);
+            shellObjects.Add(shellObject.transform);
+
+            GameObject hitObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Hit"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
+            hitObject.transform.SetParent(bulletObject.transform);
+            hitObject.name = "(" + i + ")hitObject";
+            hitObject.SetActive(false);
+            hitObjects.Add(hitObject.transform);
+
+            // Setting up the index number for the bullet
+            bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex = i;
+            // Debug.Log("Bullet Index" + bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex);
+            // Set the bullet object available
+            bulletObject.SetActive(true);
+
+            _localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
+        }
+    }
+
 
 
     /// <summary>
@@ -213,6 +276,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// <summary>
     ///  This method reloads the current gun, ammo display will be refreshed after reload.
     /// </summary>
+    [PunRPC]
     public void Reload()
     {
         GuardClause.InspectGuardClauseNullRef<int>(this._weaponClip, nameof(this._weaponClip));
@@ -233,6 +297,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// This method initialize the shooting type of the weapon there are three options (Auto, Burst, Semi).
     /// </summary>
     /// <param name="fireType"></param>
+    [PunRPC]
     public void InitShoot(Weapon_Firetype fireType)
     {
         switch (fireType)
