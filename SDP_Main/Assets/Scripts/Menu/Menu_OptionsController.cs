@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class controls user inputs and then updates the player settings
+/// </summary>
 public class Menu_OptionsController : MonoBehaviour
 {
     [Header("Sliders & Toggles")]
