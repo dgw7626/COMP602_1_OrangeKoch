@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class Player_SoundManager : MonoBehaviour
 {
+    [Tooltip("Master Audio Mixer")]
+    public AudioMixer AudioMixer;
+
     [Tooltip("Audio source for footsteps, jump, etc...")]
     public AudioSource AudioSource;
 
@@ -22,7 +26,7 @@ public class Player_SoundManager : MonoBehaviour
     [Tooltip("Sound played when jumping")] public AudioClip JumpSfx;
     [Tooltip("Sound played when landing")] public AudioClip LandSfx;
 
-    [Tooltip("Sound played when taking damage froma fall")]
+    [Tooltip("Sound played when taking damage from a fall")]
     public AudioClip FallDamageSfx;
 
 
@@ -35,6 +39,9 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        Debug.Log(Game_RuntimeData.playerSettings.globalVolume);
+        //Set Master Volume
+        AudioMixer.SetFloat("MasterVolume", Mathf.Log10(Game_RuntimeData.playerSettings.globalVolume) * 20);
         //Return if not playing multiplayer, such that it is single.
         if (!Game_RuntimeData.isMultiplayer)
             return;

@@ -10,32 +10,17 @@ public class Player_Settings_Tests
     [SetUp]
     public void Setup()
     {
-        //  playerSettings = new GameObject().AddComponent<Player_Settings>();
+        playerSettings = new GameObject().AddComponent<Player_Settings>();
     }
 
     [TearDown]
     public void Teardown()
     {
-        //Object.DestroyImmediate(playerSettings.gameObject);
+        Object.DestroyImmediate(playerSettings.gameObject);
     }
 
     [Test]
-    public void TrialTest()
-    {
-        // ARRANGE
-        int a = 25;
-        int b = 4;
-        int c = 100;
-
-        // ACT
-        int calc = (a * b);
-
-        // ASSERT
-        Assert.That(calc, Is.EqualTo(c));
-    }
-
-    [Test]
-    public void invertMouseYAxisTest()
+    public void InvertMouseYAxisTest()
     {
         // ARRANGE
         bool initialInvertMouseYAxis = playerSettings.invertMouseYAxis;
@@ -45,20 +30,36 @@ public class Player_Settings_Tests
 
 
         // ASSERT
-        Assert.AreEqual(!initialInvertMouseYAxis, playerSettings.invertMouseYAxis);
+        Assert.AreNotEqual(initialInvertMouseYAxis, playerSettings.invertMouseYAxis);
     }
 
     [Test]
-    public void ChangeMouseMovementSpeedTest()
+    public void SetLookSensitivityInsideBoundsTest()
     {
         // ARRANGE
-        int initialMouseMovementSpeed = playerSettings.mouseMovementSpeed;
+        float initialLookSensitivityMultiplier = 2f;
 
         // ACT
-        playerSettings.setMouseSpeed(100);
+        playerSettings.setMouseSpeed(initialLookSensitivityMultiplier);
+        playerSettings.setMouseSpeed(1f);
 
         // ASSERT
-        Assert.AreEqual(100, playerSettings.mouseMovementSpeed);
+        Assert.AreEqual(1f, playerSettings.lookSensitivity);
+        Assert.AreNotEqual(initialLookSensitivityMultiplier, playerSettings.lookSensitivity);
+    }
+
+    [Test]
+    public void SetLookSensitivityOutsideBoundsTest()
+    {
+        // ARRANGE
+        float initialLookSensitivityMultiplier = 2f;
+
+        // ACT
+        playerSettings.setMouseSpeed(initialLookSensitivityMultiplier);
+        playerSettings.setMouseSpeed(0.1f);
+
+        // ASSERT
+        Assert.AreEqual(initialLookSensitivityMultiplier, playerSettings.lookSensitivity);
     }
 
     [Test]
@@ -68,9 +69,11 @@ public class Player_Settings_Tests
         float initialGlobalVolume = playerSettings.globalVolume;
 
         // ACT
-        playerSettings.setGlobalVolume(50);
+        playerSettings.setGlobalVolume(0.5f);
 
         // ASSERT
-        Assert.AreEqual(50, playerSettings.globalVolume);
+        Assert.AreEqual(0.5f, playerSettings.globalVolume);
+        Assert.AreNotEqual(initialGlobalVolume, playerSettings.globalVolume);
     }
+
 }
