@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using System.IO;
 using Photon.Pun;
 //[RequireComponent(typeof(PhotonView))]
@@ -36,6 +37,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     //for Synchronization
     public PhotonView photonView;
     internal string _playerNameID;
+    public AudioMixerGroup masterMixer;
     void Awake()
     {
         if (!transform.GetComponentInParent<PhotonView>().IsMine)
@@ -133,6 +135,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             GameObject hitObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Hit"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
             hitObject.transform.SetParent(bulletObject.transform);
             hitObject.name = "(" + i + ")hitObject";
+            hitObject.GetComponent<AudioSource>().outputAudioMixerGroup = masterMixer;
             hitObject.SetActive(false);
             hitObjects.Add(hitObject.transform);
 
