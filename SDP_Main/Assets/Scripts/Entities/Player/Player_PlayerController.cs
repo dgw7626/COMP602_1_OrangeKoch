@@ -282,13 +282,13 @@ public class Player_PlayerController : MonoBehaviour
         // shooting
         if (inputHandler.GetFireInputDown())
         {
-            _projectMananger.photonView.RPC(nameof(_projectMananger.InitShoot), RpcTarget.All, Weapon_Firetype.Semi);
+            _projectMananger.InitShoot(Weapon_Firetype.Semi);
+
            // _projectMananger.InitShoot(Weapon_Firetype.Semi);
         }
         //Reaload
         if (inputHandler.GetReloadButtonDown())
         {
-
             _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
             //_projectMananger.Reload();
         }

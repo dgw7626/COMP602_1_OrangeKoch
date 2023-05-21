@@ -35,12 +35,14 @@ public class Weapon_ProjectileManager : MonoBehaviour
 
     //for Synchronization
     public PhotonView photonView;
+    internal string _playerNameID;
     void Awake()
     {
         if (!transform.GetComponentInParent<PhotonView>().IsMine)
         {
             return;
         }
+        _playerNameID = PhotonNetwork.NickName;
         this._camera = this.transform.parent.GetComponentInChildren<Camera>().transform;
         GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
         this._fw = _camera.transform.InverseTransformDirection(transform.forward);
@@ -54,12 +56,10 @@ public class Weapon_ProjectileManager : MonoBehaviour
         _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         _ammunitionUI.gameObject.SetActive(false);
         // Check if the view is mine
-         
-        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
-        {
-            photonView = GetComponent<PhotonView>();
-            _ammunitionUI.gameObject.SetActive(true);
-        }
+   
+        photonView = GetComponent<PhotonView>();
+        _ammunitionUI.gameObject.SetActive(true);
+        
         _weaponAmmo = _weaponInfo.BulletCounts;
         _weaponClip = _weaponInfo.ClipCounts;
         _firePos = transform.GetChild(0).GetChild(0).transform;
@@ -76,7 +76,8 @@ public class Weapon_ProjectileManager : MonoBehaviour
     [PunRPC]
     public void UpdateChildTransform()
     {
-        GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
+        // GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
+        if (!transform.GetComponentInParent<PhotonView>().IsMine) return;
         var newFw = _camera.transform.TransformDirection(_fw);
         var newUp = _camera.transform.TransformDirection(_up);
         var newRot = Quaternion.LookRotation(newFw, newUp);
@@ -84,30 +85,32 @@ public class Weapon_ProjectileManager : MonoBehaviour
         this.transform.rotation = newRot;
         return;
     }
+
     [PunRPC]
     public void InitBullets_P()
     {
-        if (transform.Find("Bullets") == null)
-        {
-            GameObject bullets = new GameObject("Bullets");
-            bullets.transform.SetParent(transform);
-        }
+   
 
         Transform bulletsTransform = transform.Find("Bullets");
-        GuardClause.InspectGuardClauseNullRef<Transform>(bulletsTransform, nameof(bulletsTransform));
+        if (bulletsTransform == null)
+        {
+            GameObject bullets = new GameObject("Bullets");
+            bulletsTransform = bullets.transform;
+            bulletsTransform.SetParent(transform);
+        }
 
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
-        GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
+
+        Debug.Log("called");
 
         for (int i = 0; i < _weaponInfo.BulletCounts; i++)
         {
             GameObject bulletObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Bullet"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
             bulletObject.name = "(" + i + ")Bullet";
             bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
-            // need to add parent to bullets transform.
+
             bulletObject.transform.SetParent(bulletsTransform);
             bulletObjects.Add(bulletObject.transform);
-            // bulletObjects[i].gameObject.SetActive(true);
 
             GameObject muzzleFlash = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "MuzzleFlash"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
             muzzleFlash.name = "(" + i + ")muzzleFlash";
@@ -133,23 +136,60 @@ public class Weapon_ProjectileManager : MonoBehaviour
             hitObject.SetActive(false);
             hitObjects.Add(hitObject.transform);
 
-            // Setting up the index number for the bullet
-            bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex = i;
-            // Debug.Log("Bullet Index" + bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex);
-            // Set the bullet object available
             bulletObject.SetActive(true);
 
-            _localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
+            Weapon_Bullet weaponBullet = bulletObject.GetComponent<Weapon_Bullet>();
+            if (weaponBullet != null)
+            {
+                weaponBullet._bulletIndex = i;
+                _localBullets.Add(weaponBullet);
+            }
         }
+        //Kill the duplicates.
+        transform.GetComponentInParent<PhotonView>().RPC(nameof(DestoryBulletVFXS),RpcTarget.All);
     }
 
+    [PunRPC]
+    public void DestoryBulletVFXS()
+    {
+        string[] targets = { "Bullet(Clone)", "MuzzleFlash(Clone)", "BulletTracer(Clone)", "Shell(Clone)", "Hit(Clone)" };
+        GameObject[] allObjects = FindObjectsOfType<GameObject>(); // Get all objects in the scene
 
+        List<GameObject> topLevelObjects = new List<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.transform.parent == null) // Check if the object has no parent
+            {
+                topLevelObjects.Add(obj);
+            }
+        }
+
+        // Print the names of the top-level objects
+        foreach (GameObject topLevelObj in topLevelObjects)
+        {
+            for(int i = 0; i < targets.Length; i++)
+            {
+                if (targets[i].Contains(topLevelObj.transform.name))
+                {
+                    Destroy(topLevelObj.gameObject);
+                }
+            }
+        }
+        Debug.Log("cleared");
+    }
 
     /// <summary>
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
+    [PunRPC]
     public void InitBullets()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+        print("CALLED???");
         Transform bullets;
         if (transform.Find("Bullets") == null)
         {
@@ -253,9 +293,11 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// <summary>
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
+
+    [PunRPC]
     public void GetShoot()
     {
-        GuardClause.InspectGuardClauseNullRef<int>(_weaponAmmo, nameof(_weaponAmmo));
+     //   GuardClause.InspectGuardClauseNullRef<int>(_weaponAmmo, nameof(_weaponAmmo));
         if (_weaponAmmo >= 1)
         {
           //  var firePos = transform.GetChild(0).GetChild(0).transform;
@@ -279,12 +321,13 @@ public class Weapon_ProjectileManager : MonoBehaviour
     [PunRPC]
     public void Reload()
     {
-        GuardClause.InspectGuardClauseNullRef<int>(this._weaponClip, nameof(this._weaponClip));
-        GuardClause.InspectGuardClauseNullRef<int>(this._weaponAmmo, nameof(this._weaponAmmo));
-        GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
-            this._ammunitionUI,
-            nameof(this._ammunitionUI)
-        );
+       
+      //  GuardClause.InspectGuardClauseNullRef<int>(this._weaponClip, nameof(this._weaponClip));
+      //  GuardClause.InspectGuardClauseNullRef<int>(this._weaponAmmo, nameof(this._weaponAmmo));
+      //  GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
+      //      this._ammunitionUI,
+      //      nameof(this._ammunitionUI)
+      //  );
         if (this._weaponClip > 0)
         {
             this._weaponAmmo = _weaponInfo.BulletCounts;
@@ -297,7 +340,8 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// This method initialize the shooting type of the weapon there are three options (Auto, Burst, Semi).
     /// </summary>
     /// <param name="fireType"></param>
-    [PunRPC]
+
+
     public void InitShoot(Weapon_Firetype fireType)
     {
         switch (fireType)
@@ -313,7 +357,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             }
             case Weapon_Firetype.Semi:
             {
-                GetShoot();
+                photonView.RPC(nameof(GetShoot),RpcTarget.All);
                 break;
             }
             default:
