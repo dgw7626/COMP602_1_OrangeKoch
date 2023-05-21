@@ -1,5 +1,4 @@
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +14,6 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal GameObject _shell;
     internal GameObject _muzzleFlash;
     internal GameObject _bullet;
-    public Transform _cameraHolder;
     internal Coroutine _currentCoroutine;
     public int _bulletIndex;
     internal int _currentIndex;
@@ -23,10 +21,8 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     private void Start()
     {
         _currentIndex = GetCurrentBuildIndex(transform.name);
-    
         if (_bulletIndex == _currentIndex && transform.GetComponent<PhotonView>().IsMine)
         {
-             _cameraHolder = transform.parent.parent.parent.Find("CameraHolder").transform;
             _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();  
         }
   
@@ -53,13 +49,26 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     [PunRPC]
     public void Fire(Transform origin)
     {
-        Debug.Log(_cameraHolder.transform.name);
-        Debug.Log("Shooting WRoks");
         transform.position = origin.position;
-        //ADD camera hodler here
+        InstantiateGunVFX();
+            if (Physics.Raycast(origin.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
+            {
+                if (hit.transform != null)
+                {
+                    if (hit.transform.tag == "Player_Model")
+                    {
+                        HitPlayer(hit);
+                    }
+                transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.All,hit.point, origin.position);
+                _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
+                return;
+                }
+            }
+        
+    }
 
-        //Activate child objects.
-      
+    internal void InstantiateGunVFX()
+    {
         this._shell = _projectileManager.shellObjects[_currentIndex].gameObject;
         this._bulletTracer = _projectileManager.bulletTracerObjects[_currentIndex].gameObject;
         this._muzzleFlash = _projectileManager.muzzleFlashObjects[_currentIndex].gameObject;
@@ -74,37 +83,8 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         this._muzzleFlash.SetActive(true);
         this._muzzleFlash.GetComponent<ParticleSystem>().Play();
         this._bullet.GetComponent<AudioSource>().Play();
-            if (Physics.Raycast(origin.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
-            {
-                if (hit.transform != null)
-                {
-                    // Edit by Corey Knight - 04/05/23
-                    //--------------------------------
-                    if (hit.transform.tag == "Player_Model")
-                    {
-                        HitPlayer(hit);
-                    }
-                //--------------------------------
-                // Debug.DrawLine(origin.position, hit.point, Color.red);
-                // Debug.unityLogger.logEnabled = true;
-                // Debug.Log("Tagged Object : " + hit.transform.name);
-                //       _hit.transform.position = hit.point;
-                //      _hit.transform.parent = null;
-                //  this._bulletTracer.SetActive(true);
-                //  this._hit.SetActive(true);
-                //  this._bulletTracer.transform.position = origin.position;
-                //  _bulletTracer.GetComponent<TrailRenderer>().AddPosition(origin.position);
-                //       _bulletTracer.transform.position = hit.point;
-                //      this._shell.transform.parent = null;
-                //      _bulletTracer.transform.parent = null;
-                //       _hit.transform.GetComponent<AudioSource>().Play();
-                transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.All,hit.point, origin.position);
-                    _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
-                return;
-                }
-            }
-        
     }
+
     [PunRPC]
     internal void RenderGunTrace(Vector3 hit, Vector3 origin)
     {
@@ -160,7 +140,6 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     
     internal IEnumerator DisableBullet( float delaySecond)
     {
-      //  GuardClause.InspectGuardClauseNullRef<GameObject>(this._bulletObject, nameof(this._bulletObject));
         yield return new WaitForSeconds(delaySecond);
         _bulletTracer.transform.SetParent(transform);
         _bulletTracer.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)), GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0);
@@ -170,8 +149,6 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         this._bulletTracer.SetActive(false);
         this._muzzleFlash.SetActive(false);
         this._hit.SetActive(false);
-      //  this._bullet = _projectileManager.bulletObjects[_currentIndex].gameObject;
-        //transform.gameObject.SetActive(false);
         StopCoroutine(_currentCoroutine);
     }
 }

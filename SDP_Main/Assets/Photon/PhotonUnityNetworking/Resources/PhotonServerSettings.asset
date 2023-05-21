@@ -58,6 +58,7 @@ MonoBehaviour:
   - BulletVFX_RPC
   - ShowBulletTrace_RPC
   - RenderGunTrace
+  - PlayFootStep
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

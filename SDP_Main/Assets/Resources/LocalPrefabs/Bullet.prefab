@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 962e9d12545da054993e4b8922c5b554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraHolder: {fileID: 0}
   _bulletIndex: 0
 --- !u!82 &6915469808226662047
 AudioSource:

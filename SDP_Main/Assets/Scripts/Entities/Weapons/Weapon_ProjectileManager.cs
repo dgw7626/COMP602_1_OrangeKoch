@@ -57,11 +57,11 @@ public class Weapon_ProjectileManager : MonoBehaviour
     {
         _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         _ammunitionUI.gameObject.SetActive(false);
-        // Check if the view is mine
-   
+        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            _ammunitionUI.gameObject.SetActive(true);
+        }
         photonView = GetComponent<PhotonView>();
-        _ammunitionUI.gameObject.SetActive(true);
-        
         _weaponAmmo = _weaponInfo.BulletCounts;
         _weaponClip = _weaponInfo.ClipCounts;
         _firePos = transform.GetChild(0).GetChild(0).transform;
@@ -78,7 +78,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     [PunRPC]
     public void UpdateChildTransform()
     {
-        // GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
         if (!transform.GetComponentInParent<PhotonView>().IsMine) return;
         var newFw = _camera.transform.TransformDirection(_fw);
         var newUp = _camera.transform.TransformDirection(_up);
@@ -100,11 +99,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             bulletsTransform = bullets.transform;
             bulletsTransform.SetParent(transform);
         }
-
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
-
-        Debug.Log("called");
-
         for (int i = 0; i < _weaponInfo.BulletCounts; i++)
         {
             GameObject bulletObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Bullet"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
@@ -148,7 +143,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
                 _localBullets.Add(weaponBullet);
             }
         }
-        //Kill the duplicates.
         transform.GetComponentInParent<PhotonView>().RPC(nameof(DestoryBulletVFXS),RpcTarget.All);
     }
 
@@ -156,19 +150,17 @@ public class Weapon_ProjectileManager : MonoBehaviour
     public void DestoryBulletVFXS()
     {
         string[] targets = { "Bullet(Clone)", "MuzzleFlash(Clone)", "BulletTracer(Clone)", "Shell(Clone)", "Hit(Clone)" };
-        GameObject[] allObjects = FindObjectsOfType<GameObject>(); // Get all objects in the scene
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
 
         List<GameObject> topLevelObjects = new List<GameObject>();
 
         foreach (GameObject obj in allObjects)
         {
-            if (obj.transform.parent == null) // Check if the object has no parent
+            if (obj.transform.parent == null) 
             {
                 topLevelObjects.Add(obj);
             }
         }
-
-        // Print the names of the top-level objects
         foreach (GameObject topLevelObj in topLevelObjects)
         {
             for(int i = 0; i < targets.Length; i++)
@@ -192,7 +184,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
         {
             return;
         }
-        print("CALLED???");
         Transform bullets;
         if (transform.Find("Bullets") == null)
         {
@@ -215,8 +206,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
             bulletObject.name = "(" + i + ")Bullet";
             bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
             bulletObjects.Add(bulletObject.transform);
-          //  bulletObjects[i].gameObject.SetActive(true);
-
             var muzzleFlash = Instantiate(
                 _weaponInfo.MuzzleFlash.gameObject,
                 Vector3.zero + new Vector3(0, 0, 5),
@@ -260,15 +249,11 @@ public class Weapon_ProjectileManager : MonoBehaviour
             hitObject.name = "(" + i + ")hitObject";
             hitObject.SetActive(false);
             hitObjects.Add(hitObject.transform);
-            //setting up the index number for the bullet
             bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex = (int)i;
-          //  Debug.Log("Bullet Index" + bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex);
-            //set the bullet object available.
             bulletObject.SetActive(true);
             
             _localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
         }
-        //getting all the vfx instances
         return;
     }
 
@@ -279,8 +264,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator GetShoot(float delaySecond)
     {
-    //    var firePos = transform.GetChild(0).GetChild(0).transform;
-      //  GuardClause.InspectGuardClauseNullRef<Transform>(_firePos, nameof(_firePos));
         foreach (Weapon_Bullet bullet in _localBullets)
         {
             if (!bullet.gameObject.activeSelf)
@@ -296,19 +279,15 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// <summary>
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
-
     [PunRPC]
     public void GetShoot()
     {
-     //   GuardClause.InspectGuardClauseNullRef<int>(_weaponAmmo, nameof(_weaponAmmo));
         if (_weaponAmmo >= 1)
         {
-          //  var firePos = transform.GetChild(0).GetChild(0).transform;
             _weaponAmmo--;
             _ammunitionUI.UpdateUI(_weaponAmmo, _weaponClip);
             foreach (Transform bullet in bulletObjects)
             {
-                //check the child object is not active.
                 if (!bullet.transform.GetChild(0).gameObject.activeSelf)
                 {
                     bullet.GetComponent<Weapon_Bullet>().Fire(_firePos);
@@ -324,13 +303,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     [PunRPC]
     public void Reload()
     {
-       
-      //  GuardClause.InspectGuardClauseNullRef<int>(this._weaponClip, nameof(this._weaponClip));
-      //  GuardClause.InspectGuardClauseNullRef<int>(this._weaponAmmo, nameof(this._weaponAmmo));
-      //  GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
-      //      this._ammunitionUI,
-      //      nameof(this._ammunitionUI)
-      //  );
         if (this._weaponClip > 0)
         {
             this._weaponAmmo = _weaponInfo.BulletCounts;
@@ -343,8 +315,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// This method initialize the shooting type of the weapon there are three options (Auto, Burst, Semi).
     /// </summary>
     /// <param name="fireType"></param>
-
-
     public void InitShoot(Weapon_Firetype fireType)
     {
         switch (fireType)

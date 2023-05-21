@@ -2871,7 +2871,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5ad7cc028aae346827dbe3638cb6e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  masterMixer: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
   _weaponInfo: {fileID: 11400000, guid: 4673bca3687865b4f9c38f8d92326c0f, type: 2}
   _localBullets: []
   _weaponAmmo: 0
@@ -2883,6 +2882,7 @@ MonoBehaviour:
   shellObjects: []
   hitObjects: []
   photonView: {fileID: 0}
+  masterMixer: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
 --- !u!114 &3147760506879643309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3142,6 +3142,8 @@ GameObject:
   - component: {fileID: 5617119470369165638}
   - component: {fileID: 589475223474452582}
   - component: {fileID: 8167696013445777441}
+  - component: {fileID: 2456399883662257649}
+  - component: {fileID: 7342568937351757382}
   m_Layer: 0
   m_Name: SoundSystem
   m_TagString: SoundSystem
@@ -3281,6 +3283,45 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2456399883662257649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7663682148274534915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 7342568937351757382}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &7342568937351757382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7663682148274534915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &8928315963834501711
 GameObject:
   m_ObjectHideFlags: 0
@@ -3614,6 +3655,7 @@ MonoBehaviour:
   currentHealth: 0
   currentUIHealth: 0
   UI_HealthTime: 0.16
+  respawnPosition: {x: 0, y: 0, z: 0}
   healthBar: {fileID: 4142007182795401793}
 --- !u!1001 &5573682601461916444
 PrefabInstance:
