@@ -49,6 +49,7 @@ public class Player_PlayerController : MonoBehaviour
     [Header("Rotation")]
     [Tooltip("Rotation speed for moving the camera")]
     public float RotationSpeed = 200f;
+    
 
     [Range(0.1f, 1f)]
     [Tooltip("Rotation speed multiplier when aiming")]
@@ -188,54 +189,10 @@ public class Player_PlayerController : MonoBehaviour
     {
         if (IsMultiplayer && !photonView.IsMine)
             return;
-        //--------------------------------------------------------------------------------------------------
-        /**
-         * TODO: TEMPORARY
-         * This is being used to simulate a player being shot.
-         */
-        if (inputHandler.OnTest())
-        {
-            s_DamageInfo d = new s_DamageInfo();
-            d.dmgRecievedId = 1;
-            d.dmgDealerId = photonView.Owner.ActorNumber;
-            d.dmgValue = 0;
-            d.bodyPart = 0;
-
-            /*Player p = null;
-            foreach (KeyValuePair<int, Player> pl in PhotonNetwork.CurrentRoom.Players)
-            {
-                if(pl.Value. == 1)
-                {
-                    p = pl.Value;
-
-                }
-            }
-            if(p == null)
-            {
-                Debug.LogError("Null player targeted");
-            }*/
-            Debug.Log("I am " + PhotonNetwork.LocalPlayer.ActorNumber + ", and I am calling shoot on Player 1");
-            PhotonView pv = null;
-            
-            foreach(KeyValuePair<int, Player_MultiplayerEntity> kv in Game_RuntimeData.activePlayers)
-            {
-                if(kv.Key == 1)
-                {
-                    pv = kv.Value.playerController.photonView;
-                    break;
-                }
-            }
-            if(pv == null)
-            {
-                Debug.LogError("NULL PV");
-            }
-            photonView.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(d));
-        }
-        //--------------------------------------------------------------------------------------------------
-
 
         if (IsInputLocked)
             return;
+
         // TODO: check for Y kill
         /*  if (!IsDead && transform.position.y < KillHeight)
           {
@@ -286,7 +243,7 @@ public class Player_PlayerController : MonoBehaviour
 
            // _projectMananger.InitShoot(Weapon_Firetype.Semi);
         }
-        //Reaload
+        //Reload
         if (inputHandler.GetReloadButtonDown())
         {
             _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
