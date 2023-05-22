@@ -2,7 +2,6 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using TMPro;
@@ -21,20 +20,31 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal Weapon_Controller _projectController;
     private void Start()
     {
-        if (!transform.parent.parent.GetComponent<Weapon_Controller>().isMultiplayer)
+        PhotonView photonView = transform.GetComponent<PhotonView>();
+        if (photonView != null && photonView.IsMine)
         {
-            _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
-            _projectController = transform.parent.parent.GetComponent<Weapon_Controller>();
+            _currentIndex = GetCurrentBuildIndex(transform.name);
+            if (_bulletIndex == _currentIndex)
+            {
+                _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
+                return;
+            }
         }
-        _currentIndex = GetCurrentBuildIndex(transform.name);
-        if (_bulletIndex == _currentIndex && transform.GetComponent<PhotonView>().IsMine)
+
+        Transform parentTransform = transform.parent;
+        if (parentTransform != null && parentTransform.parent != null)
         {
-            _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();  
+            Weapon_Controller controller = parentTransform.parent.GetComponent<Weapon_Controller>();
+            if (controller != null && !controller.isMultiplayer)
+            {
+                _projectileManager = parentTransform.parent.GetComponent<Weapon_ProjectileManager>();
+                _projectController = controller;
+            }
         }
     }
 
 
-   internal int GetCurrentBuildIndex(string str)
+    internal int GetCurrentBuildIndex(string str)
     {
         if (str != null)
         { 
@@ -70,8 +80,10 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
                     return;
                 }
-                transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.All,hit.point, origin.position);
+                if(PhotonNetwork.LocalPlayer == transform.GetComponent<PhotonView>().Owner) { 
+                transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.AllBuffered,hit.point, origin.position);
                 _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
+    }
                 return;
                 }
             }
@@ -99,6 +111,14 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     [PunRPC]
     internal void RenderGunTrace(Vector3 hit, Vector3 origin)
     {
+        // Check if the PhotonView exists
+        if (transform.GetComponent<PhotonView>() == null)
+        {
+            // Log an error or handle the missing PhotonView
+            Debug.LogError("PhotonView not found!");
+            return;
+        }
+
         _hit.transform.position = hit;
         _hit.transform.parent = null;
         this._bulletTracer.SetActive(true);
@@ -109,7 +129,19 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         this._shell.transform.parent = null;
         _bulletTracer.transform.parent = null;
         _hit.transform.GetComponent<AudioSource>().Play();
+
+        // Clean up the RPC call if the GameObject or PhotonView was destroyed
+        if (PhotonNetwork.LocalPlayer == transform.GetComponent<PhotonView>().Owner)
+        {
+            // Clear the RPC buffer if the PhotonView was destroyed
+            if (!PhotonNetwork.NetworkingClient.LocalPlayer.IsMasterClient)
+            {
+                PhotonNetwork.RemoveRPCs(transform.GetComponent<PhotonView>());
+            }
+        }
     }
+
+
     /// <summary>
     /// Author: Corey John Knight
     /// Creates a new damage struct, converts it to JSON. Gets the PV of the player that was hit and uses their

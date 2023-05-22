@@ -328,7 +328,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             {
                     if (_weaponController.isMultiplayer)
                     {
-                        photonView.RPC(nameof(GetShoot), RpcTarget.All);
+                        photonView.RPC(nameof(GetShoot), RpcTarget.AllBuffered);
                         break;
                     }
                     else
