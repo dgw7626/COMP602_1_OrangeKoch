@@ -118,7 +118,7 @@ public class Player_PlayerController : MonoBehaviour
             return 1f;
         }
     }
-    private Weapon_ProjectileManager _projectMananger;
+    private WeaponProjectileManager _projectMananger;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -135,8 +135,8 @@ public class Player_PlayerController : MonoBehaviour
     void Awake()
     {
         IsMultiplayer = Game_RuntimeData.isMultiplayer;
-        photonView = GetComponentInParent<PhotonView>();
-        _projectMananger = GetComponentInParent<Weapon_ProjectileManager>();
+        photonView = GetComponent<PhotonView>();
+        _projectMananger = GetComponentInParent<WeaponProjectileManager>();
         _scoreBoard = GetComponentInChildren<ScoreBoard>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
@@ -177,7 +177,7 @@ public class Player_PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         inputHandler = GetComponent<Player_InputManager>();
-        _projectMananger = GetComponentInChildren<Weapon_ProjectileManager>();
+        _projectMananger = GetComponentInChildren<WeaponProjectileManager>();
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
@@ -239,27 +239,19 @@ public class Player_PlayerController : MonoBehaviour
         // shooting
         if (inputHandler.GetFireInputDown())
         {
-            _projectMananger.InitShoot(Weapon_Firetype.Semi);
-
-           // _projectMananger.InitShoot(Weapon_Firetype.Semi);
+            _projectMananger.InitShoot(WeaponFiretype.Semi);
         }
         //Reload
         if (inputHandler.GetReloadButtonDown())
         {
-            if (!_projectMananger.transform.GetComponent<Weapon_Controller>().isMultiplayer)
-            {
-                _projectMananger.Reload();
-                return;
-            }
-            _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
-            //_projectMananger.Reload();
+            _projectMananger.Reload();
         }
         //checking Scoreboard
         if(inputHandler.GetScoreBoardInputDown()){
             _scoreBoard.GetScoreboard();
         }
     }
-    
+
     void OnDie()
     {
         IsDead = true;

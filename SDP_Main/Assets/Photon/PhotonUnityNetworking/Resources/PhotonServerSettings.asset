@@ -43,22 +43,6 @@ MonoBehaviour:
   - HeresWhy
   - OnPlayerKilled
   - OnGameEnded
-  - Fire
-  - Shoot
-  - InitBullets
-  - GetShoot
-  - InitiBullets
-  - UpdateChildTransform
-  - Bitch
-  - RPC_Bitch
-  - Reload
-  - InitShoot
-  - InitBullets_P
-  - DestoryBulletVFXS
-  - BulletVFX_RPC
-  - ShowBulletTrace_RPC
-  - RenderGunTrace
-  - PlayFootStep
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
