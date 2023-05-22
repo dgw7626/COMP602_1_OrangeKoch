@@ -11,17 +11,15 @@ public class Weapon_Controller : MonoBehaviour
     private Weapon_ProjectileManager _weaponProjectileMananger;
     [SerializeField]
     internal bool isMultiplayer = false;
-    internal string userName;
     void Awake()
     {
-
+        //get the photon component to call the rpc method.
         photonView = GetComponent<PhotonView>();
-        userName = PhotonNetwork.NickName;
         _weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
     void Start()
     {
-        //Do not add PhotonView ismine.
+        // if its multiplayer instantiate bullet object instances otherwise will be instantiated without photon.
         if (isMultiplayer)
         {
             _weaponProjectileMananger.InitBullets_P();
@@ -30,10 +28,10 @@ public class Weapon_Controller : MonoBehaviour
         {
             _weaponProjectileMananger.InitBullets();
         }
-       //_weaponProjectileMananger.InitBullets();
     }
     void Update()
     {
+        //if its multiplayer get the camera transform and parent to the child object otherwise it will link to local player object child.
         if (!isMultiplayer)
         {
             _weaponProjectileMananger.UpdateChildTransform();
@@ -44,7 +42,6 @@ public class Weapon_Controller : MonoBehaviour
            return;
        }
         photonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
-        //_weaponProjectileMananger.UpdateChildTransform();
     }
 
  
