@@ -22,7 +22,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
 
     [SerializeField]
     private AmmunitionUI _ammunitionUI;
-
+    private Weapon_Controller _weaponController;
     internal Coroutine _currentCoroutine;
     private Vector3 _fw,
         _up;
@@ -56,6 +56,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     void Start()
     {
         _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
+        _weaponController = transform.GetComponent<Weapon_Controller>();
         _ammunitionUI.gameObject.SetActive(false);
         if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -177,13 +178,8 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// <summary>
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
-    [PunRPC]
     public void InitBullets()
-    {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
+    { 
         Transform bullets;
         if (transform.Find("Bullets") == null)
         {
@@ -330,8 +326,16 @@ public class Weapon_ProjectileManager : MonoBehaviour
             }
             case Weapon_Firetype.Semi:
             {
-                photonView.RPC(nameof(GetShoot),RpcTarget.All);
-                break;
+                    if (_weaponController.isMultiplayer)
+                    {
+                        photonView.RPC(nameof(GetShoot), RpcTarget.All);
+                        break;
+                    }
+                    else
+                    {
+                        GetShoot();
+                        break;
+                    }
             }
             default:
             {

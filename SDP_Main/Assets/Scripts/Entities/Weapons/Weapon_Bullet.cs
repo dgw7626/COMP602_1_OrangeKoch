@@ -18,14 +18,19 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     public int _bulletIndex;
     internal int _currentIndex;
     internal Weapon_ProjectileManager _projectileManager;
+    internal Weapon_Controller _projectController;
     private void Start()
     {
+        if (!transform.parent.parent.GetComponent<Weapon_Controller>().isMultiplayer)
+        {
+            _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
+            _projectController = transform.parent.parent.GetComponent<Weapon_Controller>();
+        }
         _currentIndex = GetCurrentBuildIndex(transform.name);
         if (_bulletIndex == _currentIndex && transform.GetComponent<PhotonView>().IsMine)
         {
             _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();  
         }
-  
     }
 
 
@@ -59,6 +64,12 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     {
                         HitPlayer(hit);
                     }
+                if (_projectController != null && !_projectController.isMultiplayer)
+                {
+                    RenderGunTrace(hit.point, origin.position);
+                    _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
+                    return;
+                }
                 transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.All,hit.point, origin.position);
                 _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
                 return;

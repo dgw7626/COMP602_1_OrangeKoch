@@ -9,7 +9,8 @@ public class Weapon_Controller : MonoBehaviour
 {
     public PhotonView photonView { get; private set; }
     private Weapon_ProjectileManager _weaponProjectileMananger;
-    internal bool hasInitiated = false;
+    [SerializeField]
+    internal bool isMultiplayer = false;
     internal string userName;
     void Awake()
     {
@@ -21,11 +22,23 @@ public class Weapon_Controller : MonoBehaviour
     void Start()
     {
         //Do not add PhotonView ismine.
-        _weaponProjectileMananger.InitBullets_P();
+        if (isMultiplayer)
+        {
+            _weaponProjectileMananger.InitBullets_P();
+        }
+        else
+        {
+            _weaponProjectileMananger.InitBullets();
+        }
        //_weaponProjectileMananger.InitBullets();
     }
     void Update()
     {
+        if (!isMultiplayer)
+        {
+            _weaponProjectileMananger.UpdateChildTransform();
+        }
+
        if (!photonView.IsMine)
        {
            return;

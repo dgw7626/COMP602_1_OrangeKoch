@@ -246,6 +246,11 @@ public class Player_PlayerController : MonoBehaviour
         //Reload
         if (inputHandler.GetReloadButtonDown())
         {
+            if (!_projectMananger.transform.GetComponent<Weapon_Controller>().isMultiplayer)
+            {
+                _projectMananger.Reload();
+                return;
+            }
             _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
             //_projectMananger.Reload();
         }
