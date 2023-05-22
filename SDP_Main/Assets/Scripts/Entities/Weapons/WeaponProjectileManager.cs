@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using System.IO;
 using Photon.Pun;
 
 public class WeaponProjectileManager : MonoBehaviour
 {
+    public AudioMixerGroup masterMixer;
+
     [SerializeField]
     private WeaponInfo _weaponInfo;
 
@@ -129,6 +132,7 @@ public class WeaponProjectileManager : MonoBehaviour
             hitObject.GetComponent<AudioSource>().rolloffMode = AudioRolloffMode.Linear;
             hitObject.GetComponent<AudioSource>().minDistance = 0;
             hitObject.GetComponent<AudioSource>().maxDistance = 20;
+            hitObject.GetComponent<AudioSource>().outputAudioMixerGroup = masterMixer;
             hitObject.transform.SetParent(bulletObject.transform);
             hitObject.name = "(" + i + ")hitObjects";
 
