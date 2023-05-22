@@ -13,53 +13,18 @@ public class Player_Health : MonoBehaviour, IDamageable
     public float currentUIHealth;
     public float UI_HealthTime = 0.16f;
 
-    public Vector3 respawnPosition;
     public HealthBar healthBar;
 
     private bool hasBegun = false;
     private bool pvIsMine = false;
     private IEnumerator conroutine;
-
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
-    void Start()
+    public void Begin(Player_MultiplayerEntity entity)
     {
-        if(!Game_RuntimeData.isMultiplayer)
-        {
-            respawnPosition = new Vector3(-25, 0, -25);
-            conroutine = UpdateUI();
-            StartCoroutine(conroutine);
-        }
+        hasBegun = true;
+
         currentHealth = maxHealth;
         currentUIHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
-    }
-
-    //-----------------------------------------------------------------
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            s_DamageInfo damageInfo = new s_DamageInfo();
-            damageInfo.dmgValue = 10f;
-
-            TakeDamage(damageInfo);
-        }
-        if (transform.position.y < -20)
-        {
-            s_DamageInfo damageInfo = new s_DamageInfo();
-            damageInfo.dmgValue = 10f;
-            Die(damageInfo);
-        }
-    }
-    //-----------------------------------------------------------------
-    
-    public void Begin(Player_MultiplayerEntity entity)
-    {
-  
-        hasBegun = true;
 
         if(entity.playerController.photonView.IsMine)
         {
@@ -83,22 +48,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     public void TakeDamage(s_DamageInfo damageInfo)
     {
         currentHealth -= damageInfo.dmgValue;
-        if(currentHealth <= 0) 
-        {
-            Die(damageInfo);
-        }
-        // Debug.Log("My id is:\nI am " + gameObject.GetComponent<Player_PlayerController>().photonView.Owner.ActorNumber.ToString()
-        //     + "\nMy health bar is active: " + healthBar.gameObject.activeSelf + "\nPV is mine: " + pvIsMine);
-    }
-
-    void Die(s_DamageInfo damageInfo)
-    {
-
-        if (!Game_RuntimeData.isMultiplayer)
-        {
-            SoloRespawn();
-        }
-        else
+        if(currentHealth < 0) 
         {
             s_DeathInfo deathInfo = new s_DeathInfo();
             //TODO: TEAMS
@@ -109,22 +59,12 @@ public class Player_Health : MonoBehaviour, IDamageable
 
             gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
                 nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, JsonUtility.ToJson(deathInfo));
+
+            currentHealth = maxHealth;
         }
-
-        
-
-    }
-    void SoloRespawn()
-    {
-        // Reset
-        gameObject.transform.position = respawnPosition;
-        Debug.Log(transform.position);
-        currentHealth = maxHealth;
-        // Weird hack, don't know why this works
-        Physics.SyncTransforms();
-        // Update UI
-        currentUIHealth = maxHealth;
-        healthBar.SetHealth(currentUIHealth);
+        healthBar.SetHealth(currentHealth);
+        Debug.Log("My id is:\nI am " + gameObject.GetComponent<Player_PlayerController>().photonView.Owner.ActorNumber.ToString()
+            + "\nMy health bar is active: " + healthBar.gameObject.activeSelf + "\nPV is mine: " + pvIsMine);
     }
 
     IEnumerator UpdateUI()
