@@ -24,17 +24,20 @@ public class Weapon_ProjectileManager : MonoBehaviour
     private AmmunitionUI _ammunitionUI;
     private Weapon_Controller _weaponController;
     internal Coroutine _currentCoroutine;
-    private Vector3 _fw,
-        _up;
+    private Vector3 _fw, _up;
     private Transform _camera;
+    [HideInInspector]
     public List<Transform> muzzleFlashObjects;
+    [HideInInspector]
     public List<Transform> bulletTracerObjects;
+    [HideInInspector]
     public List<Transform> bulletObjects;
+    [HideInInspector]
     public List<Transform> shellObjects;
+    [HideInInspector]
     public List<Transform> hitObjects;
     internal Transform _firePos;
 
-    //for Synchronization
     public PhotonView photonView;
     internal string _playerNameID;
     public AudioMixerGroup masterMixer;
@@ -74,6 +77,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Author: Sky
     /// This method will update the target object of the postion and rotation, the position values will be duplicated from parent object.
     /// </summary>
     [PunRPC]
@@ -88,6 +92,11 @@ public class Weapon_ProjectileManager : MonoBehaviour
         return;
     }
 
+
+    /// <summary>
+    /// Auther: Sky
+    /// method is responsible for destroying specific game objects related to bullet visual effects in a game scene.
+    /// </summary>
     [PunRPC]
     public void InitBullets_P()
     {
@@ -147,6 +156,10 @@ public class Weapon_ProjectileManager : MonoBehaviour
         transform.GetComponentInParent<PhotonView>().RPC(nameof(DestoryBulletVFXS),RpcTarget.All);
     }
 
+    /// <summary>
+    /// Auther: Sky
+    /// This method is responsible for destroying specific game objects related to bullet visual effects in a game scene.
+    /// </summary>
     [PunRPC]
     public void DestoryBulletVFXS()
     {
@@ -176,6 +189,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
+    ///  Author: Sky
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
     public void InitBullets()
@@ -254,6 +268,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Author: Sky
     /// This method is automatic shoot method.
     /// </summary>
     /// <param name="delaySecond"></param>
@@ -273,6 +288,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Author: Sky
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
     [PunRPC]
@@ -294,6 +310,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Author: Sky
     ///  This method reloads the current gun, ammo display will be refreshed after reload.
     /// </summary>
     [PunRPC]
@@ -308,6 +325,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Author: Sky
     /// This method initialize the shooting type of the weapon there are three options (Auto, Burst, Semi).
     /// </summary>
     /// <param name="fireType"></param>

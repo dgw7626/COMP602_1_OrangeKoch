@@ -43,7 +43,11 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         }
     }
 
-
+    /// <summary>
+    /// This method translates the transform name to numeraic value.
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
     internal int GetCurrentBuildIndex(string str)
     {
         if (str != null)
@@ -60,7 +64,10 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
        
         return 0;
     }
-
+    /// <summary>
+    /// This method implementes the shooting for multiplayer and local player.
+    /// </summary>
+    /// <param name="origin"></param>
     [PunRPC]
     public void Fire(Transform origin)
     {
@@ -89,7 +96,10 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
             }
         
     }
-
+    /// <summary>
+    /// Author:Sky
+    /// This method intantiates bullet vfx game instances.
+    /// </summary>
     internal void InstantiateGunVFX()
     {
         this._shell = _projectileManager.shellObjects[_currentIndex].gameObject;
@@ -108,6 +118,12 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         this._bullet.GetComponent<AudioSource>().Play();
     }
 
+    /// <summary>
+    /// Author: Sky
+    /// This method renders the bullet trace. the paramteter takes hit and origin positions.
+    /// </summary>
+    /// <param name="hit"></param>
+    /// <param name="origin"></param>
     [PunRPC]
     internal void RenderGunTrace(Vector3 hit, Vector3 origin)
     {
@@ -180,7 +196,12 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         }
 
     }
-    
+    /// <summary>
+    /// Author: Sky
+    /// The method waits for a specified delay, then performs various operations to disable certain game objects and stop a coroutine.
+    /// </summary>
+    /// <param name="delaySecond"></param>
+    /// <returns></returns>
     internal IEnumerator DisableBullet( float delaySecond)
     {
         yield return new WaitForSeconds(delaySecond);
