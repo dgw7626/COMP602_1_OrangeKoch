@@ -1834,7 +1834,7 @@ AudioSource:
   m_GameObject: {fileID: 2626998906154615884}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -2884,6 +2884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5ad7cc028aae346827dbe3638cb6e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterMixer: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
   _weaponInfo: {fileID: 11400000, guid: 4673bca3687865b4f9c38f8d92326c0f, type: 2}
   _localBullets: []
   _weaponAmmo: 0
@@ -3143,6 +3144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b551aef53dc53b74cb8fcc8c041b70ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AudioMixer: {fileID: 24100000, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
   AudioSource: {fileID: 8167696013445777441}
   FootstepSfxFrequency: 0.25
   FootstepSfxFrequencyWhileSprinting: 0.2
@@ -3160,7 +3162,7 @@ AudioSource:
   m_GameObject: {fileID: 7663682148274534915}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
