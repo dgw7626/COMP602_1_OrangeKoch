@@ -13,7 +13,7 @@ public interface IgameMode
     public void OnPerFrameUpdate();
     public void OnPlayerKilled(s_DeathInfo deathInfoStruct);
     public void OnPlayerLeftMatch(Player playerLeftMatch);
-    public void OnScoreEvent(int score, int teamNumber);
+    public void OnScoreEvent(s_DeathInfo deathInfoStruct);
     public void OnStopGame();
     public void LeaveScene(string sceneName);
 }

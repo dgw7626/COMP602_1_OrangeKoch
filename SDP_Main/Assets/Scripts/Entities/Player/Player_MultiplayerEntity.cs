@@ -123,6 +123,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         {
             //TODO: calculate team scores.
             //Game_RuntimeData.gameScore.killsPerTeam[info.killerTeam] += 1;
+            Game_RuntimeData.gameMode.OnScoreEvent(info);
         }
         if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
         {

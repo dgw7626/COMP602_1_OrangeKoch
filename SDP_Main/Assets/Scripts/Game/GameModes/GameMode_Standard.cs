@@ -32,9 +32,12 @@ public class GameMode_Standard : IgameMode
         for (int i = 0; i < Game_RuntimeData.instantiatedPlayers.Count; i++)
         {
             numPlayers++;
-            int team = i % 2 == 0 ? 0 : 1;
+            int team = 0;
+            if (Game_RuntimeData.instantiatedPlayers[i].photonView.Owner.ActorNumber % 2 != 0)
+                team = 1;
 
             Game_RuntimeData.teams[team].Add(Game_RuntimeData.instantiatedPlayers[i]);
+            Game_RuntimeData.instantiatedPlayers[i].transform.GetChild(0).GetComponent<Player_3dModelManager>().SetTeamColour(team);
         }
 
         // Initialize Countdown
@@ -118,12 +121,9 @@ public class GameMode_Standard : IgameMode
     public void OnPerFrameUpdate()
     {
     }
-    public void OnScoreEvent(int score, int teamNumber)
+    public void OnScoreEvent(s_DeathInfo deathInfoStruct)
     {
-        if (teamNumber > NUM_TEAMS || teamNumber < 0)
-            Debug.LogError("ERROR: Team " + teamNumber + " does not exist! Cannot assign points to team");
-
-        teamScores.killsPerTeam[teamNumber] += score;
+        
     }
     public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
@@ -132,6 +132,7 @@ public class GameMode_Standard : IgameMode
         {
             if(value.Key == deathInfoStruct.diedId) 
             {
+                PhotonView pv = value.Value.playerController.photonView;
                 value.Value.gameObject.transform.position = new Vector3(0, 0, 0);
                 return;
             }
