@@ -19,6 +19,10 @@ public class Player_3dModelManager : MonoBehaviour
 
     public void SetTeamColour(int teamNumber)
     {
+        if(gameObject.GetComponentInParent<Player_PlayerController>().photonView.IsMine)
+        {
+            Debug.Log("MY TEAM NUMBER IS " + teamNumber + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        }
         if (teamNumber == 0)
             myRenderer.material = orange;
         else
