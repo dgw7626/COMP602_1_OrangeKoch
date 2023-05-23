@@ -143,24 +143,6 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Error: Room Failed to Create.");
     }
 
-    /// <summary>
-    /// Method to quit multiplayer and return to Lobby.
-    /// </summary>
-    public void QuitMultiplayer()
-    {
-        Debug.Log("Quit Multiplayer Invoked - Returning to Lobby.");
-        Game_RuntimeData.CleanUp_Multiplayer_Data();
-
-        // Get a reference to the Photon Voice Manager object
-        var voiceManager = GameObject.Find("VoiceManager");
-        // If the object exists, stop and destroy the voice service
-        if (voiceManager != null)
-        {
-            Destroy(voiceManager);
-        }
-
-        StartCoroutine(QuitAfterDelay());
-    }
 
      /// <summary>
      /// Method to delay quitting and wait to disconnect from Photon Server.

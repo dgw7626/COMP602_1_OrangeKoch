@@ -124,5 +124,4 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         }
         Game_GameState.NextScene("Lobby");
     }
-
 }

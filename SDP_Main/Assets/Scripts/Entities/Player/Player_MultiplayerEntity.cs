@@ -132,15 +132,12 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     /// PunRPC callback. The master client has announced that the game has ended, and is telling you the score.
     /// </summary>
     [PunRPC]
-    public void OnGameEnded(string gameScoreStructJSON)
+    public void UpdateScore(string gameScoreStructJSON)
     {
         s_GameScore gameScoreStruct = (s_GameScore)JsonUtility.FromJson(gameScoreStructJSON, typeof(s_GameScore));
         
-        //TODO: store the data into DB?
-
         // MunishesScoreStuff.HereIsTheScore(gameScoreStruct);
-
-
+        Game_RuntimeData.gameScore = gameScoreStruct;
         GameMode_Manager.gameIsRunning = false;
     }
 }

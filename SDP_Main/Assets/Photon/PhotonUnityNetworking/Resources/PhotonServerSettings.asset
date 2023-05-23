@@ -43,6 +43,7 @@ MonoBehaviour:
   - HeresWhy
   - OnPlayerKilled
   - OnGameEnded
+  - UpdateScore
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

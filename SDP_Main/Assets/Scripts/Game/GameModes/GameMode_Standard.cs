@@ -74,7 +74,7 @@ public class GameMode_Standard : IgameMode
 
     }
 
-    public void OnStopGame()
+    public IEnumerator OnStopGame()
     {
         Debug.Log("Game Stoped!");
 
@@ -83,22 +83,26 @@ public class GameMode_Standard : IgameMode
         {
             p.playerController.IsInputLocked = true;
         }
+        //Share Score
         if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
         {
-            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnGameEnded), RpcTarget.All, JsonUtility.ToJson(teamScores));
+            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.Others, JsonUtility.ToJson(teamScores));
         }
 
         //TODO: Cleanup
 
         //TODO: Score Board
-        Debug.Log("player 1 killed: " + teamScores.killsPerPlayer[0]);
-        Debug.Log("player 1 dies: " + teamScores.deathsPerPlayer[0]);
-        Debug.Log("player 2 killed: " + teamScores.killsPerPlayer[1]);
-        Debug.Log("player 2 dies: " + teamScores.deathsPerPlayer[1]);
-        Debug.Log("team 1 killed: " + teamScores.killsPerTeam[0]);
-        Debug.Log("team 1 died: " + teamScores.deathsPerTeam[0]);
-        Debug.Log("team 2 killed: " + teamScores.killsPerTeam[1]);
-        Debug.Log("team 2 died: " + teamScores.deathsPerTeam[1]);
+        s_GameScore score = Game_RuntimeData.gameScore;
+        Debug.Log("player 1 killed: " + score.killsPerPlayer[0]);
+        Debug.Log("player 1 dies: " + score.deathsPerPlayer[0]);
+        Debug.Log("player 2 killed: " + score.killsPerPlayer[1]);
+        Debug.Log("player 2 dies: " + score.deathsPerPlayer[1]);
+        Debug.Log("team 1 killed: " + score.killsPerTeam[0]);
+        Debug.Log("team 1 died: " + score.deathsPerTeam[0]);
+        Debug.Log("team 2 killed: " + score.killsPerTeam[1]);
+        Debug.Log("team 2 died: " + score.deathsPerTeam[1]);
+        
+        yield return new WaitForSeconds(3);
 
         Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
     }
@@ -113,16 +117,8 @@ public class GameMode_Standard : IgameMode
                 GameMode_Manager.SetSynchronousTimerValue();
                 Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
 
-                // If the timer expires, tell the other players what the score is.
                 if(GameMode_Manager.gameTime < 1)
-                {
-                    Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
-                        nameof(Player_MultiplayerEntity.OnGameEnded), 
-                        RpcTarget.Others, 
-                        JsonUtility.ToJson(Game_RuntimeData.gameScore));
-                    
                     GameMode_Manager.gameIsRunning = false;
-                }
             }
 
             Debug.Log(GameMode_Manager.gameTime);
@@ -130,7 +126,7 @@ public class GameMode_Standard : IgameMode
 
         }
 
-        OnStopGame();
+        Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
     }
 
     public void OnPerFrameUpdate()

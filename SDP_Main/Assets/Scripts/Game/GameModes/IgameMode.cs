@@ -14,6 +14,6 @@ public interface IgameMode
     public void OnPlayerKilled(s_DeathInfo deathInfoStruct);
     public void OnPlayerLeftMatch(Player playerLeftMatch);
     public void OnScoreEvent(s_DeathInfo deathInfoStruct);
-    public void OnStopGame();
+    public IEnumerator OnStopGame();
     public void LeaveScene(string sceneName);
 }
