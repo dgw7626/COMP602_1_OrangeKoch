@@ -17,14 +17,11 @@ public class GameMode_Standard : IgameMode
     public void InitGame()
     {
 
-        teamScores = new s_GameScore();
-        teamScores.killsPerTeam = new List<int>();
 
         // Make teams
         for (int i = 0; i < NUM_TEAMS; i++)
         {
             Game_RuntimeData.teams.Add(new List<Player_MultiplayerEntity>());
-            teamScores.killsPerTeam.Add(INITIAL_SCORE);
         }
 
         //Divy players up into teams
@@ -37,7 +34,17 @@ public class GameMode_Standard : IgameMode
 
             Game_RuntimeData.teams[team].Add(Game_RuntimeData.instantiatedPlayers[i]);
             Game_RuntimeData.instantiatedPlayers[i].transform.GetChild(0).GetComponent<Player_3dModelManager>().SetTeamColour(team);
+            Game_RuntimeData.instantiatedPlayers[i].teamNumber = team;
         }
+
+        // Setup Score struct
+        teamScores = new s_GameScore();
+        teamScores.killsPerTeam = new int[NUM_TEAMS];
+        teamScores.deathsPerTeam = new int[NUM_TEAMS];
+        teamScores.killsPerPlayer = new int[numPlayers];
+        teamScores.deathsPerPlayer = new int[numPlayers];
+        teamScores.numTeams = NUM_TEAMS;
+        Game_RuntimeData.gameScore = teamScores;
 
         // Initialize Countdown
         if (PhotonNetwork.IsMasterClient)
@@ -80,10 +87,19 @@ public class GameMode_Standard : IgameMode
         {
             Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnGameEnded), RpcTarget.All, JsonUtility.ToJson(teamScores));
         }
-        
+
         //TODO: Cleanup
 
         //TODO: Score Board
+        Debug.Log("player 1 killed: " + teamScores.killsPerPlayer[0]);
+        Debug.Log("player 1 dies: " + teamScores.deathsPerPlayer[0]);
+        Debug.Log("player 2 killed: " + teamScores.killsPerPlayer[1]);
+        Debug.Log("player 2 dies: " + teamScores.deathsPerPlayer[1]);
+        Debug.Log("team 1 killed: " + teamScores.killsPerTeam[0]);
+        Debug.Log("team 1 died: " + teamScores.deathsPerTeam[0]);
+        Debug.Log("team 2 killed: " + teamScores.killsPerTeam[1]);
+        Debug.Log("team 2 died: " + teamScores.deathsPerTeam[1]);
+
         Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
     }
 
@@ -122,7 +138,10 @@ public class GameMode_Standard : IgameMode
     }
     public void OnScoreEvent(s_DeathInfo deathInfoStruct)
     {
-        
+        teamScores.killsPerPlayer[deathInfoStruct.killerId-1]++;
+        teamScores.deathsPerPlayer[deathInfoStruct.diedId-1]++;
+        teamScores.killsPerTeam[deathInfoStruct.killerTeam]++;
+        teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
     }
     public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
@@ -140,7 +159,7 @@ public class GameMode_Standard : IgameMode
 
     public void LeaveScene(string sceneName)
     {
-        Game_GameState.NextScene(sceneName);
+
     }
 
     public void OnPlayerLeftMatch(Player playerLeftMatch)

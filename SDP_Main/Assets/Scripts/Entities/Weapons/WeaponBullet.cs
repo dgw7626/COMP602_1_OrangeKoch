@@ -77,6 +77,8 @@ public class WeaponBullet : MonoBehaviour, IWeaponFireable
         dmg.dmgValue = 10f;
         dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
         dmg.dmgRecievedId = pv.Owner.ActorNumber;
+        dmg.dmgDealerTeam = Game_RuntimeData.thisMachinesMultiplayerEntity.teamNumber;
+        dmg.dmgRecievedTeam = hit.transform.GetComponentInParent<Player_MultiplayerEntity>().teamNumber;
         pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
     }
 

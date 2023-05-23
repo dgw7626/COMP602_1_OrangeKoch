@@ -3582,6 +3582,7 @@ MonoBehaviour:
   currentHealth: 0
   currentUIHealth: 0
   UI_HealthTime: 0.16
+  respawnPosition: {x: 0, y: 0, z: 0}
   healthBar: {fileID: 4142007182795401793}
 --- !u!1001 &5573682601461916444
 PrefabInstance:

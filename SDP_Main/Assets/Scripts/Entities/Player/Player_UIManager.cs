@@ -87,7 +87,7 @@ public class Player_UIManager : MonoBehaviour
         Debug.Log("Player quit game.");
         if (Game_RuntimeData.isMultiplayer)
         {
-            Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
+            Game_RuntimeData.gameMode.OnStopGame();
         } else
         {
             Game_RuntimeData.gameMode_Manager.QuitSinglePlayer();

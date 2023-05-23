@@ -89,7 +89,6 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         {
             Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber)    );
             Debug.Log("The actor who was shot: " + dmgInfo.dmgRecievedId);
-            dmgInfo.dmgValue = 10f;
             playerHealth.TakeDamage(dmgInfo);
                 
         }
@@ -121,8 +120,6 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
         if(PhotonNetwork.IsMasterClient)
         {
-            //TODO: calculate team scores.
-            //Game_RuntimeData.gameScore.killsPerTeam[info.killerTeam] += 1;
             Game_RuntimeData.gameMode.OnScoreEvent(info);
         }
         if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)

@@ -102,8 +102,8 @@ public class Player_Health : MonoBehaviour, IDamageable
         {
             s_DeathInfo deathInfo = new s_DeathInfo();
             //TODO: TEAMS
-            deathInfo.killerTeam = 0;
-            deathInfo.diedTeam = 0;
+            deathInfo.killerTeam = damageInfo.dmgRecievedTeam;
+            deathInfo.diedTeam = damageInfo.dmgDealerTeam;
             deathInfo.killerId = damageInfo.dmgDealerId;
             deathInfo.diedId = damageInfo.dmgRecievedId;
 
@@ -138,7 +138,6 @@ public class Player_Health : MonoBehaviour, IDamageable
                 {
                     speed = 8f;
                 }
-                Debug.Log("UI changing");
                 currentUIHealth -= speed;
 
                 healthBar.SetHealth(currentUIHealth);

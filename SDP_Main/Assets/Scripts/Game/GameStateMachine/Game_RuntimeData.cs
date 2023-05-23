@@ -126,6 +126,5 @@ public class Game_RuntimeData
         isMultiplayer = false;
         gameMode = null;
         thisMachinesPlayersPhotonView = null;
-
     }
 }

@@ -18,7 +18,10 @@ public enum e_BodyPart
 public struct s_GameScore
 {
     public int numTeams;
-    public List<int> killsPerTeam;
+    public int[] killsPerTeam;
+    public int[] deathsPerTeam;
+    public int[] killsPerPlayer;
+    public int[] deathsPerPlayer;
 }
 
 [Serializable]
@@ -26,6 +29,8 @@ public struct s_DamageInfo
 {
     public int dmgDealerId;
     public int dmgRecievedId;
+    public int dmgDealerTeam;
+    public int dmgRecievedTeam;
     public float dmgValue;
     public e_BodyPart bodyPart;
 }
