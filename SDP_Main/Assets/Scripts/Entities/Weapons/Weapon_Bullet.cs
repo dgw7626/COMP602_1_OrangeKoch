@@ -87,8 +87,9 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         transform.position = origin.position;
         //insntatiating the bullet vfx instances.
         InstantiateGunVFX();
-        //raycasting the origin position
-        if (Physics.Raycast(origin.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
+        //raycasting the origin position 
+        //you need to chnange the origin position from here.
+        if (Physics.Raycast(_projectileManager.transform.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
         {
             //if the transform is not null.
             if (hit.transform != null)
