@@ -158,7 +158,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
             if (weaponBullet != null)
             {
                 //set the bullet index to the iterator.
-                weaponBullet._weaponDamage = _weaponInfo.WeaponDamage;
                 weaponBullet._bulletIndex = i;
                 _localBullets.Add(weaponBullet);
             }
@@ -285,7 +284,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             hitObjects.Add(hitObject.transform);
             bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex = (int)i;
             bulletObject.SetActive(true);
-            bulletObject.GetComponent<Weapon_Bullet>()._weaponDamage = _weaponInfo.WeaponDamage;
+            
             //add the local bullet object instance to the weapon_bullet class.
             _localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
         }

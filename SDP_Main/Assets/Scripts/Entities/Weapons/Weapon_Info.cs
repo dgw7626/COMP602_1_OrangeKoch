@@ -8,7 +8,6 @@ public class Weapon_Info : ScriptableObject
    public string WeaponName;
    public int BulletCounts;
    public int ClipCounts;
-    public float WeaponDamage;
    public ParticleSystem MuzzleFlash;
    public TrailRenderer BulletTrace;
     public GameObject BulletShell;

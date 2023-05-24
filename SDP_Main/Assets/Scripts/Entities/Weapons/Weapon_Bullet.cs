@@ -16,7 +16,6 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal int _currentIndex;
     internal Weapon_ProjectileManager _projectileManager;
     internal Weapon_Controller _projectController;
-    public float _weaponDamage;
     private void Start()
     {
         //get the photon view instance.
@@ -211,7 +210,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
 
         s_DamageInfo dmg = new s_DamageInfo();
         dmg.bodyPart = e_BodyPart.NONE;
-        dmg.dmgValue = this._weaponDamage;
+        dmg.dmgValue = 10f;
         dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
         dmg.dmgRecievedId = pv.Owner.ActorNumber;
         pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
