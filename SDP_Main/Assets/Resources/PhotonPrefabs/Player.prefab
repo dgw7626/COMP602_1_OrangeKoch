@@ -2835,8 +2835,6 @@ GameObject:
   - component: {fileID: 360649010880703138}
   - component: {fileID: 5959844741077266673}
   - component: {fileID: 3147760506879643309}
-  - component: {fileID: 6575372281330074508}
-  - component: {fileID: 8792550577207668625}
   m_Layer: 0
   m_Name: WeaponHolder
   m_TagString: Untagged
@@ -2877,13 +2875,6 @@ MonoBehaviour:
   _weaponAmmo: 0
   _weaponClip: 0
   _ammunitionUI: {fileID: 0}
-  muzzleFlashObjects: []
-  bulletTracerObjects: []
-  bulletObjects: []
-  shellObjects: []
-  hitObjects: []
-  photonView: {fileID: 0}
-  masterMixer: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
 --- !u!114 &3147760506879643309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2896,46 +2887,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10870dd6f483d14e80d36f834fd524e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMultiplayer: 1
---- !u!114 &6575372281330074508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6375844988555525573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 8792550577207668625}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &8792550577207668625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6375844988555525573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &6658200086318097328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3144,8 +3095,6 @@ GameObject:
   - component: {fileID: 5617119470369165638}
   - component: {fileID: 589475223474452582}
   - component: {fileID: 8167696013445777441}
-  - component: {fileID: 2456399883662257649}
-  - component: {fileID: 7342568937351757382}
   m_Layer: 0
   m_Name: SoundSystem
   m_TagString: SoundSystem
@@ -3285,45 +3234,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2456399883662257649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663682148274534915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 7342568937351757382}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &7342568937351757382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663682148274534915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &8928315963834501711
 GameObject:
   m_ObjectHideFlags: 0
@@ -3657,7 +3567,6 @@ MonoBehaviour:
   currentHealth: 0
   currentUIHealth: 0
   UI_HealthTime: 0.16
-  respawnPosition: {x: 0, y: 0, z: 0}
   healthBar: {fileID: 4142007182795401793}
 --- !u!1001 &5573682601461916444
 PrefabInstance:
