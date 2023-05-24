@@ -18,6 +18,7 @@ public enum e_BodyPart
 public struct s_GameScore
 {
     public int numTeams;
+    public int numPlayers;
     public int[] killsPerTeam;
     public int[] deathsPerTeam;
     public int[] killsPerPlayer;

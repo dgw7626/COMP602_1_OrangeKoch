@@ -122,6 +122,6 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
             }
             yield return null;
         }
-        Game_GameState.NextScene("Lobby");
+        Game_GameState.NextScene("MultiplayerScoreboard");
     }
 }

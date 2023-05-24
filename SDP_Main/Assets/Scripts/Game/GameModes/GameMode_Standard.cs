@@ -39,6 +39,7 @@ public class GameMode_Standard : IgameMode
 
         // Setup Score struct
         teamScores = new s_GameScore();
+        teamScores.numPlayers = numPlayers;
         teamScores.killsPerTeam = new int[NUM_TEAMS];
         teamScores.deathsPerTeam = new int[NUM_TEAMS];
         teamScores.killsPerPlayer = new int[numPlayers];
@@ -76,35 +77,30 @@ public class GameMode_Standard : IgameMode
 
     public IEnumerator OnStopGame()
     {
-        Debug.Log("Game Stoped!");
+            Debug.Log("Game Stoped!");
 
-        //Lock Controlls
-        foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
-        {
-            p.playerController.IsInputLocked = true;
+            if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+            {
+
+            //Lock Controlls
+            foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
+            {
+                p.playerController.IsInputLocked = true;
+            }
+            //Share Score
+            if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
+            {
+                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.Others, JsonUtility.ToJson(teamScores));
+            }
+
+            //TODO: Cleanup
+
+            s_GameScore score = Game_RuntimeData.gameScore;
+
+            yield return new WaitForSeconds(3);
+
+            Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
         }
-        //Share Score
-        if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
-        {
-            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.Others, JsonUtility.ToJson(teamScores));
-        }
-
-        //TODO: Cleanup
-
-        //TODO: Score Board
-        s_GameScore score = Game_RuntimeData.gameScore;
-        Debug.Log("player 1 killed: " + score.killsPerPlayer[0]);
-        Debug.Log("player 1 dies: " + score.deathsPerPlayer[0]);
-        Debug.Log("player 2 killed: " + score.killsPerPlayer[1]);
-        Debug.Log("player 2 dies: " + score.deathsPerPlayer[1]);
-        Debug.Log("team 1 killed: " + score.killsPerTeam[0]);
-        Debug.Log("team 1 died: " + score.deathsPerTeam[0]);
-        Debug.Log("team 2 killed: " + score.killsPerTeam[1]);
-        Debug.Log("team 2 died: " + score.deathsPerTeam[1]);
-        
-        yield return new WaitForSeconds(3);
-
-        Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
     }
 
     public IEnumerator OnOneSecondCountdown()

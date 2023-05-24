@@ -119,12 +119,15 @@ public class Game_RuntimeData
         PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
         PhotonNetwork.Disconnect();
 
-        gameMode_Manager = null;
+        //TODO: these members need to be alive after this method, because 
+        // they are required to cleanup the game.
+        // consider another cleanup method to garbage collect these after the scoreboard.
+        //gameMode_Manager = null;
         instantiatedPlayers = new List<Player_MultiplayerEntity>();
         teams = new List<List<Player_MultiplayerEntity>>();
         activePlayers = null;
         isMultiplayer = false;
-        gameMode = null;
+        //gameMode = null;
         thisMachinesPlayersPhotonView = null;
     }
 }
