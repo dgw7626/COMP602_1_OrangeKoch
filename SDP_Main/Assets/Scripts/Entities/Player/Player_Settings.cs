@@ -16,7 +16,7 @@ using UnityEngine;
 /// <summary>
 /// This Class holds global settings for the player which can be accessed through Game_RuntimeData
 /// </summary>
-public class Player_Settings : MonoBehaviour
+public class Player_Settings
 {
     public bool invertMouseYAxis = false;
     public float lookSensitivity = 1;
