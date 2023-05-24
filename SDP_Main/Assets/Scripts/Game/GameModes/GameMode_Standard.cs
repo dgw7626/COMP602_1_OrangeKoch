@@ -90,7 +90,7 @@ public class GameMode_Standard : IgameMode
             //Share Score
             if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
             {
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.Others, JsonUtility.ToJson(teamScores));
+                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
             }
 
             //TODO: Cleanup
