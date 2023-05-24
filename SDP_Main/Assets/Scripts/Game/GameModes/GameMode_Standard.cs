@@ -106,7 +106,7 @@ public class GameMode_Standard : IgameMode
                 }
             }
 
-            Debug.Log(GameMode_Manager.gameTime);
+            //Debug.Log(GameMode_Manager.gameTime);
             yield return new WaitForSeconds(1);
 
         }
