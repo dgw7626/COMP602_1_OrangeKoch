@@ -1,12 +1,12 @@
 /*
 
  ************************************************
- *                                              *				
+ *                                              *
  * Primary Dev: 	Dion Hemmes		            *
  * Student ID: 		21154191		            *
  * Course Code: 	COMP602_2023_S1             *
  * Assessment Item: Orange Koch                 *
- * 						                        *			
+ * 						                        *
  ************************************************
 
  */
@@ -60,6 +60,7 @@ public class Player_Settings_Tests
     /// Method to Set the Mouse Y Axis Inversion setting for the player.
     /// </summary>
     [Test]
+
     public void SetInvertMouseYAxisTest()
     {
         // ARRANGE
