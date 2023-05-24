@@ -26,7 +26,7 @@ public class Player_Settings_Tests
     [SetUp]
     public void Setup()
     {
-        playerSettings = new GameObject().AddComponent<Player_Settings>();
+        playerSettings = new Player_Settings();
     }
 
 
@@ -36,7 +36,7 @@ public class Player_Settings_Tests
     [TearDown]
     public void Teardown()
     {
-        Object.DestroyImmediate(playerSettings.gameObject);
+        playerSettings = null;
     }
 
     /// <summary>
