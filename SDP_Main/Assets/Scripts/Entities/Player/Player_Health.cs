@@ -1,9 +1,10 @@
 using Photon.Pun;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages the health of the player character.
+/// </summary>
 public class Player_Health : MonoBehaviour, IDamageable
 {
     // Variables
@@ -16,9 +17,11 @@ public class Player_Health : MonoBehaviour, IDamageable
     public HealthBar healthBar;
 
     private bool hasBegun = false;
-    private bool pvIsMine = false;
     private IEnumerator coroutine;
 
+    /// <summary>
+    /// Initializes the player's health.
+    /// </summary>
     void Start()
     {
         // Check if not in multiplayer mode
@@ -29,12 +32,15 @@ public class Player_Health : MonoBehaviour, IDamageable
             coroutine = UpdateUI();
             StartCoroutine(coroutine);
         }
-
+        //set initial player health and UI to max.
         currentHealth = maxHealth;
         currentUIHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
     }
 
+    /// <summary>
+    /// Handles the player's input and checks for death conditions.
+    /// </summary>
     void Update()
     {
         // Simulate damage on key press
@@ -53,11 +59,13 @@ public class Player_Health : MonoBehaviour, IDamageable
             Die(damageInfo);
         }
     }
+
     /// <summary>
-    /// When game start in multiplayer mode.
+    /// Begins the player's health management in multiplayer mode.
     /// </summary>
     public void Begin(Player_MultiplayerEntity entity)
     {
+        // Change status of hasBegun
         hasBegun = true;
 
         if (entity.playerController.photonView.IsMine)
@@ -65,24 +73,23 @@ public class Player_Health : MonoBehaviour, IDamageable
             // Check if the PhotonView is owned by the local player
             if (entity.playerController.photonView.IsMine)
             {
-                Debug.Log(
-                    "The photon view belongs to: "
-                        + entity.playerController.photonView.Owner.ActorNumber
-                );
+                Debug.Log("The photon view belongs to: " + entity.playerController.photonView.Owner.ActorNumber);
                 Debug.Log("Local ID: " + PhotonNetwork.LocalPlayer.ActorNumber);
             }
 
-            pvIsMine = true;
+            // Enable health UI
             coroutine = UpdateUI();
             StartCoroutine(coroutine);
         }
         else
         {
+            // Disable health UI for remote players
             healthBar.gameObject.SetActive(false);
         }
     }
+
     /// <summary>
-    /// Health decrease when get damage
+    /// Decreases the player's health by the specified damage value.
     /// </summary>
     public void TakeDamage(s_DamageInfo damageInfo)
     {
@@ -94,8 +101,9 @@ public class Player_Health : MonoBehaviour, IDamageable
             Die(damageInfo);
         }
     }
+
     /// <summary>
-    /// Player died and call Respawn.
+    /// Handles the player's death.
     /// </summary>
     void Die(s_DamageInfo damageInfo)
     {
@@ -111,20 +119,14 @@ public class Player_Health : MonoBehaviour, IDamageable
             deathInfo.diedTeam = 0;
             deathInfo.killerId = damageInfo.dmgDealerId;
             deathInfo.diedId = damageInfo.dmgRecievedId;
-            
+
             // Call OnPlayerKilled method on the networked player
-            gameObject
-                .GetComponent<Player_PlayerController>()
-                .photonView.RPC(
-                    nameof(Player_MultiplayerEntity.OnPlayerKilled),
-                    RpcTarget.All,
-                    JsonUtility.ToJson(deathInfo)
-                );
+            gameObject.GetComponent<Player_PlayerController>().photonView.RPC(nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, JsonUtility.ToJson(deathInfo));
         }
     }
 
     /// <summary>
-    /// Respawn method for single player mode
+    /// Respawns the player character in single player mode.
     /// </summary>
     void SoloRespawn()
     {
@@ -142,8 +144,9 @@ public class Player_Health : MonoBehaviour, IDamageable
         currentUIHealth = maxHealth;
         healthBar.SetHealth(currentUIHealth);
     }
+
     /// <summary>
-    /// Coroutine to update UI over time
+    /// Updates the UI representing the player's health over time.
     /// </summary>
     IEnumerator UpdateUI()
     {
@@ -158,8 +161,7 @@ public class Player_Health : MonoBehaviour, IDamageable
                 {
                     speed = 8f;
                 }
-
-                Debug.Log("UI changing");
+                //Update the health bar
                 currentUIHealth -= speed;
                 healthBar.SetHealth(currentUIHealth);
             }
