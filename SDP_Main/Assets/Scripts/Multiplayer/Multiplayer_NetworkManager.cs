@@ -1,10 +1,21 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Dion Hemmes		            *
+ * Student ID: 		21154191		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
 using System.Linq;
-using UnityEngine.SceneManagement;
 
 
 public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
@@ -18,6 +29,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playerListItemPrefab;   // Object for each players name that has joined a room
     [SerializeField] GameObject startGameButton;        // Object for master player to start game
     [SerializeField] GameObject uiErrorMessage;         // Object for error ui message.
+
     /// <summary>
     /// Creates a unique instance of Multiplayer_NetworkManager
     /// </summary>
