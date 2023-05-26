@@ -62,11 +62,16 @@ public class Weapon_ProjectileManager : MonoBehaviour
         _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         _weaponController = transform.GetComponent<Weapon_Controller>();
         _ammunitionUI.gameObject.SetActive(false);
+
         //if the transform object is current multiplayer.
-        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            _ammunitionUI.gameObject.SetActive(true);
+        } else if(!Game_RuntimeData.isMultiplayer)
         {
             _ammunitionUI.gameObject.SetActive(true);
         }
+
         photonView = GetComponent<PhotonView>();
         _weaponAmmo = _weaponInfo.BulletCounts;
         _weaponClip = _weaponInfo.ClipCounts;
@@ -372,7 +377,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             case Weapon_Firetype.Semi:
             {
                     //get rpc shoot if the mutliplayer is enabled other wise it calls local method.
-                    if (_weaponController.isMultiplayer)
+                    if (Game_RuntimeData.isMultiplayer)
                     {
                         photonView.RPC(nameof(GetShoot), RpcTarget.AllBuffered);
                         break;
