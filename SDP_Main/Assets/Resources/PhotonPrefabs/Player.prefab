@@ -1466,7 +1466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10870dd6f483d14e80d36f834fd524e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMultiplayer: 1
 --- !u!114 &6575372281330074508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2155,7 +2154,6 @@ MonoBehaviour:
   MaxSpeedForFallDamage: 30
   FallDamageAtMinSpeed: 10
   FallDamageAtMaxSpeed: 50
-  IsMultiplayer: 0
   IsInputLocked: 0
   photonView: {fileID: 0}
   soundManager: {fileID: 0}
