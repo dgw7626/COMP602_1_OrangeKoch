@@ -52,7 +52,13 @@ public class GameMode_Standard : IgameMode
         teamScores.deathsPerTeam = new int[NUM_TEAMS];
         teamScores.killsPerPlayer = new int[numPlayers];
         teamScores.deathsPerPlayer = new int[numPlayers];
-        teamScores.numTeams = NUM_TEAMS;
+        teamScores.teamNumbersByPlayer = new int[numPlayers];
+        for (int i = 0; i < Game_RuntimeData.instantiatedPlayers.Count; i++)
+        {
+            teamScores.teamNumbersByPlayer[i] = Game_RuntimeData.instantiatedPlayers[i].teamNumber;
+        }
+
+            teamScores.numTeams = NUM_TEAMS;
         Game_RuntimeData.gameScore = teamScores;
 
         // Initialize Countdown

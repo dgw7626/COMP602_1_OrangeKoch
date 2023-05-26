@@ -46,11 +46,40 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
     /// </summary>
     private void Init()
     {
+        //Calculate Winning Team
+        int winningTeam = 0;
+        int winningTeamKillCount = m_score.killsPerTeam[0];
+        for(int i = 1; i < m_score.numTeams; i++)
+        {
+            if (m_score.killsPerTeam[i] > winningTeamKillCount)
+            {
+                winningTeam = i;
+                winningTeamKillCount = m_score.killsPerTeam[i];
+            }
+        }
+
+        //Calculate MVP
+        int mvpID = 0;
+        int mvpKills = m_score.killsPerPlayer[0];
+        for (int i = 1; i < m_score.numPlayers; i++)
+        {
+            if (m_score.killsPerPlayer[i] > winningTeamKillCount)
+            {
+                mvpID = i;
+                mvpKills = m_score.killsPerTeam[i];
+            }
+        }
+
         GameObject tmp;
         for (int i = 0; i < m_score.numPlayers; i++) 
         {
+            string winTxt = "";
+
+            if (i == mvpID)
+                winTxt += " (MVP!)";
+
             tmp = Instantiate(textPrefab, m_NameCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("Player" + (i+1));
+            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + m_score.teamNumbersByPlayer[i] + ") " +  "Player" + (i+1) + winTxt);
 
             tmp = Instantiate(textPrefab, m_KillCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerPlayer[i]);
@@ -61,8 +90,15 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
 
         for(int i = 0; i < m_score.numTeams; i++)
         {
+            string winTxt = "";
+
+            if (i == winningTeam)
+                winTxt += "\nWinner!";
+            else
+                winTxt += "\nLOOSER!";
+
             tmp = Instantiate(textPrefab, m_TeamNameCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("Team " + (i + 1));
+            tmp.GetComponent<TextMeshProUGUI>().text = ("Team " + (i + 1) + winTxt);
 
             tmp = Instantiate(textPrefab, m_TeamKillCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerTeam[i]);

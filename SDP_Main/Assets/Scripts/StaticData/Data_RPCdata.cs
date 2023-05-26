@@ -23,6 +23,7 @@ public struct s_GameScore
     public int[] deathsPerTeam;
     public int[] killsPerPlayer;
     public int[] deathsPerPlayer;
+    public int[] teamNumbersByPlayer;
 }
 
 [Serializable]
