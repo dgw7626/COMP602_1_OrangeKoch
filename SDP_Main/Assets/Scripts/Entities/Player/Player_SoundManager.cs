@@ -39,7 +39,6 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        Debug.Log(Game_RuntimeData.playerSettings.globalVolume);
         //Set Master Volume
         AudioMixer.SetFloat("MasterVolume", Mathf.Log10(Game_RuntimeData.playerSettings.globalVolume) * 20);
         //Return if not playing multiplayer, such that it is single.
@@ -179,16 +178,23 @@ public class Player_SoundManager : MonoBehaviour
     {
         float chosenFootstepSfxFrequency =
                     (isSprinting ? FootstepSfxFrequencyWhileSprinting : FootstepSfxFrequency);
-        if (m_FootstepDistanceCounter >= 1f / chosenFootstepSfxFrequency)
-        {
-            m_FootstepDistanceCounter = 0f;
-           transform.GetComponent<PhotonView>().RPC(nameof(PlayFootStep), RpcTarget.All);
-            //AudioSource.PlayOneShot(FootstepSfx);
-        }
-
 
         // keep track of distance traveled for footsteps sound
         m_FootstepDistanceCounter += magnitude * Time.deltaTime;
+
+        if (m_FootstepDistanceCounter >= 1f / chosenFootstepSfxFrequency)
+        {
+            m_FootstepDistanceCounter = 0f;
+
+            if (Game_RuntimeData.isMultiplayer)
+            {
+                transform.GetComponent<PhotonView>().RPC(nameof(PlayFootStep), RpcTarget.All);
+                return;
+            }
+            AudioSource.PlayOneShot(FootstepSfx);
+        }
+
+
     }
     [PunRPC]
     internal void PlayFootStep()
