@@ -1,9 +1,21 @@
-using System;
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Dion Hemmes		            *
+ * Student ID: 		21154191		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using TMPro;
 using UnityEngine;
 
-
-
+/// <summary>
+/// This class is designed to Manage Objects on the Players Interface within the Game
+/// </summary>
 public class Player_UIManager : MonoBehaviour
 {
 
@@ -56,6 +68,9 @@ public class Player_UIManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Update method to constantly check for changes at a slower rate.
+    /// </summary>
     private void FixedUpdate()
     {
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
