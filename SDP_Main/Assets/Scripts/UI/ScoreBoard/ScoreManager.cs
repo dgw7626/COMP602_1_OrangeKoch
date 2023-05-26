@@ -26,10 +26,7 @@ public class ScoreManager
         
     }
 
-    public ScoreManager(int team_1TotalKills)
-    {
-        this.team_1TotalKills = team_1TotalKills;
-    }
+   
 
 
 }

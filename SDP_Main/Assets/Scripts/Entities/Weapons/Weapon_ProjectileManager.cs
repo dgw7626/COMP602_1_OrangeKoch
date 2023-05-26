@@ -9,19 +9,19 @@ public class Weapon_ProjectileManager : MonoBehaviour
 {
     [Header("Weapon Controls")]
     [SerializeField]
-    private Weapon_Info _weaponInfo;
+    public Weapon_Info _weaponInfo;
 
     [SerializeField]
-    internal List<Weapon_Bullet> _localBullets;
+    public List<Weapon_Bullet> _localBullets;
 
     [SerializeField]
-    private int _weaponAmmo;
+    public int _weaponAmmo;
 
     [SerializeField]
-    private int _weaponClip;
+    public int _weaponClip;
 
     [SerializeField]
-    private AmmunitionUI _ammunitionUI;
+    public AmmunitionUI _ammunitionUI;
     private Weapon_Controller _weaponController;
     internal Coroutine _currentCoroutine;
     private Vector3 _fw, _up;
