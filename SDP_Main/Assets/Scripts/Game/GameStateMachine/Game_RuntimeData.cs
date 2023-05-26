@@ -121,9 +121,10 @@ public class Game_RuntimeData
     public static void CleanUp_Multiplayer_Data()
     {
         Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
-        if(PhotonNetwork.IsMasterClient)
+        if(PhotonNetwork.IsMasterClient && PhotonNetwork.GetPhotonView(999) != null)
             PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
 
+        PhotonNetwork.LeaveRoom();
         PhotonNetwork.Disconnect();
 
         //TODO: these members need to be alive after this method, because 
