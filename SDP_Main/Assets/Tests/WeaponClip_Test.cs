@@ -1,41 +1,57 @@
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using System.Collections;
+using System;
 
 public class WeaponClip_Test
 {
-    [Test]
-    public void getshoot_1()
+    private Weapon_ProjectileManager _projectileManager;
+    private Weapon_Controller _weaponController;
+    private AmmunitionUI _ammunitionUI;
+    public Weapon_Info weaponInfo;
+    [SetUp]
+    public void Init()
     {
-        // arrange
-        var player = new GameObject().AddComponent<Weapon_ProjectileManager>();
-
-        player._weaponAmmo = 10;
-
-        // act
-        //player.GetShoot_1();
-
-        // assert
-        Assert.AreEqual(9, player._weaponAmmo);
-        // additional assertions can be added based on the expected behavior
+        _projectileManager = new GameObject().AddComponent<Weapon_ProjectileManager>();
+        _weaponController = _projectileManager.gameObject.AddComponent<Weapon_Controller>();
+        _projectileManager.firePos = new GameObject().transform;
+        _ammunitionUI = new GameObject().AddComponent<AmmunitionUI>();
+        _ammunitionUI.Text = new GameObject().AddComponent<Text>();
+        weaponInfo = Resources.Load<Weapon_Info>("WeaponData/Glock_modern");
+        _projectileManager._weaponInfo = weaponInfo;
+        _projectileManager._weaponAmmo = this.weaponInfo.BulletCounts;
+        _projectileManager._weaponClip = this.weaponInfo.ClipCounts;
+        _weaponController.isMultiplayer = false;
+        _projectileManager._ammunitionUI = this._ammunitionUI;
+        _projectileManager.firePos.name = "firePos";
+        _projectileManager._weaponController = this._weaponController;
+        _projectileManager.InitBullets();
+        Debug.Log("PROJECT:" +_projectileManager._weaponInfo.ShootEffect);
+        Debug.Log(_ammunitionUI);
+        Debug.Log(_weaponController);
+        Debug.Log(_projectileManager);
     }
+
+    
 
     [Test]
     public void GetShoot_DecreasesAmmoAndFiresBullet()
     {
         // Arrange
-        var shootingComponent = new GameObject().AddComponent<Weapon_ProjectileManager>();
-        shootingComponent._weaponAmmo = 3;
-        var bulletPrefab = new GameObject();
-       // var bulletComponent = bulletPrefab.AddComponent<Weapon_Bullet>();
+        //enable false to make the player local.
+
+        //Initiate bullet instances.
+
+        // var bulletComponent = bulletPrefab.AddComponent<Weapon_Bullet>();
 
         // Act
-        shootingComponent.GetShoot();
-
+        _projectileManager.InitShoot(Weapon_Firetype.Semi);
+        Debug.Log(_projectileManager._weaponAmmo);
         // Assert
-        Assert.AreEqual(2, shootingComponent._weaponAmmo);
+        Assert.AreEqual(0, _projectileManager._weaponAmmo);
        // Assert.IsTrue(bulletComponent.gameObject.activeSelf);
     }
 

@@ -8,7 +8,7 @@ public class Weapon_Controller : MonoBehaviour
     public PhotonView photonView { get; private set; }
     private Weapon_ProjectileManager _weaponProjectileMananger;
     [SerializeField]
-    internal bool isMultiplayer = false;
+    public bool isMultiplayer = false;
     void Awake()
     {
         //get the photon component to call the rpc method.
