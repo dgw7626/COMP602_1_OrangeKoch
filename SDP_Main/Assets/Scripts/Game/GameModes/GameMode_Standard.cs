@@ -92,32 +92,26 @@ public class GameMode_Standard : IgameMode
     /// <returns></returns>
     public IEnumerator OnStopGame()
     {
+        if (!Game_RuntimeData.matchIsRunning)
+            yield break;
+
         Debug.Log("Game Stoped!");
 
         Game_RuntimeData.matchIsRunning = false;
+       
 
-        if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+        //Lock Controlls
+        foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
         {
-
-            //Lock Controlls
-            foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
-            {
-                p.playerController.IsInputLocked = true;
-            }
-            //Share Score
-            if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
-            {
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
-            }
-
-            //TODO: Cleanup
-
-            s_GameScore score = Game_RuntimeData.gameScore;
-
-            yield return new WaitForSeconds(1);
-
-            Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
+            p.playerController.IsInputLocked = true;
         }
+        //TODO: Cleanup
+
+        s_GameScore score = Game_RuntimeData.gameScore;
+
+        yield return new WaitForSeconds(1);
+
+        Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
     }
 
     /// <summary>
@@ -128,15 +122,18 @@ public class GameMode_Standard : IgameMode
     public IEnumerator OnOneSecondCountdown()
     {
         Debug.Log("Begin! ");
-        while(GameMode_Manager.gameIsRunning)
+        while(GameMode_Manager.timerIsRunning)
         {
             if(PhotonNetwork.IsMasterClient)
             {
                 GameMode_Manager.SetSynchronousTimerValue();
                 Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
 
-                if(GameMode_Manager.gameTime < 1)
-                    GameMode_Manager.gameIsRunning = false;
+            }
+
+            if(GameMode_Manager.gameTime < 1)
+            {
+                GameMode_Manager.timerIsRunning = false;
             }
 
             yield return new WaitForSeconds(1);
@@ -163,6 +160,9 @@ public class GameMode_Standard : IgameMode
         teamScores.deathsPerPlayer[deathInfoStruct.diedId-1]++;
         teamScores.killsPerTeam[deathInfoStruct.killerTeam]++;
         teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
+
+        Game_RuntimeData.gameScore = teamScores;
+        Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
     }
 
     /// <summary>

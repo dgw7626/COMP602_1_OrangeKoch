@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,6 +139,17 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         
         // MunishesScoreStuff.HereIsTheScore(gameScoreStruct);
         Game_RuntimeData.gameScore = gameScoreStruct;
-        GameMode_Manager.gameIsRunning = false;
+    }
+
+    /// <summary>
+    /// Someone is requesting a score update. If you are the master client, broadcast back the current score
+    /// </summary>
+    [PunRPC]
+    public void RequestScoreFromMaster()
+    {
+        if(PhotonNetwork.IsMasterClient) 
+        {
+            photonView.RPC(nameof(UpdateScore), RpcTarget.All, JsonUtility.ToJson(Game_RuntimeData.gameScore));
+        }
     }
 }
