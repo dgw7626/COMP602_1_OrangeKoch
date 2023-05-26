@@ -16,7 +16,6 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal int _currentIndex;
     internal Weapon_ProjectileManager _projectileManager;
     internal Weapon_Controller _projectController;
-    public float weaponDamage;
     private void Start()
     {
         //get the photon view instance.
@@ -156,7 +155,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// <param name="hit"></param>
     /// <param name="origin"></param>
     [PunRPC]
-    public void RenderGunTrace(Vector3 hit, Vector3 origin)
+    internal void RenderGunTrace(Vector3 hit, Vector3 origin)
     {
         // Check if the PhotonView exists
         if (transform.GetComponent<PhotonView>() == null)

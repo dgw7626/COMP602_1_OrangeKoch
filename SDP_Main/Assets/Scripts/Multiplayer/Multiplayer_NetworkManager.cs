@@ -1,10 +1,21 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Dion Hemmes		            *
+ * Student ID: 		21154191		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
 using System.Linq;
-using UnityEngine.SceneManagement;
 
 
 public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
@@ -18,6 +29,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playerListItemPrefab;   // Object for each players name that has joined a room
     [SerializeField] GameObject startGameButton;        // Object for master player to start game
     [SerializeField] GameObject uiErrorMessage;         // Object for error ui message.
+
     /// <summary>
     /// Creates a unique instance of Multiplayer_NetworkManager
     /// </summary>
@@ -90,15 +102,29 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinOrCreateRoom("default_room",options, TypedLobby.Default);
     }
 
+    /// <summary>
+    /// This method override the photon method for when a player fails to join the room.
+    /// Once the game is started.This method restrict the new player and show the error messege. 
+    /// </summary>
     public override void OnJoinRoomFailed (short returnCode, string message)
     {
+        // This photon method activate the error message.
         uiErrorMessage.SetActive(true);
+
+        // This message display the message on the screne.
         uiErrorMessage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Game Error: game is still running";
+
+        // This message disable the error after 1.2 seconds.
         Invoke(nameof(DisableErrorMessage), 1.2f);
     }
+
+    /// <summary>
+    /// This photon method disable error message.
+    /// </summary>
     internal void DisableErrorMessage(){
         uiErrorMessage.SetActive(false);
     }
+
     /// <summary>
     /// Override method upon player succesfully joining the room. Updates all clients for player names and changes.
     /// </summary>
@@ -140,7 +166,6 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     {
         errorText.text = "Room Creation Failed: " + message;
         Multiplayer_MenuManager.Instance.OpenMenu("error");
-        Debug.Log("Error: Room Failed to Create.");
     }
 
     /// <summary>
@@ -209,7 +234,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         Debug.Log(PhotonNetwork.NickName+" has started a Game!");
-        PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Default);
+        PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Uknown);
         PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 }
