@@ -90,15 +90,25 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinOrCreateRoom("default_room",options, TypedLobby.Default);
     }
 
+    /// <summary>
+    /// This method override the photon method for when a player fails to join the room.
+    /// Once the game is started.This method restrict the new player and show the error messege. 
+    /// </summary>
     public override void OnJoinRoomFailed (short returnCode, string message)
     {
+        // This photon method activate the error message.
         uiErrorMessage.SetActive(true);
+        // This message display the message on the screne.
         uiErrorMessage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Game Error: game is still running";
+        // This message disable the error after 1.2 seconds.
         Invoke(nameof(DisableErrorMessage), 1.2f);
     }
+
+    // This photon method disable error message.
     internal void DisableErrorMessage(){
         uiErrorMessage.SetActive(false);
     }
+
     /// <summary>
     /// Override method upon player succesfully joining the room. Updates all clients for player names and changes.
     /// </summary>
@@ -140,7 +150,6 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     {
         errorText.text = "Room Creation Failed: " + message;
         Multiplayer_MenuManager.Instance.OpenMenu("error");
-        Debug.Log("Error: Room Failed to Create.");
     }
 
     /// <summary>

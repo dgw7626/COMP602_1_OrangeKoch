@@ -1,28 +1,28 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Audio;
-using System.IO;
-using Photon.Pun;
 
 public class WeaponProjectileManager : MonoBehaviour
 {
     public AudioMixerGroup masterMixer;
 
     [SerializeField]
-    private WeaponInfo _weaponInfo;
+    public WeaponInfo _weaponInfo;
 
     [SerializeField]
-    internal List<WeaponBullet> _localBullets;
+    public List<WeaponBullet> _localBullets;
 
     [SerializeField]
-    private int _weaponAmmo;
+    public int _weaponAmmo;
 
     [SerializeField]
-    private int _weaponClip;
+    public int _weaponClip;
 
     [SerializeField]
-    private AmmunitionUI _ammunitionUI;
+    public AmmunitionUI _ammunitionUI;
 
     internal Coroutine _currentCoroutine;
     private Vector3 _fw,
@@ -168,12 +168,18 @@ public class WeaponProjectileManager : MonoBehaviour
     /// </summary>
     public void GetShoot()
     {
+        var firePos = transform.GetChild(0)?.GetChild(0)?.transform;
+       
         GuardClause.InspectGuardClauseNullRef<int>(_weaponAmmo, nameof(_weaponAmmo));
         if (_weaponAmmo >= 1)
         {
-            var firePos = transform.GetChild(0).GetChild(0).transform;
+            firePos = transform.GetChild(0).GetChild(0).transform;                        
             _weaponAmmo--;
-            _ammunitionUI.UpdateUI(_weaponAmmo, _weaponClip);
+           
+            if (_ammunitionUI != null)
+            {
+                _ammunitionUI.UpdateUI(_weaponAmmo, _weaponClip);
+            }
             foreach (WeaponBullet bullet in _localBullets)
             {
                 if (!bullet.gameObject.activeSelf)
@@ -183,6 +189,7 @@ public class WeaponProjectileManager : MonoBehaviour
                     return;
                 }
             }
+        
         }
     }
 
