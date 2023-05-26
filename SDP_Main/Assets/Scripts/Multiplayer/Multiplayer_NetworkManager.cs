@@ -110,13 +110,17 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     {
         // This photon method activate the error message.
         uiErrorMessage.SetActive(true);
+
         // This message display the message on the screne.
         uiErrorMessage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Game Error: game is still running";
+
         // This message disable the error after 1.2 seconds.
         Invoke(nameof(DisableErrorMessage), 1.2f);
     }
 
-    // This photon method disable error message.
+    /// <summary>
+    /// This photon method disable error message.
+    /// </summary>
     internal void DisableErrorMessage(){
         uiErrorMessage.SetActive(false);
     }
