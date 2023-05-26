@@ -400,7 +400,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 187915120}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -2279,7 +2279,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5880469034258650676, guid: 1d60a21c31fac4b4a8bdf90228205e5e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d60a21c31fac4b4a8bdf90228205e5e, type: 3}
@@ -3833,7 +3833,6 @@ MonoBehaviour:
   MaxSpeedForFallDamage: 30
   FallDamageAtMinSpeed: 10
   FallDamageAtMaxSpeed: 50
-  IsMultiplayer: 0
   IsInputLocked: 0
   photonView: {fileID: 0}
   soundManager: {fileID: 0}
@@ -4379,13 +4378,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f78b092dc67b1a84fab12d0caf38bfb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNameText_1: {fileID: 747609550545999000}
-  playerKillsText_1: {fileID: 747609551164593488}
-  playerDeathsText_1: {fileID: 747609549042534333}
+  playerNameText_1: {fileID: 0}
+  playerKillsText_1: {fileID: 0}
+  playerDeathsText_1: {fileID: 0}
   playerWonText_1: {fileID: 0}
-  playerNameText_2: {fileID: 747609549589329229}
-  playerKillsText_2: {fileID: 747609549226075707}
-  playerDeathsText_2: {fileID: 747609549466334331}
+  playerNameText_2: {fileID: 0}
+  playerKillsText_2: {fileID: 0}
+  playerDeathsText_2: {fileID: 0}
 --- !u!224 &747609549190704732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5972,7 +5971,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10870dd6f483d14e80d36f834fd524e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMultiplayer: 0
 --- !u!4 &3151239351205643233
 Transform:
   m_ObjectHideFlags: 0
@@ -6778,22 +6776,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3873561669869081983}
   m_CullTransparentMesh: 1
---- !u!114 &6256992572008175129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9033863219074106931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &6375844990429750799
 GameObject:
   m_ObjectHideFlags: 0
@@ -6832,8 +6814,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 6256992572008175129}
+  ObservedComponents: []
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -6942,18 +6923,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &6850991497933398141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9033863219074106931}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &7169300091578699795
 Transform:
   m_ObjectHideFlags: 0
@@ -7502,8 +7471,6 @@ GameObject:
   - component: {fileID: 5236005439429596122}
   - component: {fileID: 129191108416666501}
   - component: {fileID: 6531818649122087674}
-  - component: {fileID: 6256992572008175129}
-  - component: {fileID: 6850991497933398141}
   - component: {fileID: 3651001709644441022}
   m_Layer: 0
   m_Name: Player
