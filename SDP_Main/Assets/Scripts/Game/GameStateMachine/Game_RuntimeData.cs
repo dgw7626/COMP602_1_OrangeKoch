@@ -41,7 +41,6 @@ public class Game_RuntimeData
     /// </summary>
     public static bool matchIsRunning = false;
 
-
     /// <summary>
     /// Reference to the local player client to store their configuration settings
     /// </summary>

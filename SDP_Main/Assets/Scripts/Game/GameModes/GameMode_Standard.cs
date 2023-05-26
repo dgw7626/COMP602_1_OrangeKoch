@@ -25,6 +25,7 @@ public class GameMode_Standard : IgameMode
     /// </summary>
     public void InitGame()
     {
+        numPlayers = 0;
         // Make teams
         for (int i = 0; i < NUM_TEAMS; i++)
         {
