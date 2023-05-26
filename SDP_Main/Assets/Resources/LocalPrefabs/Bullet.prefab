@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9130417987039527865}
   - component: {fileID: 6246191250145616316}
   - component: {fileID: 6915469808226662047}
+  - component: {fileID: 108863252468810344}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -44,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 962e9d12545da054993e4b8922c5b554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bulletIndex: 0
 --- !u!82 &6915469808226662047
 AudioSource:
   m_ObjectHideFlags: 0
@@ -53,7 +55,7 @@ AudioSource:
   m_GameObject: {fileID: 8271472123091560255}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
   m_audioClip: {fileID: 8300000, guid: e730d1593f127d94887ca2c16b3826d4, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -140,3 +142,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &108863252468810344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271472123091560255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
