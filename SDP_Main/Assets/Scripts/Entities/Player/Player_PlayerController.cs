@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
-using Photon.Realtime;
 
 [RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
@@ -14,10 +11,10 @@ public class Player_PlayerController : MonoBehaviour
 
     [Header("General")]
     [Tooltip("Force applied downward when in the air")]
-    public float GravityDownForce = 20f;
+    public float GravityForce = 20f;
 
-    [Tooltip("Physic layers checked to consider the player grounded")]
-    public LayerMask GroundCheckLayers = -1;
+    [Tooltip("Physics layer checked for to consider if the player is grounded")]
+    public LayerMask GroundCheckLayer = -1;
 
     [Tooltip("distance from the bottom of the character controller capsule to test for grounded")]
     public float GroundCheckDistance = 0.05f;
@@ -41,14 +38,15 @@ public class Player_PlayerController : MonoBehaviour
     public float AccelerationSpeedInAir = 25f;
 
     [Tooltip("Multiplicator for the sprint speed (based on grounded speed)")]
-    public float SprintSpeedModifier = 2f;
+    public float SprintSpeedModifier = 3f;
 
     [Tooltip("Height at which the player dies instantly when falling off the map")]
-    public float KillHeight = -50f;
+    public float MaxNegativeY = -50f;
 
     [Header("Rotation")]
     [Tooltip("Rotation speed for moving the camera")]
     public float RotationSpeed = 200f;
+    
 
     [Range(0.1f, 1f)]
     [Tooltip("Rotation speed multiplier when aiming")]
@@ -94,11 +92,11 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsDead { get; private set; }
     public bool IsCrouching { get; private set; }
 
-    public bool IsMultiplayer;
     public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
-
+    
+    [SerializeField]private ScoreBoard _scoreBoard;
     //private List<Weapon> weapons = new List<Weapon>();
     //private Weapon currentWeapon = null;
 
@@ -116,7 +114,7 @@ public class Player_PlayerController : MonoBehaviour
             return 1f;
         }
     }
-    private WeaponProjectileManager _projectMananger;
+    private Weapon_ProjectileManager _projectMananger;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -132,15 +130,18 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
-        IsMultiplayer = Game_RuntimeData.isMultiplayer;
-        photonView = GetComponent<PhotonView>();
-        _projectMananger = GetComponentInParent<WeaponProjectileManager>();
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            photonView = GetComponentInParent<PhotonView>();
+            if (photonView == null)
+                Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
+        }
+
+        _projectMananger = GetComponentInParent<Weapon_ProjectileManager>();
+        _scoreBoard = GetComponentInChildren<ScoreBoard>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
-
-        if (photonView == null)
-            Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
         /*
         Weapon[] myGuns = GetComponentsInChildren<Weapon>();
@@ -165,7 +166,7 @@ public class Player_PlayerController : MonoBehaviour
     void Start()
     {
 
-        if (!photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
         }
@@ -174,51 +175,22 @@ public class Player_PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         inputHandler = GetComponent<Player_InputManager>();
-        _projectMananger = GetComponentInChildren<WeaponProjectileManager>();
+        _projectMananger = GetComponentInChildren<Weapon_ProjectileManager>();
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
-        SetCrouchingState(false, true);
+        CanCrouchOrJump(false, true);
         UpdateCharacterHeight(true);
     }
 
     void Update()
     {
-        //--------------------------------------------------------------------------------------------------
-        /**
-         * TODO: TEMPORARY
-         * This is being used to simulate a player being shot.
-         */
-        if (inputHandler.OnTest())
-        {
-            if (Game_RuntimeData.activePlayers.Count > 1)
-            {
-                foreach (KeyValuePair<int, Player_MultiplayerEntity> e in Game_RuntimeData.activePlayers)
-                {
-                    if (e.Value.uniqueID != gameObject.GetComponent<Player_MultiplayerEntity>().uniqueID)
-                    {
-                        Data_DamageData d = new Data_DamageData();
-                        PhotonView targetView = e.Value.GetComponent<PhotonView>();
-                        if (targetView.IsMine)
-                        {
-                            Debug.Log("The target is me, so I wont call it.");
-                            break;
-                        }
-                        Player target = targetView.Owner;
-                        Debug.Log("Take Damage being called on me!");
-
-                        photonView.RPC("OnDamageRecieved", target, 1f);
-                    }
-                }
-            }
-        }
-        //--------------------------------------------------------------------------------------------------
-
-        if (IsMultiplayer && !photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
             return;
 
         if (IsInputLocked)
             return;
+
         // TODO: check for Y kill
         /*  if (!IsDead && transform.position.y < KillHeight)
           {
@@ -255,7 +227,7 @@ public class Player_PlayerController : MonoBehaviour
         // crouching
         if (inputHandler.GetCrouchInputDown())
         {
-            SetCrouchingState(!IsCrouching, false);
+            CanCrouchOrJump(!IsCrouching, false);
         }
 
         UpdateCharacterHeight(false);
@@ -265,15 +237,27 @@ public class Player_PlayerController : MonoBehaviour
         // shooting
         if (inputHandler.GetFireInputDown())
         {
-            _projectMananger.InitShoot(WeaponFiretype.Semi);
+            _projectMananger.InitShoot(Weapon_Firetype.Semi);
+
+           // _projectMananger.InitShoot(Weapon_Firetype.Semi);
         }
-        //Reaload
+        //Reload
         if (inputHandler.GetReloadButtonDown())
         {
-            _projectMananger.Reload();
+            if (!Game_RuntimeData.isMultiplayer)
+            {
+                _projectMananger.Reload();
+                return;
+            }
+            _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
+            //_projectMananger.Reload();
+        }
+        //checking Scoreboard
+        if(inputHandler.GetScoreBoardInputDown()){
+            _scoreBoard.GetScoreboard();
         }
     }
-
+    
     void OnDie()
     {
         IsDead = true;
@@ -300,7 +284,7 @@ public class Player_PlayerController : MonoBehaviour
         {
             // if we're grounded, collect info about the ground normal with a downward capsule cast representing our character capsule
             if (Physics.CapsuleCast(GetCapsuleBottomHemisphere(), GetCapsuleTopHemisphere(controller.height),
-                controller.radius, Vector3.down, out RaycastHit hit, chosenGroundCheckDistance, GroundCheckLayers,
+                controller.radius, Vector3.down, out RaycastHit hit, chosenGroundCheckDistance, GroundCheckLayer,
                 QueryTriggerInteraction.Ignore))
             {
                 // storing the upward direction for the surface found
@@ -350,7 +334,7 @@ public class Player_PlayerController : MonoBehaviour
         {
             if (isSprinting)
             {
-                isSprinting = SetCrouchingState(false, false);
+                isSprinting = CanCrouchOrJump(false, false);
             }
 
             float speedModifier = isSprinting ? SprintSpeedModifier : 1f;
@@ -377,7 +361,7 @@ public class Player_PlayerController : MonoBehaviour
                 if (IsGrounded && inputHandler.IsJumping())
                 {
                     // force the crouch state to false
-                    if (SetCrouchingState(false, false))
+                    if (CanCrouchOrJump(false, false))
                     {
                         // start by canceling out the vertical component of our velocity
                         CharacterVelocity = new Vector3(CharacterVelocity.x, 0f, CharacterVelocity.z);
@@ -414,7 +398,7 @@ public class Player_PlayerController : MonoBehaviour
                 CharacterVelocity = horizontalVelocity + (Vector3.up * verticalVelocity);
 
                 // apply the gravity to the velocity
-                CharacterVelocity += Vector3.down * GravityDownForce * Time.deltaTime;
+                CharacterVelocity += Vector3.down * GravityForce * Time.deltaTime;
             }
         }
 
@@ -485,8 +469,8 @@ public class Player_PlayerController : MonoBehaviour
         }
     }
 
-    // returns false if there was an obstruction
-    bool SetCrouchingState(bool crouched, bool ignoreObstructions)
+    // Checks for collisions in a radius
+    bool CanCrouchOrJump(bool crouched, bool ignoreObstructions)
     {
         // set appropriate heights
         if (crouched)
@@ -495,7 +479,6 @@ public class Player_PlayerController : MonoBehaviour
         }
         else
         {
-            // Detect obstructions
             if (!ignoreObstructions)
             {
                 Collider[] standingOverlaps = Physics.OverlapCapsule(
@@ -506,7 +489,7 @@ public class Player_PlayerController : MonoBehaviour
                     QueryTriggerInteraction.Ignore);
                 foreach (Collider c in standingOverlaps)
                 {
-                    if (c != controller)
+                    if (c != controller && c.tag != "Player_Model")
                     {
                         return false;
                     }

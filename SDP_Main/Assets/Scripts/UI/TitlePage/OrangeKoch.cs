@@ -19,9 +19,9 @@ public class OrangeKoch : MonoBehaviour
 {
     public string Main_Menu = "MainMenuUI";
 
-    void Start()
+    public void Start()
     {
-        Invoke("LoadNextScene", 5f);
+        Invoke("LoadNextScene", 3f);
     }
 
     void LoadNextScene()

@@ -24,7 +24,11 @@ public class MainMenu : MonoBehaviour
     }
     public void Tutorial()
     {
+<<<<<<< HEAD
         // SceneManager.LoadScene("");
+=======
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+>>>>>>> main
         SceneManager.LoadScene("TutorialMap");
     }
 

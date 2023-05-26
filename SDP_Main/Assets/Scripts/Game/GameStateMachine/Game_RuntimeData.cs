@@ -8,7 +8,12 @@ public class Game_RuntimeData
     /// <summary>
     /// Reference to game mode manager to be accessed from instantiated environment.
     /// </summary>
-    public static GameMode_Manager gameMode_Manager = null;
+    public static GameMode_Manager gameMode_Manager = null;    
+    
+    /// <summary>
+    /// Reference to player manager to be accessed from instantiated environment.
+    /// </summary>
+    public static Game_PlayerManager playerManager = null;
 
     /// <summary>
     /// List of all Multiplayer Entities that were ever instantiated.
@@ -30,6 +35,11 @@ public class Game_RuntimeData
     /// This can prevent many multiplayer-specific action during a single player match
     /// </summary>
     public static bool isMultiplayer = false;
+
+    /// <summary>
+    /// Reference to the local player client to store their configuration settings
+    /// </summary>
+    public static Player_Settings playerSettings = new Player_Settings();
 
     /// <summary>
     /// Will be set to Standard if not other type has been selected from the menu.
@@ -105,10 +115,11 @@ public class Game_RuntimeData
     /// </summary>
     public static void CleanUp_Multiplayer_Data()
     {
-        Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
-        PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
-        PhotonNetwork.Disconnect();
-
+        if (Game_RuntimeData.isMultiplayer) { 
+            Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
+            PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
+            PhotonNetwork.Disconnect();
+        }
         gameMode_Manager = null;
         instantiatedPlayers = new List<Player_MultiplayerEntity>();
         teams = new List<List<Player_MultiplayerEntity>>();

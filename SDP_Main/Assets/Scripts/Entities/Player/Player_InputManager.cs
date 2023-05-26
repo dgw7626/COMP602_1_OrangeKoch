@@ -14,6 +14,12 @@ public class Player_InputManager : MonoBehaviour
 
     void Start()
     {
+        // Set look sensitivity speed from the Options Window
+        lookSensitivity = Game_RuntimeData.playerSettings.lookSensitivity;
+
+        // Set Mouse Invert Y Axis from the Options Window
+        invertY = !Game_RuntimeData.playerSettings.invertMouseYAxis;
+
         playerControllerscript = GetComponent<Player_PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -146,6 +152,14 @@ public class Player_InputManager : MonoBehaviour
             return 1;
         else
             return 0;
+    }
+
+    public bool GetScoreBoardInputDown(){
+        if(InputIsLocked())
+            return false;
+        
+        return Input.GetButtonDown("Scoreboard");
+
     }
 
     public int GetSelectWeaponInput()

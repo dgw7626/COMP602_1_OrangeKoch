@@ -1,4 +1,3 @@
-using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +5,7 @@ using Photon.Pun;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Realtime;
 using System;
+using Newtonsoft.Json.Schema;
 
 public class GameMode_Standard : IgameMode
 {
@@ -51,9 +51,16 @@ public class GameMode_Standard : IgameMode
         // Unlock Player Movement
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
         {
-            p.playerController.IsMultiplayer = true;
             p.playerController.IsInputLocked = false;
+      
+            if(p.playerController.photonView.IsMine)
+            {
+                Game_RuntimeData.thisMachinesPlayersPhotonView = p.playerController.photonView;
+                Debug.Log("At START GAME: ThisMachines PhotonView is mine, and my number is: " + PhotonNetwork.LocalPlayer.ActorNumber + 
+                    " " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber);
+            }
         }
+
     }
 
     public void OnStopGame()
@@ -69,7 +76,11 @@ public class GameMode_Standard : IgameMode
         {
             Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnGameEnded), RpcTarget.All, JsonUtility.ToJson(teamScores));
         }
+        
         //TODO: Cleanup
+
+        //TODO: Score Board
+        Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
     }
 
     public IEnumerator OnOneSecondCountdown()
@@ -83,7 +94,7 @@ public class GameMode_Standard : IgameMode
                 Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
 
                 // If the timer expires, tell the other players what the score is.
-                if(GameMode_Manager.gameTime == -1)
+                if(GameMode_Manager.gameTime < 1)
                 {
                     Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
                         nameof(Player_MultiplayerEntity.OnGameEnded), 
@@ -94,7 +105,7 @@ public class GameMode_Standard : IgameMode
                 }
             }
 
-            Debug.Log(GameMode_Manager.gameTime);
+            //Debug.Log(GameMode_Manager.gameTime);
             yield return new WaitForSeconds(1);
 
         }
@@ -112,8 +123,17 @@ public class GameMode_Standard : IgameMode
 
         teamScores.killsPerTeam[teamNumber] += score;
     }
-    public void OnPlayerKilled(Player_MultiplayerEntity playerKilled)
+    public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
+        //TODO: Find player and respwan/destroy them here
+        foreach(KeyValuePair<int, Player_MultiplayerEntity> value in Game_RuntimeData.activePlayers)
+        {
+            if(value.Key == deathInfoStruct.diedId) 
+            {
+                value.Value.gameObject.transform.position = new Vector3(0, 0, 0);
+                return;
+            }
+        }
     }
 
     public void LeaveScene(string sceneName)
