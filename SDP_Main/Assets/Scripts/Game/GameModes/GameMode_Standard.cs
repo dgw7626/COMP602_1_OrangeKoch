@@ -177,8 +177,9 @@ public class GameMode_Standard : IgameMode
         {
             if(value.Key == deathInfoStruct.diedId) 
             {
+                //Here I have found the player that died:
                 PhotonView pv = value.Value.playerController.photonView;
-                value.Value.gameObject.transform.position = new Vector3(0, 0, 0);
+                value.Value.gameObject.transform.position = new Vector3(0, 10, 0);
                 return;
             }
         }
