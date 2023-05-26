@@ -5,19 +5,19 @@ using UnityEngine.UI;
 using  Proyecto26;
 using System;
 using System.Net.Mime;
+using TMPro;
 
 public class ScoreBoard : MonoBehaviour
 {
 // Assiging the Text attribute.
-    public Text playerNameText_1;
-    public Text playerKillsText_1;
-    public Text playerDeathsText_1;
-    public Text playerWonText_1;
+    public TMP_Text playerNameText_1;
+    public TMP_Text playerKillsText_1;
+    public TMP_Text playerDeathsText_1;
+    public TMP_Text playerWonText_1;
 
-    public Text playerNameText_2;
-    public Text playerKillsText_2;
-    public Text playerDeathsText_2;
-    //public Text playerWonText_2;
+    public TMP_Text playerNameText_2;
+    public TMP_Text playerKillsText_2;
+    public TMP_Text playerDeathsText_2;
     internal bool _activeSelf;
 
    PlayerDetail playerdetail = new PlayerDetail();
@@ -25,7 +25,6 @@ public class ScoreBoard : MonoBehaviour
      public static string playerName;
      public static int playerKills;
      public static int playerDeaths;
-     //public static int playerWon;
 
 // This methode update player 1 detail print on Scoreboard.
      public void UpdatePlayerDetail_1()
@@ -33,7 +32,6 @@ public class ScoreBoard : MonoBehaviour
       playerNameText_1.text = playerdetail.playerName;
       playerKillsText_1.text = playerdetail.kills.ToString();
       playerDeathsText_1.text = playerdetail.deaths.ToString();
-      //playerWonText_1.text = playerdetail.won.ToString();
     }
 
 // This methode update player 2 detail print on Scoreboard.
@@ -42,7 +40,6 @@ public class ScoreBoard : MonoBehaviour
       playerNameText_2.text = playerdetail.playerName;
       playerKillsText_2 .text = playerdetail.kills.ToString();
       playerDeathsText_2.text = playerdetail.deaths.ToString();
-      //playerWonText_2.text = playerdetail.won.ToString();
     }
     private void Start(){
       this._activeSelf = false;
