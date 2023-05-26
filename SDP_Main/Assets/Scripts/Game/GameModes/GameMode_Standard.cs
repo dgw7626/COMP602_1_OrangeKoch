@@ -51,7 +51,6 @@ public class GameMode_Standard : IgameMode
         // Unlock Player Movement
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
         {
-            p.playerController.IsMultiplayer = true;
             p.playerController.IsInputLocked = false;
       
             if(p.playerController.photonView.IsMine)
@@ -106,7 +105,7 @@ public class GameMode_Standard : IgameMode
                 }
             }
 
-            Debug.Log(GameMode_Manager.gameTime);
+            //Debug.Log(GameMode_Manager.gameTime);
             yield return new WaitForSeconds(1);
 
         }

@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
-using Photon.Realtime;
 
 [RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
@@ -95,7 +92,6 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsDead { get; private set; }
     public bool IsCrouching { get; private set; }
 
-    public bool IsMultiplayer;
     public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
@@ -118,7 +114,7 @@ public class Player_PlayerController : MonoBehaviour
             return 1f;
         }
     }
-    private WeaponProjectileManager _projectMananger;
+    private Weapon_ProjectileManager _projectMananger;
     Player_InputManager inputHandler;
     CharacterController controller;
     Vector3 m_GroundNormal;
@@ -134,16 +130,18 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
-        IsMultiplayer = Game_RuntimeData.isMultiplayer;
-        photonView = GetComponent<PhotonView>();
-        _projectMananger = GetComponentInParent<WeaponProjectileManager>();
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            photonView = GetComponentInParent<PhotonView>();
+            if (photonView == null)
+                Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
+        }
+
+        _projectMananger = GetComponentInParent<Weapon_ProjectileManager>();
         _scoreBoard = GetComponentInChildren<ScoreBoard>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
-
-        if (photonView == null)
-            Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
         /*
         Weapon[] myGuns = GetComponentsInChildren<Weapon>();
@@ -168,7 +166,7 @@ public class Player_PlayerController : MonoBehaviour
     void Start()
     {
 
-        if (!photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
         }
@@ -177,7 +175,7 @@ public class Player_PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         inputHandler = GetComponent<Player_InputManager>();
-        _projectMananger = GetComponentInChildren<WeaponProjectileManager>();
+        _projectMananger = GetComponentInChildren<Weapon_ProjectileManager>();
         controller.enableOverlapRecovery = true;
 
         // force the crouch state to false when starting
@@ -187,7 +185,7 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (IsMultiplayer && !photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
             return;
 
         if (IsInputLocked)
@@ -239,19 +237,27 @@ public class Player_PlayerController : MonoBehaviour
         // shooting
         if (inputHandler.GetFireInputDown())
         {
-            _projectMananger.InitShoot(WeaponFiretype.Semi);
+            _projectMananger.InitShoot(Weapon_Firetype.Semi);
+
+           // _projectMananger.InitShoot(Weapon_Firetype.Semi);
         }
         //Reload
         if (inputHandler.GetReloadButtonDown())
         {
-            _projectMananger.Reload();
+            if (!Game_RuntimeData.isMultiplayer)
+            {
+                _projectMananger.Reload();
+                return;
+            }
+            _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
+            //_projectMananger.Reload();
         }
         //checking Scoreboard
         if(inputHandler.GetScoreBoardInputDown()){
             _scoreBoard.GetScoreboard();
         }
     }
-
+    
     void OnDie()
     {
         IsDead = true;
