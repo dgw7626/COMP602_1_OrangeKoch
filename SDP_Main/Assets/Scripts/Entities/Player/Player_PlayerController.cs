@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
-using Photon.Realtime;
 
 [RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
@@ -95,7 +92,6 @@ public class Player_PlayerController : MonoBehaviour
     public bool IsDead { get; private set; }
     public bool IsCrouching { get; private set; }
 
-    public bool IsMultiplayer;
     public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
@@ -134,16 +130,18 @@ public class Player_PlayerController : MonoBehaviour
 
     void Awake()
     {
-        IsMultiplayer = Game_RuntimeData.isMultiplayer;
-        photonView = GetComponentInParent<PhotonView>();
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            photonView = GetComponentInParent<PhotonView>();
+            if (photonView == null)
+                Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
+        }
+
         _projectMananger = GetComponentInParent<Weapon_ProjectileManager>();
         _scoreBoard = GetComponentInChildren<ScoreBoard>();
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
-
-        if (photonView == null)
-            Debug.LogError("ERROR: Photon View is NULL for " + gameObject.name);
         //TODO: Add weapons
         /*
         Weapon[] myGuns = GetComponentsInChildren<Weapon>();
@@ -168,7 +166,7 @@ public class Player_PlayerController : MonoBehaviour
     void Start()
     {
 
-        if (!photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
         }
@@ -187,7 +185,7 @@ public class Player_PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (IsMultiplayer && !photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
             return;
 
         if (IsInputLocked)
@@ -246,7 +244,7 @@ public class Player_PlayerController : MonoBehaviour
         //Reload
         if (inputHandler.GetReloadButtonDown())
         {
-            if (!_projectMananger.transform.GetComponent<Weapon_Controller>().isMultiplayer)
+            if (!Game_RuntimeData.isMultiplayer)
             {
                 _projectMananger.Reload();
                 return;
