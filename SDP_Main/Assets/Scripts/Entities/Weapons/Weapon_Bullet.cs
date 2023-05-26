@@ -17,6 +17,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal Weapon_ProjectileManager _projectileManager;
     internal Weapon_Controller _projectController;
     public Player_MultiplayerEntity m_MultiplayerEntity;
+    public float weaponDamage;
     private void Start()
     {
         //get the photon view instance.
@@ -41,7 +42,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
             //get the weapon controller class form parent object.
             Weapon_Controller controller = parentTransform.parent.GetComponent<Weapon_Controller>();
             //if the controller is not null and multiplayer is false.
-            if (controller != null && !controller.isMultiplayer)
+            if (controller != null && !Game_RuntimeData.isMultiplayer)
             {
                 // get the projectile manager class and controller class.
                 _projectileManager = parentTransform.parent.GetComponent<Weapon_ProjectileManager>();
@@ -88,7 +89,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         transform.position = origin.position;
         //insntatiating the bullet vfx instances.
         InstantiateGunVFX();
-        //raycasting the origin position 
+        //raycasting the origin position
         //you need to chnange the origin position from here.
         if (Physics.Raycast(_projectileManager.transform.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
         {
@@ -102,14 +103,14 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     HitPlayer(hit);
                 }
                 //check if the controller is not null and is multiplayer is false.
-                if (_projectController != null && !_projectController.isMultiplayer)
+                if (_projectController != null && !Game_RuntimeData.isMultiplayer)
                 {
                     //exectue the mutliplayer bullet trace vfx.
                     RenderGunTrace(hit.point, origin.position);
                     _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
                     return;
                 }
-                //check if the photonnetwork is local. 
+                //check if the photonnetwork is local.
                 if (PhotonNetwork.LocalPlayer == transform.GetComponent<PhotonView>().Owner)
                 {
                     //exectue the mutliplayer bullet trace vfx.
@@ -202,6 +203,11 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// <param name="hit"></param>
     private void HitPlayer(RaycastHit hit)
     {
+        if (!Game_RuntimeData.isMultiplayer)
+        {
+            return;
+        }
+
         PhotonView pv = hit.transform.GetComponentInParent<Player_PlayerController>().photonView;
         if (pv == null)
         {

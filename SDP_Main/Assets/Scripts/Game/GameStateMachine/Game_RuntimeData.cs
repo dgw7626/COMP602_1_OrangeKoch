@@ -8,8 +8,8 @@ public class Game_RuntimeData
     /// <summary>
     /// Reference to game mode manager to be accessed from instantiated environment.
     /// </summary>
-    public static GameMode_Manager gameMode_Manager = null;    
-    
+    public static GameMode_Manager gameMode_Manager = null;
+
     /// <summary>
     /// Reference to player manager to be accessed from instantiated environment.
     /// </summary>
@@ -35,7 +35,7 @@ public class Game_RuntimeData
     /// This can prevent many multiplayer-specific action during a single player match
     /// </summary>
     public static bool isMultiplayer = false;
-   
+
     /// <summary>
     /// Global state for the multiplayer game
     /// </summary>
@@ -69,7 +69,7 @@ public class Game_RuntimeData
     /// will broadcast the struct at the end of a match.
     /// </summary>
     public static s_GameScore gameScore;
-    
+
     /// <summary>
     /// Key-value-pair of all currently active players in a multiplayer match.
     /// Triggered once at the start of a match, by the GameModeManager. All MultiplayerEntities in instantiatedPlayers will be added.
@@ -125,7 +125,7 @@ public class Game_RuntimeData
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.Disconnect();
 
-        //TODO: these members need to be alive after this method, because 
+        //TODO: these members need to be alive after this method, because
         // they are required to cleanup the game.
         // consider another cleanup method to garbage collect these after the scoreboard.
         //gameMode_Manager = null;

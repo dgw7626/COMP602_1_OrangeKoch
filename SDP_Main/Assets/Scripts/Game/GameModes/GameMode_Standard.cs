@@ -80,7 +80,6 @@ public class GameMode_Standard : IgameMode
         // Unlock Player Movement
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
         {
-            p.playerController.IsMultiplayer = true;
             p.playerController.IsInputLocked = false;
       
             if(p.playerController.photonView.IsMine)

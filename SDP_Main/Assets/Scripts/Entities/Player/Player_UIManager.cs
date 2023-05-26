@@ -73,7 +73,7 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
             return;
         }

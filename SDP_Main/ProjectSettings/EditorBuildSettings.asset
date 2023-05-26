@@ -26,4 +26,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MultiplayerScoreboard.unity
     guid: 9c3ff3a992bd18446a0c96a5ce1068d1
+    path: Assets/Scenes/GameMap_unknown.unity
+    guid: 32a899706428a1f488cacfffc7a560fb
   m_configObjects: {}
