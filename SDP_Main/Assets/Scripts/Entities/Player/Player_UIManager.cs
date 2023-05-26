@@ -80,6 +80,9 @@ public class Player_UIManager : MonoBehaviour
         UpdateTimer();
     }
 
+    /// <summary>
+    /// Updates the ingame UI to display the current game timer. Only used in multiplayer.
+    /// </summary>
     private void UpdateTimer()
     {
         int seconds = GameMode_Manager.gameTime;
@@ -102,6 +105,9 @@ public class Player_UIManager : MonoBehaviour
         Debug.Log("Player quit game.");
         if (Game_RuntimeData.isMultiplayer)
         {
+            if (!Game_RuntimeData.matchIsRunning)
+                return;
+            
             Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
         } else
         {

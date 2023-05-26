@@ -35,6 +35,12 @@ public class Game_RuntimeData
     /// This can prevent many multiplayer-specific action during a single player match
     /// </summary>
     public static bool isMultiplayer = false;
+   
+    /// <summary>
+    /// Global state for the multiplayer game
+    /// </summary>
+    public static bool matchIsRunning = false;
+
 
     /// <summary>
     /// Reference to the local player client to store their configuration settings

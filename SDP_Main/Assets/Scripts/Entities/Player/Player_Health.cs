@@ -45,13 +45,20 @@ public class Player_Health : MonoBehaviour, IDamageable
         }
     }
 
+    /// <summary>
+    /// Subtract hp from the local instance. If hp falls below zero, inform all players that I have died.
+    /// Update the UI value.
+    /// </summary>
+    /// <param name="damageInfo"></param>
     public void TakeDamage(s_DamageInfo damageInfo)
     {
+        //Subtract damage
         currentHealth -= damageInfo.dmgValue;
+        
+        //If died, inform others
         if(currentHealth < 0) 
         {
             s_DeathInfo deathInfo = new s_DeathInfo();
-            //TODO: TEAMS
             deathInfo.killerTeam = damageInfo.dmgRecievedTeam;
             deathInfo.diedTeam = damageInfo.dmgDealerTeam;
             deathInfo.killerId = damageInfo.dmgDealerId;
@@ -62,9 +69,9 @@ public class Player_Health : MonoBehaviour, IDamageable
 
             currentHealth = maxHealth;
         }
+
+        //Tell the UI 
         healthBar.SetHealth(currentHealth);
-        Debug.Log("My id is:\nI am " + gameObject.GetComponent<Player_PlayerController>().photonView.Owner.ActorNumber.ToString()
-            + "\nMy health bar is active: " + healthBar.gameObject.activeSelf + "\nPV is mine: " + pvIsMine);
     }
 
     IEnumerator UpdateUI()
