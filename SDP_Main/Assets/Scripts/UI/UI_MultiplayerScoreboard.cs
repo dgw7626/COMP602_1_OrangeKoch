@@ -5,6 +5,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class handles the UI logic for the post-game splash screen.
+/// It dynamically generates UI elements based on the the number of teams and players.
+/// </summary>
 public class UI_MultiplayerScoreboard : MonoBehaviour
 {
     private List<List<TextMeshProUGUI>> m_UIelementst;
@@ -19,7 +23,9 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
 
     public GameObject textPrefab;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Assigns UI layout groups to member references, and gets the score from RuntimeData
+    /// </summary>
     void Start()
     {
         m_NameCollumn = transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
@@ -35,6 +41,9 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         Init();
     }
 
+    /// <summary>
+    /// Dynamically instantiate UI elements, assigns text elements a value from the score struct.
+    /// </summary>
     private void Init()
     {
         GameObject tmp;
@@ -63,7 +72,9 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Quit back to the lobby
+    /// </summary>
     void Update()
     {
         // Messy hack that breaks all of our conventions
