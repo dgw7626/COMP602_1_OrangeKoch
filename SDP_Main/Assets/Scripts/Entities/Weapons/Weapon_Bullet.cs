@@ -16,6 +16,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal int _currentIndex;
     internal Weapon_ProjectileManager _projectileManager;
     internal Weapon_Controller _projectController;
+    public float weaponDamage;
     private void Start()
     {
         //get the photon view instance.
