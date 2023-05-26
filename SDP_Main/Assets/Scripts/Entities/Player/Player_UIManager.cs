@@ -1,13 +1,27 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Dion Hemmes		            *
+ * Student ID: 		21154191		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using TMPro;
 using UnityEngine;
 
-
-
+/// <summary>
+/// This class is designed to Manage Objects on the Players Interface within the Game
+/// </summary>
 public class Player_UIManager : MonoBehaviour
 {
 
     public TextMeshProUGUI proximityMuteText;
     public TextMeshProUGUI pushToTalkText;
+    public TextMeshProUGUI timerText;
 
     /// <summary>
     /// Functions to run once, when object is instantiated
@@ -18,6 +32,7 @@ public class Player_UIManager : MonoBehaviour
         if (!Game_RuntimeData.isMultiplayer)
             return;
 
+        
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -27,6 +42,7 @@ public class Player_UIManager : MonoBehaviour
         //Load if the instance belongs to me
         if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
+            timerText.enabled = true;
             PreLoadVoiceUI();
         }
     }
@@ -49,6 +65,33 @@ public class Player_UIManager : MonoBehaviour
         {
             return;
         }
+
+    }
+
+    /// <summary>
+    /// Update method to constantly check for changes at a slower rate.
+    /// </summary>
+    private void FixedUpdate()
+    {
+        if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            return;
+        }
+        UpdateTimer();
+    }
+
+    private void UpdateTimer()
+    {
+        int seconds = GameMode_Manager.gameTime;
+
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        string middleStr = ":";
+        if (seconds < 10)
+            middleStr += "0";
+
+        timerText.text = "" + minutes + middleStr + seconds;
     }
 
     /// <summary>

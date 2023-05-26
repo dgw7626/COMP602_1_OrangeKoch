@@ -1,0 +1,22 @@
+{
+    "name": "ScriptAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b59fae9c7ebc1574e8690f2570b29d6f",
+        "GUID:08a110bd598f7604f9519c2d7e1fb3cc",
+        "GUID:831409e8f9d13b5479a3baef9822ad34",
+        "GUID:57c32fc907df0f54e8e6e8f0d2488336",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:d62e4537d6f8ca64c8d2affe565a5cd1",
+        "GUID:999fab92f690f524d82ec0fe0ba59b90"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

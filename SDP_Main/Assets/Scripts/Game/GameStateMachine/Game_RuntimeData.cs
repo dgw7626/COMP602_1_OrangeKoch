@@ -37,6 +37,11 @@ public class Game_RuntimeData
     public static bool isMultiplayer = false;
 
     /// <summary>
+    /// Reference to the local player client to store their configuration settings
+    /// </summary>
+    public static Player_Settings playerSettings = new Player_Settings();
+
+    /// <summary>
     /// Will be set to Standard if not other type has been selected from the menu.
     /// </summary>
     public static IgameMode gameMode = null;
