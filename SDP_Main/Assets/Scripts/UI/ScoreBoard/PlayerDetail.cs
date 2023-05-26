@@ -12,7 +12,6 @@ public class PlayerDetail
     public string playerName;
     public int kills;
     public int deaths;
-    //public int won;
 
 // The constructor assign player detail with scoreboard features.
     public PlayerDetail()
@@ -20,6 +19,5 @@ public class PlayerDetail
         playerName = ScoreBoard.playerName;
         kills = ScoreBoard.playerKills;
         deaths = ScoreBoard.playerDeaths;
-        //won = ScoreBoard.playerWon;
     }
 }

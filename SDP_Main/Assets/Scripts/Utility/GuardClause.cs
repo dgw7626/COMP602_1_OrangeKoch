@@ -63,12 +63,13 @@ public static class GuardClause
     /// <returns>returns current type of the object.</returns>
     public static T InspectGuardClauseNullRef<T>(T currentType, string parameterName)
     {
-        if (currentType.Equals(null))
+        if (ReferenceEquals(currentType, null))
         {
-            Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName +  ", Type: (" + currentType.GetType() +") , -----HERE-----" +
-                "\n \t\t[Comment]: Missing " + currentType.GetType() + ", this reference is required to run the current script.");
+            Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName + ", Type: (" + typeof(T) + ") , -----HERE-----" +
+                "\n \t\t[Comment]: Missing " + typeof(T) + ", this reference is required to run the current script.");
             return default(T);
         }
         return currentType;
     }
+
 }
