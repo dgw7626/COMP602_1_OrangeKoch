@@ -40,7 +40,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
             //get the weapon controller class form parent object.
             Weapon_Controller controller = parentTransform.parent.GetComponent<Weapon_Controller>();
             //if the controller is not null and multiplayer is false.
-            if (controller != null && !controller.isMultiplayer)
+            if (controller != null && !Game_RuntimeData.isMultiplayer)
             {
                 // get the projectile manager class and controller class.
                 _projectileManager = parentTransform.parent.GetComponent<Weapon_ProjectileManager>();
@@ -101,7 +101,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     HitPlayer(hit);
                 }
                 //check if the controller is not null and is multiplayer is false.
-                if (_projectController != null && !_projectController.isMultiplayer)
+                if (_projectController != null && !Game_RuntimeData.isMultiplayer)
                 {
                     //exectue the mutliplayer bullet trace vfx.
                     RenderGunTrace(hit.point, origin.position);
@@ -201,6 +201,11 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// <param name="hit"></param>
     private void HitPlayer(RaycastHit hit)
     {
+        if (!Game_RuntimeData.isMultiplayer)
+        {
+            return;
+        }
+
         PhotonView pv = hit.transform.GetComponentInParent<Player_PlayerController>().photonView;
         if (pv == null)
         {

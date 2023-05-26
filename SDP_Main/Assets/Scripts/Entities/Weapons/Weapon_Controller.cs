@@ -2,23 +2,21 @@ using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(Weapon_ProjectileManager))]
-[RequireComponent(typeof(PhotonView))]
 public class Weapon_Controller : MonoBehaviour
 {
     public PhotonView photonView { get; private set; }
     private Weapon_ProjectileManager _weaponProjectileMananger;
-    [SerializeField]
-    internal bool isMultiplayer = false;
     void Awake()
     {
         //get the photon component to call the rpc method.
-        photonView = GetComponent<PhotonView>();
+        if(Game_RuntimeData.isMultiplayer)
+            photonView = GetComponent<PhotonView>();
         _weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
     void Start()
     {
         // if its multiplayer instantiate bullet object instances otherwise will be instantiated without photon.
-        if (isMultiplayer)
+        if (Game_RuntimeData.isMultiplayer)
         {
             _weaponProjectileMananger.InitBullets_P();
         }
@@ -30,9 +28,10 @@ public class Weapon_Controller : MonoBehaviour
     void Update()
     {
         //if its multiplayer get the camera transform and parent to the child object otherwise it will link to local player object child.
-        if (!isMultiplayer)
+        if (!Game_RuntimeData.isMultiplayer)
         {
             _weaponProjectileMananger.UpdateChildTransform();
+            return;
         }
 
        if (!photonView.IsMine)
