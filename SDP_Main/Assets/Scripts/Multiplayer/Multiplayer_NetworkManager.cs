@@ -234,7 +234,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         Debug.Log(PhotonNetwork.NickName+" has started a Game!");
-        PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Default);
+        PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Uknown);
         PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 }
