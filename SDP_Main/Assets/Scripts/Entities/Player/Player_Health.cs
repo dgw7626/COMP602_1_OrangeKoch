@@ -15,8 +15,6 @@ public class Player_Health : MonoBehaviour, IDamageable
 
     public Vector3 respawnPosition;
     public HealthBar healthBar;
-
-    private bool hasBegun = false;
     private IEnumerator coroutine;
 
     /// <summary>
@@ -43,14 +41,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// </summary>
     void Update()
     {
-        // Simulate damage on key press
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            s_DamageInfo damageInfo = new s_DamageInfo();
-            damageInfo.dmgValue = 10f;
-            TakeDamage(damageInfo);
-        }
-
         // Check if player falls below a certain height and cause damage
         if (transform.position.y < -20)
         {
@@ -65,8 +55,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// </summary>
     public void Begin(Player_MultiplayerEntity entity)
     {
-        // Change status of hasBegun
-        hasBegun = true;
 
         if (entity.playerController.photonView.IsMine)
         {
