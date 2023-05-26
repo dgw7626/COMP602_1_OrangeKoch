@@ -59,13 +59,14 @@ public class Player_Health : MonoBehaviour, IDamageable
         if(currentHealth < 0) 
         {
             s_DeathInfo deathInfo = new s_DeathInfo();
-            deathInfo.killerTeam = damageInfo.dmgRecievedTeam;
-            deathInfo.diedTeam = damageInfo.dmgDealerTeam;
+            deathInfo.killerTeam = damageInfo.dmgDealerTeam;
+            deathInfo.diedTeam = damageInfo.dmgRecievedTeam;
             deathInfo.killerId = damageInfo.dmgDealerId;
             deathInfo.diedId = damageInfo.dmgRecievedId;
 
+            string json = JsonUtility.ToJson(deathInfo);
             gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
-                nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, JsonUtility.ToJson(deathInfo));
+                nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, json);
 
             currentHealth = maxHealth;
         }

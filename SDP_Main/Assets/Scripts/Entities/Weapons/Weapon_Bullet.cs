@@ -16,12 +16,13 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal int _currentIndex;
     internal Weapon_ProjectileManager _projectileManager;
     internal Weapon_Controller _projectController;
+    public Player_MultiplayerEntity m_MultiplayerEntity;
     private void Start()
     {
         //get the photon view instance.
-        PhotonView photonView = transform.GetComponent<PhotonView>();
+        PhotonView vfxPhotonView = transform.GetComponent<PhotonView>();
         //check if the photon view is not null and is current multiplayer.
-        if (photonView != null && photonView.IsMine)
+        if (vfxPhotonView != null && vfxPhotonView.IsMine)
         {
             //get the current index of the transform
             _currentIndex = GetCurrentBuildIndex(transform.name);
@@ -211,10 +212,10 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         s_DamageInfo dmg = new s_DamageInfo();
         dmg.bodyPart = e_BodyPart.NONE;
         dmg.dmgValue = 10f;
-        dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+        dmg.dmgDealerId = m_MultiplayerEntity.playerController.photonView.Owner.ActorNumber; ;
         dmg.dmgRecievedId = pv.Owner.ActorNumber;
-        dmg.dmgRecievedTeam = hit.transform.GetComponent<Player_MultiplayerEntity>().teamNumber;
-        dmg.dmgDealerTeam = Game_RuntimeData.thisMachinesMultiplayerEntity.teamNumber;
+        dmg.dmgRecievedTeam = hit.transform.GetComponentInParent<Player_MultiplayerEntity>().teamNumber;
+        dmg.dmgDealerTeam = m_MultiplayerEntity.teamNumber;
         pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
     }
 
