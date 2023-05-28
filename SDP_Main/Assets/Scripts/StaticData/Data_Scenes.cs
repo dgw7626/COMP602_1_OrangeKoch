@@ -6,6 +6,6 @@ public static class Data_Scenes
 {
     public const string GameMap_Prefix = "GameMap_";
     public const string Multiplayer_GameMap_Default = "GameMap_default";
-    public const string Multiplayer_GameMap_Uknown = "GameMap_unknown";
+    public const string Multiplayer_GameMap_Unknown = "GameMap_unknown";
 
 }
