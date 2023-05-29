@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletIndex: 0
+  weaponDamage: 0
 --- !u!82 &6915469808226662047
 AudioSource:
   m_ObjectHideFlags: 0

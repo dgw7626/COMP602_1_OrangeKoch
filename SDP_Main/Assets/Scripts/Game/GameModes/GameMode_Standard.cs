@@ -14,9 +14,9 @@ public class GameMode_Standard : IgameMode
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
     public s_GameScore teamScores;
+
     public void InitGame()
     {
-
         teamScores = new s_GameScore();
         teamScores.killsPerTeam = new List<int>();
 
@@ -39,7 +39,7 @@ public class GameMode_Standard : IgameMode
         // Initialize Countdown
         if (PhotonNetwork.IsMasterClient)
         {
-            GameMode_Manager.gameTime =  MAX_GAME_TIME_SECONDS;
+            GameMode_Manager.gameTime = MAX_GAME_TIME_SECONDS;
         }
 
         StartGame();
@@ -52,15 +52,18 @@ public class GameMode_Standard : IgameMode
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
         {
             p.playerController.IsInputLocked = false;
-      
-            if(p.playerController.photonView.IsMine)
+
+            if (p.playerController.photonView.IsMine)
             {
                 Game_RuntimeData.thisMachinesPlayersPhotonView = p.playerController.photonView;
-                Debug.Log("At START GAME: ThisMachines PhotonView is mine, and my number is: " + PhotonNetwork.LocalPlayer.ActorNumber + 
-                    " " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber);
+                Debug.Log(
+                    "At START GAME: ThisMachines PhotonView is mine, and my number is: "
+                        + PhotonNetwork.LocalPlayer.ActorNumber
+                        + " "
+                        + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber
+                );
             }
         }
-
     }
 
     public void OnStopGame()
@@ -72,11 +75,15 @@ public class GameMode_Standard : IgameMode
         {
             p.playerController.IsInputLocked = true;
         }
-        if(Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
+        if (Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
         {
-            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnGameEnded), RpcTarget.All, JsonUtility.ToJson(teamScores));
+            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
+                nameof(Player_MultiplayerEntity.OnGameEnded),
+                RpcTarget.All,
+                JsonUtility.ToJson(teamScores)
+            );
         }
-        
+
         //TODO: Cleanup
 
         //TODO: Score Board
@@ -86,51 +93,63 @@ public class GameMode_Standard : IgameMode
     public IEnumerator OnOneSecondCountdown()
     {
         Debug.Log("Begin! ");
-        while(GameMode_Manager.gameIsRunning)
+        while (GameMode_Manager.gameIsRunning)
         {
-            if(PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
             {
                 GameMode_Manager.SetSynchronousTimerValue();
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
+                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
+                    "GetSynchronousTimerValue",
+                    RpcTarget.Others,
+                    GameMode_Manager.gameTime
+                );
 
                 // If the timer expires, tell the other players what the score is.
-                if(GameMode_Manager.gameTime < 1)
+                if (GameMode_Manager.gameTime < 1)
                 {
                     Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
-                        nameof(Player_MultiplayerEntity.OnGameEnded), 
-                        RpcTarget.Others, 
-                        JsonUtility.ToJson(Game_RuntimeData.gameScore));
-                    
+                        nameof(Player_MultiplayerEntity.OnGameEnded),
+                        RpcTarget.Others,
+                        JsonUtility.ToJson(Game_RuntimeData.gameScore)
+                    );
+
                     GameMode_Manager.gameIsRunning = false;
                 }
             }
 
             //Debug.Log(GameMode_Manager.gameTime);
             yield return new WaitForSeconds(1);
-
         }
 
         OnStopGame();
     }
 
-    public void OnPerFrameUpdate()
-    {
-    }
+    public void OnPerFrameUpdate() { }
+
     public void OnScoreEvent(int score, int teamNumber)
     {
         if (teamNumber > NUM_TEAMS || teamNumber < 0)
-            Debug.LogError("ERROR: Team " + teamNumber + " does not exist! Cannot assign points to team");
+            Debug.LogError(
+                "ERROR: Team " + teamNumber + " does not exist! Cannot assign points to team"
+            );
 
         teamScores.killsPerTeam[teamNumber] += score;
     }
+
     public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
         //TODO: Find player and respwan/destroy them here
-        foreach(KeyValuePair<int, Player_MultiplayerEntity> value in Game_RuntimeData.activePlayers)
+        foreach (
+            KeyValuePair<int, Player_MultiplayerEntity> value in Game_RuntimeData.activePlayers
+        )
         {
-            if(value.Key == deathInfoStruct.diedId) 
+            if (value.Key == deathInfoStruct.diedId)
             {
-                value.Value.gameObject.transform.position = new Vector3(0, 0, 0);
+                //TODO: detroy the gameobject
+                GameObject.Destroy(value.Value.gameObject);
+                //TODO: create a new one
+                  Multiplayer_PlayerManager.CreateController();
+                // value.Value.gameObject.transform.position = new Vector3(0, 10, 0);
                 return;
             }
         }
@@ -157,10 +176,11 @@ public class GameMode_Standard : IgameMode
         {
             if (e.GetComponent<PhotonView>().Owner.ActorNumber == id)
             {
-                Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
+                Game_RuntimeData.RegisterNewMultiplayerPlayer(
+                    e.GetComponent<PhotonView>().Owner.ActorNumber,
+                    e
+                );
             }
         }
     }
-
-
 }
