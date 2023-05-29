@@ -14,6 +14,9 @@ public class GameMode_Standard : IgameMode
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
     public s_GameScore teamScores;
+    // Kevin add: if make any problem, please delete that.
+    private Player_Health playerHealth;
+
 
     public void InitGame()
     {
@@ -145,11 +148,8 @@ public class GameMode_Standard : IgameMode
         {
             if (value.Key == deathInfoStruct.diedId)
             {
-                //TODO: detroy the gameobject
-                GameObject.Destroy(value.Value.gameObject);
-                //TODO: create a new one
-                  Multiplayer_PlayerManager.CreateController();
-                // value.Value.gameObject.transform.position = new Vector3(0, 10, 0);
+
+                OnPlayerRespawn(value);
                 return;
             }
         }
@@ -182,5 +182,23 @@ public class GameMode_Standard : IgameMode
                 );
             }
         }
+    }
+
+    public void OnPlayerRespawn(KeyValuePair<int, Player_MultiplayerEntity> value)
+    {
+        //TODO: detroy the gameobject
+        // GameObject.Destroy(value.Value.gameObject);
+        //TODO: create a new one
+        //   Multiplayer_PlayerManager.CreateController();
+        Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
+        //update health
+        playerHealth.currentHealth = playerHealth.maxHealth;
+        playerHealth.currentUIHealth = playerHealth.maxHealth;
+        Debug.Log("Current UI Health: " + playerHealth.currentUIHealth);
+        Debug.Log("Max Health: " + playerHealth.maxHealth);
+
+        playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
+        //update the respawn point
+        value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
     }
 }

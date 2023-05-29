@@ -43,7 +43,8 @@ public class Player_Health : MonoBehaviour, IDamageable
     {
 
         // Check if player falls below a certain height and cause damage
-        if (transform.position.y >= 2)
+        // if (transform.position.y >=  2)
+        if (transform.position.y <=  10)
         {
             s_DamageInfo damageInfo = new s_DamageInfo();
             damageInfo.dmgValue = 10f;
