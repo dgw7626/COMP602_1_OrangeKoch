@@ -10,6 +10,7 @@
  ************************************************
 
  */
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ public class Player_UIManager : MonoBehaviour
     public TextMeshProUGUI proximityMuteText;
     public TextMeshProUGUI pushToTalkText;
     public TextMeshProUGUI timerText;
+    private Color orangeColor = new Color(1f, 0.65f, 0f); //Create orange as it does not exist by default
 
     /// <summary>
     /// Functions to run once, when object is instantiated
@@ -92,8 +94,68 @@ public class Player_UIManager : MonoBehaviour
             middleStr += "0";
 
         timerText.text = "" + minutes + middleStr + seconds;
+        TimerColorDecider(seconds);
     }
 
+    /// <summary>
+    /// Decides the countdown timer based on value
+    /// </summary>
+    private void TimerColorDecider(int seconds)
+    {
+        int redAlertThreshold = 5;
+        int orangeAlertThreshold = 15;
+        int yellowAlertThreshold = 30;
+
+        if(seconds > yellowAlertThreshold)
+        {
+            return;
+        }
+        else if (yellowAlertThreshold >= seconds && seconds > orangeAlertThreshold)
+        {
+            SetTimerColor(Color.yellow);
+        }
+        else if (orangeAlertThreshold >= seconds && seconds > redAlertThreshold)
+        {
+            SetTimerColor(orangeColor);
+        }
+        else if (redAlertThreshold >= seconds)
+        {
+            SetTimerColor(Color.red);
+
+            //Call coroutine to display flash
+            RedAlertCountdownTimerFlash(seconds);
+        }
+        else
+        {
+            SetTimerColor(Color.white);
+        }
+    }
+
+    /// <summary>
+    /// Method to Set the colour of the Countdown timer
+    /// </summary>
+    private void SetTimerColor(Color color)
+    {
+        if(color != null)
+        {
+            timerText.color = color;
+        }
+    }
+
+    /// <summary>
+    /// Coroutine to flash during RedAlert countdown timer final seconds
+    /// </summary>
+    public IEnumerator RedAlertCountdownTimerFlash(int seconds)
+    {
+        
+        while (seconds > 0)
+        {
+            yield return new WaitForSeconds(0.5f);
+            SetTimerColor(Color.white);
+            yield return new WaitForSeconds(0.5f);
+        }
+        
+    }
     /// <summary>
     /// Method to Quit the game back to Menu.
     /// </summary>
