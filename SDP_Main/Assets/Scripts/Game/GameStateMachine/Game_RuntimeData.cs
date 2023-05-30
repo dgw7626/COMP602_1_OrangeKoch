@@ -115,10 +115,11 @@ public class Game_RuntimeData
     /// </summary>
     public static void CleanUp_Multiplayer_Data()
     {
-        Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
-        PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
-        PhotonNetwork.Disconnect();
-
+        if (Game_RuntimeData.isMultiplayer) { 
+            Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
+            PhotonNetwork.Destroy(PhotonNetwork.GetPhotonView(999));
+            PhotonNetwork.Disconnect();
+        }
         gameMode_Manager = null;
         instantiatedPlayers = new List<Player_MultiplayerEntity>();
         teams = new List<List<Player_MultiplayerEntity>>();

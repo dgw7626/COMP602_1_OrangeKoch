@@ -22,7 +22,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
 
     [SerializeField]
     public AmmunitionUI _ammunitionUI;
-    public Weapon_Controller _weaponController;
+    private Weapon_Controller _weaponController;
     internal Coroutine _currentCoroutine;
     private Vector3 _fw, _up;
     private Transform _camera;
@@ -36,7 +36,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     public List<Transform> shellObjects;
     [HideInInspector]
     public List<Transform> hitObjects;
-    public Transform firePos;
+    internal Transform _firePos;
 
     public PhotonView photonView;
     public AudioMixerGroup masterMixer;
@@ -62,15 +62,20 @@ public class Weapon_ProjectileManager : MonoBehaviour
         _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         _weaponController = transform.GetComponent<Weapon_Controller>();
         _ammunitionUI.gameObject.SetActive(false);
+
         //if the transform object is current multiplayer.
-        if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            _ammunitionUI.gameObject.SetActive(true);
+        } else if(!Game_RuntimeData.isMultiplayer)
         {
             _ammunitionUI.gameObject.SetActive(true);
         }
+
         photonView = GetComponent<PhotonView>();
         _weaponAmmo = _weaponInfo.BulletCounts;
         _weaponClip = _weaponInfo.ClipCounts;
-        firePos = transform.GetChild(0).GetChild(0).transform;
+        _firePos = transform.GetChild(0).GetChild(0).transform;
         GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
             this._ammunitionUI,
             nameof(this._ammunitionUI)
@@ -216,8 +221,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         }
         bullets = transform.Find("Bullets");
         GuardClause.InspectGuardClauseNullRef<Transform>(bullets, nameof(bullets));
-        //need to change this firepos to public transform type.
-       // Transform firePos = transform.GetChild(0).GetChild(0).transform;
+        Transform firePos = transform.GetChild(0).GetChild(0).transform;
         GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
         //iterate through all weapon bullet counts.
         for (int i = 0; i < _weaponInfo.BulletCounts; i++)
@@ -304,21 +308,12 @@ public class Weapon_ProjectileManager : MonoBehaviour
         {
             if (!bullet.gameObject.activeSelf)
             {
-                bullet.Fire(firePos);
+                bullet.Fire(_firePos);
                 bullet.gameObject.SetActive(true);
             }
             yield return new WaitForSeconds(delaySecond);
         }
         StopCoroutine(_currentCoroutine);
-    }
-
-    // creating a new method for TDD
-    void GetShoot_1()
-    {
-        if (_weaponAmmo >= 1)
-        {
-            _weaponAmmo--;
-        }
     }
 
     /// <summary>
@@ -328,8 +323,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     [PunRPC]
     public void GetShoot()
     {
-
-        //GetShoot_1();
         if (_weaponAmmo >= 1)
         {
             _weaponAmmo--;
@@ -339,7 +332,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             {
                 if (!bullet.transform.GetChild(0).gameObject.activeSelf)
                 {
-                    bullet.GetComponent<Weapon_Bullet>().Fire(firePos);
+                    bullet.GetComponent<Weapon_Bullet>().Fire(_firePos);
                     return;
                 }
             }
@@ -384,7 +377,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             case Weapon_Firetype.Semi:
             {
                     //get rpc shoot if the mutliplayer is enabled other wise it calls local method.
-                    if (_weaponController.isMultiplayer)
+                    if (Game_RuntimeData.isMultiplayer)
                     {
                         photonView.RPC(nameof(GetShoot), RpcTarget.AllBuffered);
                         break;

@@ -1442,7 +1442,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5ad7cc028aae346827dbe3638cb6e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  masterMixer: {fileID: 24300002, guid: 03e88275a01589244802f3a80ca9c600, type: 2}
   _weaponInfo: {fileID: 11400000, guid: 4673bca3687865b4f9c38f8d92326c0f, type: 2}
   _localBullets: []
   _weaponAmmo: 0
@@ -1467,7 +1466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10870dd6f483d14e80d36f834fd524e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMultiplayer: 1
 --- !u!114 &6575372281330074508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2156,7 +2154,6 @@ MonoBehaviour:
   MaxSpeedForFallDamage: 30
   FallDamageAtMinSpeed: 10
   FallDamageAtMaxSpeed: 50
-  IsMultiplayer: 0
   IsInputLocked: 0
   photonView: {fileID: 0}
   soundManager: {fileID: 0}
