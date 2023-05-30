@@ -24,6 +24,10 @@ public class Player_UIManager : MonoBehaviour
     public TextMeshProUGUI pushToTalkText;
     public TextMeshProUGUI timerText;
     private Color orangeColor = new Color(1f, 0.65f, 0f); //Create orange as it does not exist by default
+    private int redAlertThreshold = 5; // Used for CountdownTimer
+    private int orangeAlertThreshold = 15; // Used for CountdownTimer
+    private int yellowAlertThreshold = 30; // Used for CountdownTimer
+    private bool isRedAlert = false;
 
     /// <summary>
     /// Functions to run once, when object is instantiated
@@ -85,6 +89,7 @@ public class Player_UIManager : MonoBehaviour
     private void UpdateTimer()
     {
         int seconds = GameMode_Manager.gameTime;
+        TimerColorDecider(seconds);
 
         int minutes = seconds / 60;
         seconds = seconds % 60;
@@ -94,7 +99,6 @@ public class Player_UIManager : MonoBehaviour
             middleStr += "0";
 
         timerText.text = "" + minutes + middleStr + seconds;
-        TimerColorDecider(seconds);
     }
 
     /// <summary>
@@ -102,12 +106,16 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void TimerColorDecider(int seconds)
     {
-        int redAlertThreshold = 5;
-        int orangeAlertThreshold = 15;
-        int yellowAlertThreshold = 30;
+        if (isRedAlert || seconds <= 0)
+        {
+            if (seconds <= 0)
+                isRedAlert = false;
+            return;
+        }
 
         if(seconds > yellowAlertThreshold)
         {
+            SetTimerColor(Color.green);
             return;
         }
         else if (yellowAlertThreshold >= seconds && seconds > orangeAlertThreshold)
@@ -118,12 +126,14 @@ public class Player_UIManager : MonoBehaviour
         {
             SetTimerColor(orangeColor);
         }
-        else if (redAlertThreshold >= seconds)
+        else if (redAlertThreshold >= seconds && seconds > 0)
         {
-            SetTimerColor(Color.red);
-
-            //Call coroutine to display flash
-            RedAlertCountdownTimerFlash(seconds);
+            //SetTimerColor(Color.red);
+            //Call coroutine to display flash)
+            if(!isRedAlert)
+            {
+                StartCoroutine(RedAlertCountdownTimerFlash());
+            }
         }
         else
         {
@@ -145,11 +155,12 @@ public class Player_UIManager : MonoBehaviour
     /// <summary>
     /// Coroutine to flash during RedAlert countdown timer final seconds
     /// </summary>
-    public IEnumerator RedAlertCountdownTimerFlash(int seconds)
+    public IEnumerator RedAlertCountdownTimerFlash()
     {
-        
-        while (seconds > 0)
+        isRedAlert = true;
+        while (isRedAlert)
         {
+            SetTimerColor(Color.red);
             yield return new WaitForSeconds(0.5f);
             SetTimerColor(Color.white);
             yield return new WaitForSeconds(0.5f);

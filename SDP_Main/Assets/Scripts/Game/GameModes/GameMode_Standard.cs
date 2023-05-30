@@ -9,7 +9,7 @@ using Newtonsoft.Json.Schema;
 
 public class GameMode_Standard : IgameMode
 {
-    public const int MAX_GAME_TIME_SECONDS = 120;
+    public const int MAX_GAME_TIME_SECONDS = 10;
     private const int NUM_TEAMS = 2;
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
