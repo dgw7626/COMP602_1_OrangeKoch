@@ -9,7 +9,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 {
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
-    public static int gameTime;
+    public static int gameTime = -1;
     public static bool gameIsRunning = false;  
 
     /**
