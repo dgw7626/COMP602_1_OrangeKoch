@@ -86,6 +86,9 @@ public class Player_UIManager : MonoBehaviour
         UpdateTimer();
     }
 
+    /// <summary>
+    /// Method that updates the gametimer that is displayed to players.
+    /// </summary>
     private void UpdateTimer()
     {
         int seconds = GameMode_Manager.gameTime;
@@ -106,6 +109,7 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void TimerColorDecider(int seconds)
     {
+        // Prevents change on color decider if game has just started
         if (isRedAlert || seconds <= 0)
         {
             if (seconds <= 0)
@@ -128,10 +132,9 @@ public class Player_UIManager : MonoBehaviour
         }
         else if (redAlertThreshold >= seconds && seconds > 0)
         {
-            //SetTimerColor(Color.red);
-            //Call coroutine to display flash)
             if(!isRedAlert)
             {
+                //Call coroutine to display flash)
                 StartCoroutine(RedAlertCountdownTimerFlash());
             }
         }
@@ -157,6 +160,7 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     public IEnumerator RedAlertCountdownTimerFlash()
     {
+        //Set red alert to true so the Coroutine is only called once
         isRedAlert = true;
         while (isRedAlert)
         {
@@ -167,6 +171,7 @@ public class Player_UIManager : MonoBehaviour
         }
         
     }
+
     /// <summary>
     /// Method to Quit the game back to Menu.
     /// </summary>
