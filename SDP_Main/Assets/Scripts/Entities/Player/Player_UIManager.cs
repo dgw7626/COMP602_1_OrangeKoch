@@ -38,7 +38,7 @@ public class Player_UIManager : MonoBehaviour
         if (!Game_RuntimeData.isMultiplayer)
             return;
 
-        
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -48,6 +48,7 @@ public class Player_UIManager : MonoBehaviour
         //Load if the instance belongs to me
         if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
+            timerText.text = "";
             timerText.enabled = true;
             PreLoadVoiceUI();
         }
@@ -92,6 +93,10 @@ public class Player_UIManager : MonoBehaviour
     private void UpdateTimer()
     {
         int seconds = GameMode_Manager.gameTime;
+        if (seconds < 0)
+        {
+            return;
+        }
         TimerColorDecider(seconds);
 
         int minutes = seconds / 60;
@@ -117,7 +122,7 @@ public class Player_UIManager : MonoBehaviour
             return;
         }
 
-        if(seconds > yellowAlertThreshold)
+        if (seconds > yellowAlertThreshold)
         {
             SetTimerColor(Color.green);
             return;
@@ -132,7 +137,7 @@ public class Player_UIManager : MonoBehaviour
         }
         else if (redAlertThreshold >= seconds && seconds > 0)
         {
-            if(!isRedAlert)
+            if (!isRedAlert)
             {
                 //Call coroutine to display flash)
                 StartCoroutine(RedAlertCountdownTimerFlash());
@@ -149,7 +154,7 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void SetTimerColor(Color color)
     {
-        if(color != null)
+        if (color != null)
         {
             timerText.color = color;
         }
@@ -169,7 +174,7 @@ public class Player_UIManager : MonoBehaviour
             SetTimerColor(Color.white);
             yield return new WaitForSeconds(0.5f);
         }
-        
+
     }
 
     /// <summary>
@@ -181,7 +186,8 @@ public class Player_UIManager : MonoBehaviour
         if (Game_RuntimeData.isMultiplayer)
         {
             Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
-        } else
+        }
+        else
         {
             Game_RuntimeData.gameMode_Manager.QuitSinglePlayer();
         }
