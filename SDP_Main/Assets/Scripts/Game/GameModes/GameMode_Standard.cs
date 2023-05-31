@@ -148,7 +148,6 @@ public class GameMode_Standard : IgameMode
         {
             if (value.Key == deathInfoStruct.diedId)
             {
-
                 OnPlayerRespawn(value);
                 return;
             }
