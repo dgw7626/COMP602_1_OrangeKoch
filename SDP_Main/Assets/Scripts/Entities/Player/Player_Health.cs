@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,11 +19,13 @@ public class Player_Health : MonoBehaviour, IDamageable
     public HealthBar healthBar;
     private IEnumerator coroutine;
 
+    public bool IsDead;
     /// <summary>
     /// Initializes the player's health.
     /// </summary>
     void Start()
     {
+        IsDead = false;
         // Check if not in multiplayer mode
         if (!Game_RuntimeData.isMultiplayer)
         {
@@ -104,7 +107,7 @@ public class Player_Health : MonoBehaviour, IDamageable
         {
             SoloRespawn();
         }
-        else
+        else if(!IsDead)
         {
             PhotonView pv = null;
             foreach(KeyValuePair<int, Player_MultiplayerEntity> kvp in Game_RuntimeData.activePlayers)
@@ -136,6 +139,7 @@ public class Player_Health : MonoBehaviour, IDamageable
             gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
             nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, json);
         }
+        IsDead = true;
     }
 
     /// <summary>
@@ -181,5 +185,11 @@ public class Player_Health : MonoBehaviour, IDamageable
 
             yield return new WaitForSeconds(UI_HealthTime);
         }
+    }
+
+    public void Respawn()
+    {
+        currentHealth = maxHealth;
+        IsDead = false;
     }
 }

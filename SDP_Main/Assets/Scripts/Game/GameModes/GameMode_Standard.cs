@@ -186,6 +186,8 @@ public class GameMode_Standard : IgameMode
                 PhotonView pv = keyValuePair.Value.playerController.photonView;
                 int myTeam = keyValuePair.Value.teamNumber;
                 keyValuePair.Value.gameObject.transform.position = new Vector3(0, 10, 0);
+                keyValuePair.Value.playerHealth.Respawn(); ;
+
                 return;
             }
         }
