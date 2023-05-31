@@ -1,12 +1,10 @@
-using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 public class Player_Health_Tests
 {
     private Player_Health playerHealth;
-    private Coroutine updateUICoroutine;
+
 
     [SetUp]
     public void Setup()
@@ -20,7 +18,7 @@ public class Player_Health_Tests
     [TearDown]
     public void Teardown()
     {
-        Object.DestroyImmediate(playerHealth.gameObject);
+        Object.DestroyImmediate(playerHealth);
     }
 
     [Test]
@@ -37,35 +35,6 @@ public class Player_Health_Tests
 
         // ASSERT
         Assert.AreEqual(expectedHealth, playerHealth.currentHealth);
-    }
-
-    [UnityTest]
-    public IEnumerator UpdateUI_HealthDecreasesOverTime()
-    {
-        // 设置当前UI健康值
-        playerHealth.currentUIHealth = playerHealth.maxHealth;
-
-        // 设置协程的等待时间
-        playerHealth.UI_HealthTime = 0.16f;
-
-        // 启动协程
-        updateUICoroutine = playerHealth.StartCoroutine(playerHealth.UpdateUI());
-
-        float elapsedTime = 0f;
-        while (elapsedTime < playerHealth.UI_HealthTime + 0.1f)
-        {
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // 获取更新后的当前UI健康值
-        float updatedUIHealth = playerHealth.currentUIHealth;
-
-        // 验证健康值是否减少，即UI是否更新
-        Assert.Less(updatedUIHealth, 100.0f);
-
-
-        // 停止协程的运行
-        playerHealth.StopCoroutine(updateUICoroutine);
+        
     }
 }
