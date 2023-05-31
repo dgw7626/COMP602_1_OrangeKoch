@@ -59,6 +59,7 @@ MonoBehaviour:
   - ShowBulletTrace_RPC
   - RenderGunTrace
   - PlayFootStep
+  - OnRespawn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

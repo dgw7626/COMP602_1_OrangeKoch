@@ -190,36 +190,35 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         // GameObject.Destroy(value.Value.gameObject);
         //TODO: create a new one
         //   Multiplayer_PlayerManager.CreateController();
-        Player_Health playerHealth = value.Value.gameObject.GetComponent<Player_Health>();
-        Weapon_ProjectileManager weapon_ProjectileManager = value.Value.gameObject.GetComponent<Weapon_ProjectileManager>();
+        Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
+        Weapon_ProjectileManager weapon_ProjectileManager = value.Value.gameObject.GetComponentInChildren<Weapon_ProjectileManager>();
         //update health
         playerHealth.currentHealth = playerHealth.maxHealth;
         playerHealth.currentUIHealth = playerHealth.maxHealth;
         playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
         //Update the ammunition
         
-        // weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
-        // weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
+        weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
+        weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
 
-        // weapon_ProjectileManager._ammunitionUI.SetAmmunition(
-        //     weapon_ProjectileManager._weaponAmmo,
-        //     weapon_ProjectileManager._weaponClip
-        // );
+        weapon_ProjectileManager._ammunitionUI.SetAmmunition(
+             weapon_ProjectileManager._weaponAmmo,
+             weapon_ProjectileManager._weaponClip
+         );
         // update the respawn point
         value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
         //set the invincible time
-        playerHealth.isInvincible = true;
-        StartCoroutine(InvincibleTime(value));
-    
-    }
-    
-    /// <summary>
-    /// Updates the UI representing the player's health over time.
-    /// </summary>
-    public IEnumerator InvincibleTime(KeyValuePair<int, Player_MultiplayerEntity> value)
-    {
-        yield return new WaitForSeconds(3.0f);
-        Player_Health player_Health = value.Value.GetComponent<Player_Health>();
-        player_Health.isInvincible = false;
+        Player targetPlayer = null;
+        foreach(Player p in PhotonNetwork.PlayerList)
+        {
+            if(p.ActorNumber == value.Key)
+            {
+                targetPlayer = p;
+                break;
+            }
+        }
+
+        if (targetPlayer != null)
+            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnRespawn), targetPlayer);
     }
 }

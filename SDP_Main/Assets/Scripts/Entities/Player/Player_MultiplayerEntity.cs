@@ -169,4 +169,16 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         //update the respawn point
         value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
     }
+
+    [PunRPC]
+    public void OnRespawn()
+    {
+        playerHealth.isInvincible = true;
+        Invoke(nameof(TurnOffInvincibility), 10.0f);
+    }
+
+    private void TurnOffInvincibility()
+    {
+        playerHealth.isInvincible = false;
+    }
 }

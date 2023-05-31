@@ -85,6 +85,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// </summary>
     public void TakeDamage(s_DamageInfo damageInfo)
     {
+        //If invincible deal no damage
         if(isInvincible)
         {
             return;
