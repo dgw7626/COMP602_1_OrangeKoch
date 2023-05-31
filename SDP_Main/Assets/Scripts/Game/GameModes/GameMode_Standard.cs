@@ -37,7 +37,7 @@ public class GameMode_Standard : IgameMode
         {
             numPlayers++;
             int team = 0;
-            if (Game_RuntimeData.instantiatedPlayers[i].photonView.Owner.ActorNumber % 2 != 0)
+            if (Game_RuntimeData.instantiatedPlayers[i].photonView.Owner.ActorNumber % 2 == 0)
                 team = 1;
 
             Game_RuntimeData.teams[team].Add(Game_RuntimeData.instantiatedPlayers[i]);

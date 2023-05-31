@@ -88,6 +88,9 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     {
         base.OnPlayerLeftRoom(otherPlayer);
         gameMode.OnPlayerLeftMatch(otherPlayer);
+
+        Debug.Log("Player" +  otherPlayer.ActorNumber + " left the room!");
+        Debug.Log("The master client is: " + PhotonNetwork.MasterClient.ActorNumber);
     }
     public static void SetSynchronousTimerValue()
     {

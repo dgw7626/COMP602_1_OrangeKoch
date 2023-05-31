@@ -79,7 +79,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
                 winTxt += " (MVP!)";
 
             tmp = Instantiate(textPrefab, m_NameCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + m_score.teamNumbersByPlayer[i] + ") " +  "Player" + (i+1) + winTxt);
+            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + (m_score.teamNumbersByPlayer[i] +1) + ") " +  "Player" + (i+1) + winTxt);
 
             tmp = Instantiate(textPrefab, m_KillCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerPlayer[i]);
@@ -101,10 +101,10 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             tmp.GetComponent<TextMeshProUGUI>().text = ("Team " + (i + 1) + winTxt);
 
             tmp = Instantiate(textPrefab, m_TeamKillCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("" + (m_score.killsPerTeam[i] + 1));
+            tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerTeam[i]);
 
             tmp = Instantiate(textPrefab, m_TeamDeathCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("" + (m_score.deathsPerTeam[i] + 1));
+            tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.deathsPerTeam[i]);
         }
     }
 

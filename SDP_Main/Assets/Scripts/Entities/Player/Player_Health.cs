@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -105,15 +106,35 @@ public class Player_Health : MonoBehaviour, IDamageable
         }
         else
         {
-          s_DeathInfo deathInfo = new s_DeathInfo();
-          deathInfo.killerTeam = damageInfo.dmgDealerTeam;
-          deathInfo.diedTeam = damageInfo.dmgRecievedTeam;
-          deathInfo.killerId = damageInfo.dmgDealerId;
-          deathInfo.diedId = damageInfo.dmgRecievedId;
+            PhotonView pv = null;
+            foreach(KeyValuePair<int, Player_MultiplayerEntity> kvp in Game_RuntimeData.activePlayers)
+            {
+                if(kvp.Key == damageInfo.dmgRecievedId)
+                {
+                    pv = kvp.Value.playerController.photonView;
+                    break;
+                }
+            }
+            if(pv == null)
+            {
+                Debug.LogError("NULL photon view found on player killed");
+            }
 
-          string json = JsonUtility.ToJson(deathInfo);
-          gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
-              nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, json);
+            if(PhotonNetwork.LocalPlayer.ActorNumber != pv.Owner.ActorNumber)
+            {
+                Debug.LogError("Trying to kill a clone!");
+                return;
+            }
+
+            s_DeathInfo deathInfo = new s_DeathInfo();
+            deathInfo.killerTeam = damageInfo.dmgDealerTeam;
+            deathInfo.diedTeam = damageInfo.dmgRecievedTeam;
+            deathInfo.killerId = damageInfo.dmgDealerId;
+            deathInfo.diedId = damageInfo.dmgRecievedId;
+
+            string json = JsonUtility.ToJson(deathInfo);
+            gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
+            nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, json);
         }
     }
 

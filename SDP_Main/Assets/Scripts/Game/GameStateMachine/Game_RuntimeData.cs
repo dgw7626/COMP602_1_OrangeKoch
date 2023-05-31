@@ -94,26 +94,6 @@ public class Game_RuntimeData
         Debug.Log("Registered new player: " + id);
     }
 
-    public static void DebugPrintMP_PlayerInfo()
-    {
-        Debug.Log("List of all instatiated players:");
-
-        foreach(Player_MultiplayerEntity ent in instantiatedPlayers)
-        {
-            Debug.Log(ent.gameObject.name);
-        }
-
-
-        Debug.Log("List of active players players:");
-
-        foreach(KeyValuePair<int, Player_MultiplayerEntity> ent in activePlayers)
-        {
-            Debug.Log("ID: " + ent.Value.GetComponent<PhotonView>().Owner.ActorNumber +
-                " Name: " + ent.Value.uniqueID);
-        }
-
-    }
-
 
     /// <summary>
     /// Cleanup and destroy objects when exiting Multiplayer Game
