@@ -12,21 +12,22 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal GameObject _muzzleFlash;
     internal GameObject _bullet;
     internal Coroutine _currentCoroutine;
-    public int BulletIndex;
+    public int _bulletIndex;
     internal int _currentIndex;
     internal Weapon_ProjectileManager _projectileManager;
     internal Weapon_Controller _projectController;
-    public float WeaponDamage;
+    public Player_MultiplayerEntity m_MultiplayerEntity;
+    public float weaponDamage;
     private void Start()
     {
         //get the photon view instance.
-        PhotonView photonView = transform.GetComponent<PhotonView>();
+        PhotonView vfxPhotonView = transform.GetComponent<PhotonView>();
         //check if the photon view is not null and is current multiplayer.
-        if (photonView != null && photonView.IsMine)
+        if (vfxPhotonView != null && vfxPhotonView.IsMine)
         {
             //get the current index of the transform
             _currentIndex = GetCurrentBuildIndex(transform.name);
-            if (BulletIndex == _currentIndex)
+            if (_bulletIndex == _currentIndex)
             {
                 // if the current index meets get the Weapon Projecile manager class and return it.
                 _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
@@ -81,14 +82,15 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// This method implementes the shooting for multiplayer and local player.
     /// </summary>
     /// <param name="origin"></param>
-    [PunRPC]
     public void Fire(Transform origin)
     {
+        if (Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+            return;
         //get the current transform position of the origin.
         transform.position = origin.position;
         //insntatiating the bullet vfx instances.
-        InstantiateGunVFX();
-        //raycasting the origin position 
+        transform.GetComponent <PhotonView>().RPC(nameof(InstantiateGunVFX), RpcTarget.All);
+        //raycasting the origin position
         //you need to chnange the origin position from here.
         if (Physics.Raycast(_projectileManager.transform.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
         {
@@ -109,11 +111,11 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
                     return;
                 }
-                //check if the photonnetwork is local. 
+                //check if the photonnetwork is local.
                 if (PhotonNetwork.LocalPlayer == transform.GetComponent<PhotonView>().Owner)
                 {
                     //exectue the mutliplayer bullet trace vfx.
-                    transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.AllBuffered, hit.point, origin.position);
+                    transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.All, hit.point, origin.position);
                     _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
                 }
                 return;
@@ -125,17 +127,18 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// Author:Sky
     /// This method intantiates bullet vfx game instances.
     /// </summary>
-    internal void InstantiateGunVFX()
+    [PunRPC]
+    public void InstantiateGunVFX()
     {
         //get all the object instances from the projectile manager class.
-        this._shell = _projectileManager.ShellObjects[_currentIndex].gameObject;
-        this._bulletTracer = _projectileManager.BulletTracerObjects[_currentIndex].gameObject;
-        this._muzzleFlash = _projectileManager.MuzzleFlashObjects[_currentIndex].gameObject;
-        this._hit = _projectileManager.HitObjects[_currentIndex].gameObject;
-        this._bullet = _projectileManager.BulletObjects[_currentIndex].gameObject;
+        this._shell = _projectileManager.shellObjects[_currentIndex].gameObject;
+        this._bulletTracer = _projectileManager.bulletTracerObjects[_currentIndex].gameObject;
+        this._muzzleFlash = _projectileManager.muzzleFlashObjects[_currentIndex].gameObject;
+        this._hit = _projectileManager.hitObjects[_currentIndex].gameObject;
+        this._bullet = _projectileManager.bulletObjects[_currentIndex].gameObject;
         //executing each vfx, shell is the rigidbody based vfx instance.
         this._shell.SetActive(true);
-        this._shell = _projectileManager.ShellObjects[BulletIndex].gameObject;
+        this._shell = _projectileManager.shellObjects[_bulletIndex].gameObject;
         this._shell.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this._shell.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         this._shell.transform.position = this.transform.parent.parent.GetChild(0).Find("BulletShellPos").position;
@@ -217,8 +220,10 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         s_DamageInfo dmg = new s_DamageInfo();
         dmg.bodyPart = e_BodyPart.NONE;
         dmg.dmgValue = 10f;
-        dmg.dmgDealerId = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+        dmg.dmgDealerId = m_MultiplayerEntity.playerController.photonView.Owner.ActorNumber; ;
         dmg.dmgRecievedId = pv.Owner.ActorNumber;
+        dmg.dmgRecievedTeam = hit.transform.GetComponentInParent<Player_MultiplayerEntity>().teamNumber;
+        dmg.dmgDealerTeam = m_MultiplayerEntity.teamNumber;
         pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
     }
 
