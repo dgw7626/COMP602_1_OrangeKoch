@@ -4,13 +4,13 @@ using Photon.Pun;
 [RequireComponent(typeof(Weapon_ProjectileManager))]
 public class Weapon_Controller : MonoBehaviour
 {
-    public PhotonView photonView { get; private set; }
+    public PhotonView PhotonView { get; private set; }
     private Weapon_ProjectileManager _weaponProjectileMananger;
     void Awake()
     {
         //get the photon component to call the rpc method.
         if(Game_RuntimeData.isMultiplayer)
-            photonView = GetComponent<PhotonView>();
+            PhotonView = GetComponent<PhotonView>();
         _weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
     void Start()
@@ -34,11 +34,11 @@ public class Weapon_Controller : MonoBehaviour
             return;
         }
 
-       if (!photonView.IsMine)
+       if (!PhotonView.IsMine)
        {
            return;
        }
-        photonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
+        PhotonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
     }
 
  

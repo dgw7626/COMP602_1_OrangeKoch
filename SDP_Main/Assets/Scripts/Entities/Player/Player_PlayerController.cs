@@ -249,7 +249,7 @@ public class Player_PlayerController : MonoBehaviour
                 _projectMananger.Reload();
                 return;
             }
-            _projectMananger.photonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
+            _projectMananger.PhotonView.RPC(nameof(_projectMananger.Reload), RpcTarget.All);
             //_projectMananger.Reload();
         }
         //checking Scoreboard

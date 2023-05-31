@@ -12,11 +12,11 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal GameObject _muzzleFlash;
     internal GameObject _bullet;
     internal Coroutine _currentCoroutine;
-    public int _bulletIndex;
+    public int BulletIndex;
     internal int _currentIndex;
     internal Weapon_ProjectileManager _projectileManager;
     internal Weapon_Controller _projectController;
-    public float weaponDamage;
+    public float WeaponDamage;
     private void Start()
     {
         //get the photon view instance.
@@ -26,7 +26,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         {
             //get the current index of the transform
             _currentIndex = GetCurrentBuildIndex(transform.name);
-            if (_bulletIndex == _currentIndex)
+            if (BulletIndex == _currentIndex)
             {
                 // if the current index meets get the Weapon Projecile manager class and return it.
                 _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
@@ -128,14 +128,14 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal void InstantiateGunVFX()
     {
         //get all the object instances from the projectile manager class.
-        this._shell = _projectileManager.shellObjects[_currentIndex].gameObject;
-        this._bulletTracer = _projectileManager.bulletTracerObjects[_currentIndex].gameObject;
-        this._muzzleFlash = _projectileManager.muzzleFlashObjects[_currentIndex].gameObject;
-        this._hit = _projectileManager.hitObjects[_currentIndex].gameObject;
-        this._bullet = _projectileManager.bulletObjects[_currentIndex].gameObject;
+        this._shell = _projectileManager.ShellObjects[_currentIndex].gameObject;
+        this._bulletTracer = _projectileManager.BulletTracerObjects[_currentIndex].gameObject;
+        this._muzzleFlash = _projectileManager.MuzzleFlashObjects[_currentIndex].gameObject;
+        this._hit = _projectileManager.HitObjects[_currentIndex].gameObject;
+        this._bullet = _projectileManager.BulletObjects[_currentIndex].gameObject;
         //executing each vfx, shell is the rigidbody based vfx instance.
         this._shell.SetActive(true);
-        this._shell = _projectileManager.shellObjects[_bulletIndex].gameObject;
+        this._shell = _projectileManager.ShellObjects[BulletIndex].gameObject;
         this._shell.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this._shell.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         this._shell.transform.position = this.transform.parent.parent.GetChild(0).Find("BulletShellPos").position;
