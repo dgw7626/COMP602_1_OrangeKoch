@@ -66,7 +66,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             if (m_score.killsPerPlayer[i] > winningTeamKillCount)
             {
                 mvpID = i;
-                mvpKills = m_score.killsPerTeam[i];
+                mvpKills = m_score.killsPerPlayer[i];
             }
         }
 
@@ -101,10 +101,10 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             tmp.GetComponent<TextMeshProUGUI>().text = ("Team " + (i + 1) + winTxt);
 
             tmp = Instantiate(textPrefab, m_TeamKillCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerTeam[i]);
+            tmp.GetComponent<TextMeshProUGUI>().text = ("" + (m_score.killsPerTeam[i] + 1));
 
             tmp = Instantiate(textPrefab, m_TeamDeathCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.deathsPerTeam[i]);
+            tmp.GetComponent<TextMeshProUGUI>().text = ("" + (m_score.deathsPerTeam[i] + 1));
         }
     }
 
