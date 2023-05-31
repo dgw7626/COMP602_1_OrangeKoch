@@ -10,6 +10,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     // Variables
     public float maxHealth = 100;
     public float currentHealth;
+    public bool isInvincible = false;
     public float currentUIHealth;
     public float UI_HealthTime = 0.16f;
 
@@ -84,6 +85,10 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// </summary>
     public void TakeDamage(s_DamageInfo damageInfo)
     {
+        if(isInvincible)
+        {
+            return;
+        }
         currentHealth -= damageInfo.dmgValue;
 
         // Check if health reaches zero or below and trigger death
