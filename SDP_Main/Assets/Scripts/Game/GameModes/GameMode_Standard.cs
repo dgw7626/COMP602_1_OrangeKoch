@@ -14,9 +14,10 @@ public class GameMode_Standard : IgameMode
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
     public s_GameScore teamScores;
+
     // Kevin add: if make any problem, please delete that.
     private Player_Health playerHealth;
-
+    private Weapon_ProjectileManager weapon_ProjectileManager;
 
     public void InitGame()
     {
@@ -190,13 +191,19 @@ public class GameMode_Standard : IgameMode
         //TODO: create a new one
         //   Multiplayer_PlayerManager.CreateController();
         Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
+        Weapon_ProjectileManager weapon_ProjectileManager =
+            value.Value.GetComponent<Weapon_ProjectileManager>();
         //update health
         playerHealth.currentHealth = playerHealth.maxHealth;
         playerHealth.currentUIHealth = playerHealth.maxHealth;
-        Debug.Log("Current UI Health: " + playerHealth.currentUIHealth);
-        Debug.Log("Max Health: " + playerHealth.maxHealth);
-
         playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
+        //Update the ammunition
+        weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
+        weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
+        weapon_ProjectileManager._ammunitionUI.SetAmmunition(
+            weapon_ProjectileManager._weaponAmmo,
+            weapon_ProjectileManager._weaponClip
+        );
         //update the respawn point
         value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
     }
