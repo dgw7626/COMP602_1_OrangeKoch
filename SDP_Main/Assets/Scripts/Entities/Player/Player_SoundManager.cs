@@ -39,7 +39,6 @@ public class Player_SoundManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        Debug.Log(Game_RuntimeData.playerSettings.globalVolume);
         //Set Master Volume
         AudioMixer.SetFloat("MasterVolume", Mathf.Log10(Game_RuntimeData.playerSettings.globalVolume) * 20);
         //Return if not playing multiplayer, such that it is single.
@@ -82,8 +81,9 @@ public class Player_SoundManager : MonoBehaviour
         {
             //Start Transmitting Voice
             OnPTTButtonPressed();
-        } else if(!transform.parent.GetComponent<Player_InputManager>().GetPTTButtonIsPressed() &&
-            transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled)
+        }
+        else if (!transform.parent.GetComponent<Player_InputManager>().GetPTTButtonIsPressed() &&
+          transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled)
         {
             //Finish Transmitting Voice
             OnPTTButtonReleased();
@@ -155,7 +155,8 @@ public class Player_SoundManager : MonoBehaviour
             Debug.Log("PTT Button Pressed!");
             transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = true;
             transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().SetPTTtext("(Press \"LEFT ALT\") PTT: ON");
-        } else
+        }
+        else
         {
             //Continue Transmitting Voice
         }
@@ -179,16 +180,23 @@ public class Player_SoundManager : MonoBehaviour
     {
         float chosenFootstepSfxFrequency =
                     (isSprinting ? FootstepSfxFrequencyWhileSprinting : FootstepSfxFrequency);
-        if (m_FootstepDistanceCounter >= 1f / chosenFootstepSfxFrequency)
-        {
-            m_FootstepDistanceCounter = 0f;
-           transform.GetComponent<PhotonView>().RPC(nameof(PlayFootStep), RpcTarget.All);
-            //AudioSource.PlayOneShot(FootstepSfx);
-        }
-
 
         // keep track of distance traveled for footsteps sound
         m_FootstepDistanceCounter += magnitude * Time.deltaTime;
+
+        if (m_FootstepDistanceCounter >= 1f / chosenFootstepSfxFrequency)
+        {
+            m_FootstepDistanceCounter = 0f;
+
+            if (Game_RuntimeData.isMultiplayer)
+            {
+                transform.GetComponent<PhotonView>().RPC(nameof(PlayFootStep), RpcTarget.All);
+                return;
+            }
+            AudioSource.PlayOneShot(FootstepSfx);
+        }
+
+
     }
     [PunRPC]
     internal void PlayFootStep()
@@ -202,6 +210,9 @@ public class Player_SoundManager : MonoBehaviour
 
     internal void PlayLand()
     {
-        AudioSource.PlayOneShot(LandSfx);
+        if (!AudioSource.isPlaying)
+        {
+            AudioSource.PlayOneShot(LandSfx);
+        }
     }
 }

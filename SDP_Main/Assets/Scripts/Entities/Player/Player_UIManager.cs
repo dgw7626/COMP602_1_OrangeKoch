@@ -10,6 +10,7 @@
  ************************************************
 
  */
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -22,6 +23,11 @@ public class Player_UIManager : MonoBehaviour
     public TextMeshProUGUI proximityMuteText;
     public TextMeshProUGUI pushToTalkText;
     public TextMeshProUGUI timerText;
+    private Color orangeColor = new Color(1f, 0.65f, 0f); //Create orange as it does not exist by default
+    private int redAlertThreshold = 5; // Used for CountdownTimer
+    private int orangeAlertThreshold = 15; // Used for CountdownTimer
+    private int yellowAlertThreshold = 30; // Used for CountdownTimer
+    private bool isRedAlert = false;
 
     /// <summary>
     /// Functions to run once, when object is instantiated
@@ -32,7 +38,7 @@ public class Player_UIManager : MonoBehaviour
         if (!Game_RuntimeData.isMultiplayer)
             return;
 
-        
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -42,6 +48,7 @@ public class Player_UIManager : MonoBehaviour
         //Load if the instance belongs to me
         if (transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
+            timerText.text = "";
             timerText.enabled = true;
             PreLoadVoiceUI();
         }
@@ -73,16 +80,24 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        if (Game_RuntimeData.isMultiplayer && !transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
             return;
         }
         UpdateTimer();
     }
 
+    /// <summary>
+    /// Method that updates the gametimer that is displayed to players.
+    /// </summary>
     private void UpdateTimer()
     {
         int seconds = GameMode_Manager.gameTime;
+        if (seconds < 0)
+        {
+            return;
+        }
+        TimerColorDecider(seconds);
 
         int minutes = seconds / 60;
         seconds = seconds % 60;
@@ -95,6 +110,74 @@ public class Player_UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Decides the countdown timer based on value
+    /// </summary>
+    private void TimerColorDecider(int seconds)
+    {
+        // Prevents change on color decider if game has just started
+        if (isRedAlert || seconds <= 0)
+        {
+            if (seconds <= 0)
+                isRedAlert = false;
+            return;
+        }
+
+        if (seconds > yellowAlertThreshold)
+        {
+            SetTimerColor(Color.green);
+            return;
+        }
+        else if (yellowAlertThreshold >= seconds && seconds > orangeAlertThreshold)
+        {
+            SetTimerColor(Color.yellow);
+        }
+        else if (orangeAlertThreshold >= seconds && seconds > redAlertThreshold)
+        {
+            SetTimerColor(orangeColor);
+        }
+        else if (redAlertThreshold >= seconds && seconds > 0)
+        {
+            if (!isRedAlert)
+            {
+                //Call coroutine to display flash)
+                StartCoroutine(RedAlertCountdownTimerFlash());
+            }
+        }
+        else
+        {
+            SetTimerColor(Color.white);
+        }
+    }
+
+    /// <summary>
+    /// Method to Set the colour of the Countdown timer
+    /// </summary>
+    private void SetTimerColor(Color color)
+    {
+        if (color != null)
+        {
+            timerText.color = color;
+        }
+    }
+
+    /// <summary>
+    /// Coroutine to flash during RedAlert countdown timer final seconds
+    /// </summary>
+    public IEnumerator RedAlertCountdownTimerFlash()
+    {
+        //Set red alert to true so the Coroutine is only called once
+        isRedAlert = true;
+        while (isRedAlert)
+        {
+            SetTimerColor(Color.red);
+            yield return new WaitForSeconds(0.5f);
+            SetTimerColor(Color.white);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+    }
+
+    /// <summary>
     /// Method to Quit the game back to Menu.
     /// </summary>
     private void OnQuitGameButtonPressed()
@@ -103,7 +186,8 @@ public class Player_UIManager : MonoBehaviour
         if (Game_RuntimeData.isMultiplayer)
         {
             Game_RuntimeData.gameMode_Manager.QuitMultiplayer();
-        } else
+        }
+        else
         {
             Game_RuntimeData.gameMode_Manager.QuitSinglePlayer();
         }

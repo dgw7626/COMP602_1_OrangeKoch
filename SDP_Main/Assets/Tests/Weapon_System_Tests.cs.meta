@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:SDP_Main/Assets/Tests/Weapon_System_Tests.cs.meta
-guid: 0a8f109d4f63fa34d9308df8608cff8c
-========
-guid: ceb9e4071e02ac54eb7eef674d2ef4b5
->>>>>>>> main:SDP_Main/Assets/Tests/WeaponClip_Test.cs.meta
+guid: 1806ef791bb97ca4cae7a88e3031d758
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
