@@ -1,12 +1,12 @@
 /*
 
  ************************************************
- *                                              *				
+ *                                              *
  * Primary Dev: 	Dion Hemmes		            *
  * Student ID: 		21154191		            *
  * Course Code: 	COMP602_2023_S1             *
  * Assessment Item: Orange Koch                 *
- * 						                        *			
+ * 						                        *
  ************************************************
 
  */
@@ -23,11 +23,11 @@ public class Player_UIManager : MonoBehaviour
     public TextMeshProUGUI proximityMuteText;
     public TextMeshProUGUI pushToTalkText;
     public TextMeshProUGUI timerText;
-    private Color orangeColor = new Color(1f, 0.65f, 0f); //Create orange as it does not exist by default
-    private int redAlertThreshold = 5; // Used for CountdownTimer
-    private int orangeAlertThreshold = 15; // Used for CountdownTimer
-    private int yellowAlertThreshold = 30; // Used for CountdownTimer
-    private bool isRedAlert = false;
+    public Color orangeColor = new Color(1f, 0.65f, 0f); //Create orange as it does not exist by default
+    public int redAlertThreshold = 5; // Used for CountdownTimer
+    public int orangeAlertThreshold = 15; // Used for CountdownTimer
+    public int yellowAlertThreshold = 30; // Used for CountdownTimer
+    public bool isRedAlert = false;
 
     /// <summary>
     /// Functions to run once, when object is instantiated
@@ -90,7 +90,7 @@ public class Player_UIManager : MonoBehaviour
     /// <summary>
     /// Method that updates the gametimer that is displayed to players.
     /// </summary>
-    private void UpdateTimer()
+    public void UpdateTimer()
     {
         int seconds = GameMode_Manager.gameTime;
         if (seconds < 0)
@@ -112,7 +112,7 @@ public class Player_UIManager : MonoBehaviour
     /// <summary>
     /// Decides the countdown timer based on value
     /// </summary>
-    private void TimerColorDecider(int seconds)
+    public void TimerColorDecider(int seconds)
     {
         // Prevents change on color decider if game has just started
         if (isRedAlert || seconds <= 0)
@@ -152,7 +152,7 @@ public class Player_UIManager : MonoBehaviour
     /// <summary>
     /// Method to Set the colour of the Countdown timer
     /// </summary>
-    private void SetTimerColor(Color color)
+    public void SetTimerColor(Color color)
     {
         if (color != null)
         {
