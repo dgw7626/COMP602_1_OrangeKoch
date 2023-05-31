@@ -22,7 +22,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public Player_Health playerHealth;
 
     // A unique identifier for multiplayer matches
-    public string uniqueID {  get; private set; }
+    public string uniqueID { get; private set; }
     public int teamNumber;
 
     //--------------------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
             Game_RuntimeData.instantiatedPlayers.Add(this);
 
             // Register the PhotnView with the local machine
-            if(playerController.photonView.IsMine)
+            if (playerController.photonView.IsMine)
             {
                 Game_RuntimeData.thisMachinesPlayersPhotonView = playerController.photonView;
                 Game_RuntimeData.thisMachinesMultiplayerEntity = this;
@@ -80,18 +80,18 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
 
         //Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgRecievedId);
         Debug.Log("SHOULD ONLY BE PLAYER: I am the player: " + playerController.photonView.Owner.ActorNumber + "\nBut I should be: " + PhotonNetwork.LocalPlayer.ActorNumber);
-        if(playerController.photonView.IsMine)
+        if (playerController.photonView.IsMine)
         {
             Debug.Log("The PV is mine (" + dmgInfo.dmgRecievedId + ")and I was shot by " + dmgInfo.dmgDealerId);
         }
 
         if (playerController.photonView.IsMine)
         {
-            Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber)    );
+            Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber));
             Debug.Log("The actor who was shot: " + dmgInfo.dmgRecievedId);
             dmgInfo.dmgValue = 10f;
             playerHealth.TakeDamage(dmgInfo);
-                
+
         }
     }
 
@@ -119,12 +119,12 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public void OnPlayerKilled(string deathInfoStructJSON)
     {
         s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             //TODO: calculate team scores.
             //Game_RuntimeData.gameScore.killsPerTeam[info.killerTeam] += 1;
         }
-        if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+        if (Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
         {
             Game_RuntimeData.gameMode.OnPlayerKilled(info);
         }
@@ -137,7 +137,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public void OnGameEnded(string gameScoreStructJSON)
     {
         s_GameScore gameScoreStruct = (s_GameScore)JsonUtility.FromJson(gameScoreStructJSON, typeof(s_GameScore));
-        
+
         //TODO: store the data into DB?
 
         // MunishesScoreStuff.HereIsTheScore(gameScoreStruct);
@@ -146,37 +146,19 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         GameMode_Manager.gameIsRunning = false;
     }
 
-        public void OnPlayerRespawn(KeyValuePair<int, Player_MultiplayerEntity> value)
-    {
-        //TODO: detroy the gameobject
-        // GameObject.Destroy(value.Value.gameObject);
-        //TODO: create a new one
-        //   Multiplayer_PlayerManager.CreateController();
-        Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
-        Weapon_ProjectileManager weapon_ProjectileManager =value.Value.GetComponent<Weapon_ProjectileManager>();
-        //update health
-        playerHealth.currentHealth = playerHealth.maxHealth;
-        playerHealth.currentUIHealth = playerHealth.maxHealth;
-        playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
-        //Update the ammunition
-        Debug.Log("The default bullet number" +weapon_ProjectileManager._weaponInfo.BulletCounts);
-        weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
-        weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
-        weapon_ProjectileManager._ammunitionUI.SetAmmunition(
-            weapon_ProjectileManager._weaponAmmo,
-            weapon_ProjectileManager._weaponClip
-        );
-        //update the respawn point
-        value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
-    }
-
+    /// <summary>
+    /// PunRPC callback. making the player character invincible
+    /// </summary>
     [PunRPC]
     public void OnRespawn()
     {
         playerHealth.isInvincible = true;
-        Invoke(nameof(TurnOffInvincibility), 10.0f);
+        Invoke(nameof(TurnOffInvincibility), 5.0f);
     }
-
+    
+    /// <summary>
+    /// turning off the invincibility 
+    /// </summary>
     private void TurnOffInvincibility()
     {
         playerHealth.isInvincible = false;
