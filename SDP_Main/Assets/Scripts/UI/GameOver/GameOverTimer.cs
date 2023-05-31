@@ -1,18 +1,7 @@
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.CompilerServices;
-using System.ComponentModel;
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Net.Mime;
-using System.Threading;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using Color = UnityEngine.Color;
 using TMPro;
-using ICSharpCode.NRefactory.Ast;
 
 public class GameOverTimer : MonoBehaviour
 {
