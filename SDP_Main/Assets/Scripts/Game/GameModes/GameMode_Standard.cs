@@ -2,10 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using ExitGames.Client.Photon.StructWrapping;
 using Photon.Realtime;
-using System;
-using Newtonsoft.Json.Schema;
 
 public class GameMode_Standard : IgameMode
 {
