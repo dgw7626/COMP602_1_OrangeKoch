@@ -7,7 +7,7 @@ using Photon.Realtime;
 using System;
 using Newtonsoft.Json.Schema;
 
-public class GameMode_Standard : IgameMode
+public class GameMode_Standard : MonoBehaviour, IgameMode
 {
     public const int MAX_GAME_TIME_SECONDS = 120;
     private const int NUM_TEAMS = 2;
@@ -18,7 +18,7 @@ public class GameMode_Standard : IgameMode
     // Kevin add: if make any problem, please delete that.
     private Player_Health playerHealth;
     private Weapon_ProjectileManager weapon_ProjectileManager;
-
+    private Coroutine Coroutine;
     public void InitGame()
     {
         teamScores = new s_GameScore();
@@ -190,21 +190,36 @@ public class GameMode_Standard : IgameMode
         // GameObject.Destroy(value.Value.gameObject);
         //TODO: create a new one
         //   Multiplayer_PlayerManager.CreateController();
-        Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
-        Weapon_ProjectileManager weapon_ProjectileManager =
-            value.Value.GetComponent<Weapon_ProjectileManager>();
+        Player_Health playerHealth = value.Value.gameObject.GetComponent<Player_Health>();
+        Weapon_ProjectileManager weapon_ProjectileManager = value.Value.gameObject.GetComponent<Weapon_ProjectileManager>();
         //update health
         playerHealth.currentHealth = playerHealth.maxHealth;
         playerHealth.currentUIHealth = playerHealth.maxHealth;
         playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
         //Update the ammunition
-        weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
-        weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
-        weapon_ProjectileManager._ammunitionUI.SetAmmunition(
-            weapon_ProjectileManager._weaponAmmo,
-            weapon_ProjectileManager._weaponClip
-        );
-        //update the respawn point
+        
+        // weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
+        // weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
+
+        // weapon_ProjectileManager._ammunitionUI.SetAmmunition(
+        //     weapon_ProjectileManager._weaponAmmo,
+        //     weapon_ProjectileManager._weaponClip
+        // );
+        // update the respawn point
         value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
+        //set the invincible time
+        playerHealth.isInvincible = true;
+        StartCoroutine(InvincibleTime(value));
+    
+    }
+    
+    /// <summary>
+    /// Updates the UI representing the player's health over time.
+    /// </summary>
+    public IEnumerator InvincibleTime(KeyValuePair<int, Player_MultiplayerEntity> value)
+    {
+        yield return new WaitForSeconds(3.0f);
+        Player_Health player_Health = value.Value.GetComponent<Player_Health>();
+        player_Health.isInvincible = false;
     }
 }

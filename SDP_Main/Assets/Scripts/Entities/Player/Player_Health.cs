@@ -41,10 +41,9 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// </summary>
     void Update()
     {
-
         // Check if player falls below a certain height and cause damage
         // if (transform.position.y >=  2)
-        if (transform.position.y <=  10)
+        if (transform.position.y <= -10)
         {
             s_DamageInfo damageInfo = new s_DamageInfo();
             damageInfo.dmgValue = 10f;
@@ -57,13 +56,15 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// </summary>
     public void Begin(Player_MultiplayerEntity entity)
     {
-
         if (entity.playerController.photonView.IsMine)
         {
             // Check if the PhotonView is owned by the local player
             if (entity.playerController.photonView.IsMine)
             {
-                Debug.Log("The photon view belongs to: " + entity.playerController.photonView.Owner.ActorNumber);
+                Debug.Log(
+                    "The photon view belongs to: "
+                        + entity.playerController.photonView.Owner.ActorNumber
+                );
                 Debug.Log("Local ID: " + PhotonNetwork.LocalPlayer.ActorNumber);
             }
 
@@ -111,7 +112,13 @@ public class Player_Health : MonoBehaviour, IDamageable
             deathInfo.diedId = damageInfo.dmgRecievedId;
 
             // Call OnPlayerKilled method on the networked player
-            gameObject.GetComponent<Player_PlayerController>().photonView.RPC(nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, JsonUtility.ToJson(deathInfo));
+            gameObject
+                .GetComponent<Player_PlayerController>()
+                .photonView.RPC(
+                    nameof(Player_MultiplayerEntity.OnPlayerKilled),
+                    RpcTarget.All,
+                    JsonUtility.ToJson(deathInfo)
+                );
         }
     }
 
@@ -138,7 +145,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// <summary>
     /// Updates the UI representing the player's health over time.
     /// </summary>
-    IEnumerator UpdateUI()
+    public IEnumerator UpdateUI()
     {
         while (true)
         {

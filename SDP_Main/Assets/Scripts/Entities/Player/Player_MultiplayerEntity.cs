@@ -145,4 +145,28 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
 
         GameMode_Manager.gameIsRunning = false;
     }
+
+        public void OnPlayerRespawn(KeyValuePair<int, Player_MultiplayerEntity> value)
+    {
+        //TODO: detroy the gameobject
+        // GameObject.Destroy(value.Value.gameObject);
+        //TODO: create a new one
+        //   Multiplayer_PlayerManager.CreateController();
+        Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
+        Weapon_ProjectileManager weapon_ProjectileManager =value.Value.GetComponent<Weapon_ProjectileManager>();
+        //update health
+        playerHealth.currentHealth = playerHealth.maxHealth;
+        playerHealth.currentUIHealth = playerHealth.maxHealth;
+        playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
+        //Update the ammunition
+        Debug.Log("The default bullet number" +weapon_ProjectileManager._weaponInfo.BulletCounts);
+        weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
+        weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
+        weapon_ProjectileManager._ammunitionUI.SetAmmunition(
+            weapon_ProjectileManager._weaponAmmo,
+            weapon_ProjectileManager._weaponClip
+        );
+        //update the respawn point
+        value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
+    }
 }
