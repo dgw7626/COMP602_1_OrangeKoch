@@ -13,7 +13,7 @@ public class ScoreBoard : MonoBehaviour
     public TMP_Text playerNameText_1;
     public TMP_Text playerKillsText_1;
     public TMP_Text playerDeathsText_1;
-    public TMP_Text playerWonText_1;
+    
 
     public TMP_Text playerNameText_2;
     public TMP_Text playerKillsText_2;
@@ -50,7 +50,7 @@ public class ScoreBoard : MonoBehaviour
       transform.gameObject.SetActive(this._activeSelf);
       return;
     }
-   private void Update()
+    private void Update()
    {
      RestClient.Get<PlayerDetail>("https://project-10bbb-default-rtdb.firebaseio.com/" + "/player1" +".json").Then(response =>
          {

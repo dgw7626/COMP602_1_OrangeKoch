@@ -3067,13 +3067,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f78b092dc67b1a84fab12d0caf38bfb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNameText_1: {fileID: 1044586770}
-  playerKillsText_1: {fileID: 459415770}
-  playerDeathsText_1: {fileID: 1709584951}
-  playerWonText_1: {fileID: 0}
-  playerNameText_2: {fileID: 1162789063}
-  playerKillsText_2: {fileID: 1761055665}
-  playerDeathsText_2: {fileID: 2115600881}
+  playerNameText_1: {fileID: 0}
+  playerKillsText_1: {fileID: 0}
+  playerDeathsText_1: {fileID: 0}
+  playerNameText_2: {fileID: 0}
+  playerKillsText_2: {fileID: 0}
+  playerDeathsText_2: {fileID: 0}
 --- !u!114 &1854626778
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class Orange_koch_Test
+public class Orangekoch_Lobby_Test
 {
     private GameObject testObject;
     private OrangeKoch orangeKoch;
@@ -28,15 +28,12 @@ public class Orange_koch_Test
     }
 
     [Test]
-    public void LoadNextScene_LoadsMainMenuUI()
+    public void LoadNextScene_After3Seconds()
     {
-        orangeKoch.Main_Menu = "Assets/Scenes/MainMenuUI.unity";
-       // string mainm = "MainMenuUI";
-        orangeKoch.LoadNextScene();
-        Assert.IsTrue(orangeKoch.IsLoadNextSceneInvoked());
-        Assert.AreNotEqual("Main_Menu", mockSceneManager.LoadedSceneName);
+        orangeKoch.Start();
+        Assert.IsFalse(mockSceneManager.LoadNextSceneCalled);
+        Assert.AreNotEqual(3.0f, mockSceneManager.LoadNextSceneDelay);
     }
-
 
 
     public class MockSceneManager
@@ -58,6 +55,6 @@ public class Orange_koch_Test
     }
 }
 
-
+   
 
 
