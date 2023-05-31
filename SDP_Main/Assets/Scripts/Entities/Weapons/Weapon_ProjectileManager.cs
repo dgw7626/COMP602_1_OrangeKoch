@@ -123,6 +123,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         {
             //instantating bullet object throught the photon network.
             GameObject bulletObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Bullet"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
+            bulletObject.GetComponent<Weapon_Bullet>().m_MultiplayerEntity = transform.parent.GetComponent<Player_MultiplayerEntity>();
             bulletObject.name = "(" + i + ")Bullet";
             bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
 
@@ -320,7 +321,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// Author: Sky
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
-    [PunRPC]
     public void GetShoot()
     {
         if (_weaponAmmo >= 1)
@@ -379,7 +379,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
                     //get rpc shoot if the mutliplayer is enabled other wise it calls local method.
                     if (Game_RuntimeData.isMultiplayer)
                     {
-                        photonView.RPC(nameof(GetShoot), RpcTarget.AllBuffered);
+                        GetShoot();
                         break;
                     }
                     else

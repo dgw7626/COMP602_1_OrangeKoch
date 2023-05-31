@@ -1,41 +1,45 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An instance of this will exist inside multiplayer scenes. Used to create a c# native gameMode, and start coroutines.
+/// </summary>
 public class GameMode_Manager : MonoBehaviourPunCallbacks
 {
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
-    public static int gameTime = -1;
-    public static bool gameIsRunning = false;  
+    public static int gameTime = 999;
+    public static bool timerIsRunning = false;
 
-    /**
-     * Fetch the gameMode from Game_RuntimeData and Invoke InitGame on that gameMode.
-     *
-     * If GameMode is null, it will be set to the default game mode.
-     *
-     * The delay before Init() gives the Player_MultiplayerEntity's time to
-     * instantiate and register themselves with Game_RunTimeData.
-     */
+    /// <summary>
+    ///Fetch the gameMode from Game_RuntimeData and Invoke InitGame on that gameMode.
+    ///
+    /// If GameMode is null, it will be set to the default game mode.
+    ///
+    /// The delay before Init() gives the Player_MultiplayerEntity's time to
+    /// instantiate and register themselves with Game_RunTimeData.
+    /// </summary>
     void Awake()
     {
+        Game_RuntimeData.gameMode_Manager = this;
+
         if(Game_RuntimeData.gameMode == null)
         {
             Game_RuntimeData.gameMode = new GameMode_Standard();
-            Game_RuntimeData.gameMode_Manager = this;
         }
         gameMode = Game_RuntimeData.gameMode;
 
         Invoke("Init", GAME_START_DELAY_SECONDS);
     }
 
-    /**
-     * Calls the GameMode's Init after a delay(GAME_START_DELAY_SECONDS),
-     * and starts the game Timer.
-     */
+
+    /// <summary>
+    /// Calls the GameMode's Init after a delay(GAME_START_DELAY_SECONDS),
+    /// and starts the game Timer.
+    /// </summary>
     void Init()
     {
         Game_RuntimeData.activePlayers = new Dictionary<int, Player_MultiplayerEntity>();
@@ -47,20 +51,25 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         }
         gameMode.InitGame();
 
-        gameIsRunning = true;
+        timerIsRunning = true;
 
+        //Begin the synchronous timer
         StartCoroutine(gameMode.OnOneSecondCountdown());
 
     }
 
-    /**
-     * Calls the GameModes perFrameUpdate method.
-     */
+    /// <summary>
+    ///  Calls the GameModes perFrameUpdate method.
+    /// </summary>
     void Update()
     {
         gameMode.OnPerFrameUpdate();
     }
 
+    /// <summary>
+    /// Allow a new player to register themselves with the runtimeData, then tell GameMode to handle their entry.
+    /// </summary>
+    /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
@@ -70,10 +79,18 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
     }
+
+    /// <summary>
+    /// Tell the network, and the gameMode, that a player has dropped.
+    /// </summary>
+    /// <param name="otherPlayer"></param>
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
         gameMode.OnPlayerLeftMatch(otherPlayer);
+
+        Debug.Log("Player" +  otherPlayer.ActorNumber + " left the room!");
+        Debug.Log("The master client is: " + PhotonNetwork.MasterClient.ActorNumber);
     }
     public static void SetSynchronousTimerValue()
     {
@@ -122,7 +139,6 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
             }
             yield return null;
         }
-        Game_GameState.NextScene("Lobby");
+        Game_GameState.NextScene("MultiplayerScoreboard");
     }
-
 }
