@@ -1,33 +1,39 @@
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.CompilerServices;
-using System.ComponentModel;
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Net.Mime;
-using System.Threading;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using Color = UnityEngine.Color;
 using UnityEngine.SceneManagement;
-using TMPro;
+using UnityEngine;
+using UnityEditor.SceneManagement;
 
 public class OrangeKoch : MonoBehaviour
 {
-    public string Main_Menu = "MainMenuUI";
+    public string Main_Menu = "Assets/Scenes/MainMenuUI.unity";
+    public bool loadNextSceneInvoked = false;
 
     public void Start()
     {
         Invoke("LoadNextScene", 3f);
     }
 
-    void LoadNextScene()
+    //public void LoadNextScene()
+    //{
+    //    loadNextSceneInvoked = true;
+    //    //EditorSceneManager.OpenScene(Main_Menu);
+    //    SceneManager.LoadScene(Main_Menu);
+    //}
+
+    public  void LoadNextScene()
     {
+        loadNextSceneInvoked = true;
         SceneManager.LoadScene(Main_Menu);
+
+//#if UNITY_EDITOR
+//        EditorSceneManager.OpenScene(Main_Menu);
+//    #else
+//                SceneManager.LoadScene(Main_Menu);
+//    #endif
+    }
+
+
+    public bool IsLoadNextSceneInvoked()
+    {
+        return loadNextSceneInvoked;
     }
 }
-
-
