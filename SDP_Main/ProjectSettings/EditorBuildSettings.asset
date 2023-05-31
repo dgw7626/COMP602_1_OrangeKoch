@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameMap_trial.unity
     guid: e3bfa96d45a8c4b4b9701162232feee1
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/GameMap_default.unity
     guid: 9f7aa64820ff69a498e799d4fb380341
   - enabled: 1
