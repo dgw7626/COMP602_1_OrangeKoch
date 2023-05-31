@@ -11,24 +11,21 @@ using Photon.Realtime;
 /// 
 /// This is a native c# class, and is held statically by game_RuntimeData. Implements the IgameMode interface.
 /// </summary>
-
-public class GameMode_Standard : MonoBehaviour, IgameMode
+public class GameMode_Standard : IgameMode
 {
     public const int MAX_GAME_TIME_SECONDS = 120;
     private const int NUM_TEAMS = 2;
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
     public s_GameScore teamScores;
-
-    // Kevin add: if make any problem, please delete that.
-    private Player_Health playerHealth;
-    private Weapon_ProjectileManager weapon_ProjectileManager;
-    private Coroutine Coroutine;
+    
+    /// <summary>
+    /// Called by the gameModeManager instace from within the scene.
+    /// Sets up the game and initializes values. 
+    /// </summary>
     public void InitGame()
     {
-        teamScores = new s_GameScore();
-        teamScores.killsPerTeam = new List<int>();
-
+        numPlayers = 0;
         // Make teams
         for (int i = 0; i < NUM_TEAMS; i++)
         {
@@ -67,7 +64,7 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         // Initialize Countdown
         if (PhotonNetwork.IsMasterClient)
         {
-            GameMode_Manager.gameTime = MAX_GAME_TIME_SECONDS;
+            GameMode_Manager.gameTime =  MAX_GAME_TIME_SECONDS;
         }
 
         StartGame();
@@ -84,18 +81,15 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
         {
             p.playerController.IsInputLocked = false;
-
-            if (p.playerController.photonView.IsMine)
+      
+            if(p.playerController.photonView.IsMine)
             {
                 Game_RuntimeData.thisMachinesPlayersPhotonView = p.playerController.photonView;
-                Debug.Log(
-                    "At START GAME: ThisMachines PhotonView is mine, and my number is: "
-                        + PhotonNetwork.LocalPlayer.ActorNumber
-                        + " "
-                        + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber
-                );
+                Debug.Log("At START GAME: ThisMachines PhotonView is mine, and my number is: " + PhotonNetwork.LocalPlayer.ActorNumber + 
+                    " " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber);
             }
         }
+
     }
 
     /// <summary>
@@ -117,15 +111,6 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         {
             p.playerController.IsInputLocked = true;
         }
-        if (Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
-        {
-            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
-                nameof(Player_MultiplayerEntity.OnGameEnded),
-                RpcTarget.All,
-                JsonUtility.ToJson(teamScores)
-            );
-        }
-
         //TODO: Cleanup
 
         s_GameScore score = Game_RuntimeData.gameScore;
@@ -143,31 +128,20 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
     public IEnumerator OnOneSecondCountdown()
     {
         Debug.Log("Begin! ");
-        while (GameMode_Manager.gameIsRunning)
+        while(GameMode_Manager.timerIsRunning)
         {
-            if (PhotonNetwork.IsMasterClient)
+            if(PhotonNetwork.IsMasterClient)
             {
                 GameMode_Manager.SetSynchronousTimerValue();
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
-                    "GetSynchronousTimerValue",
-                    RpcTarget.Others,
-                    GameMode_Manager.gameTime
-                );
+                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
 
-                // If the timer expires, tell the other players what the score is.
-                if (GameMode_Manager.gameTime < 1)
-                {
-                    Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
-                        nameof(Player_MultiplayerEntity.OnGameEnded),
-                        RpcTarget.Others,
-                        JsonUtility.ToJson(Game_RuntimeData.gameScore)
-                    );
-
-                    GameMode_Manager.gameIsRunning = false;
-                }
             }
 
-            //Debug.Log(GameMode_Manager.gameTime);
+            if(GameMode_Manager.gameTime < 1)
+            {
+                GameMode_Manager.timerIsRunning = false;
+            }
+
             yield return new WaitForSeconds(1);
         }
 
@@ -175,14 +149,12 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
     }
 
-    public void OnPerFrameUpdate() { }
-
-    public void OnScoreEvent(int score, int teamNumber)
+    /// <summary>
+    /// Use for any per-frame game logic.
+    /// </summary>
+    public void OnPerFrameUpdate()
     {
-        if (teamNumber > NUM_TEAMS || teamNumber < 0)
-            Debug.LogError(
-                "ERROR: Team " + teamNumber + " does not exist! Cannot assign points to team"
-            );
+    }
 
     /// <summary>
     /// Only the Master Client will execute this method. Counts score locally, to be shared with others later.
@@ -199,24 +171,13 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
     }
 
+    /// <summary>
+    /// Executed by everyone. This tells a machine that a particular player has been killed, so you should handle respawning if applicable.
+    /// </summary>
+    /// <param name="deathInfoStruct"></param>
     public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
-        //TODO: Find player and respwan/destroy them here
-        foreach (
-            KeyValuePair<int, Player_MultiplayerEntity> value in Game_RuntimeData.activePlayers
-        )
-        {
-            if (value.Key == deathInfoStruct.diedId)
-            {
-                OnPlayerRespawn(value);
-                return;
-            }
-        }
-    }
-
-    public void LeaveScene(string sceneName)
-    {
-        Game_GameState.NextScene(sceneName);
+        
     }
 
     /// <summary>
@@ -244,52 +205,10 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         {
             if (e.GetComponent<PhotonView>().Owner.ActorNumber == id)
             {
-                Game_RuntimeData.RegisterNewMultiplayerPlayer(
-                    e.GetComponent<PhotonView>().Owner.ActorNumber,
-                    e
-                );
+                Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
             }
         }
     }
 
 
-    /// <summary>
-    /// Respawns the player and performs health and ammunition updates.
-    /// </summary>
-    /// <param name="value">Key-value pair representing the player's unique identifier and corresponding multiplayer entity.</param>
-    public void OnPlayerRespawn(KeyValuePair<int, Player_MultiplayerEntity> value)
-    {
-
-        Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
-        Weapon_ProjectileManager weapon_ProjectileManager = value.Value.gameObject.GetComponentInChildren<Weapon_ProjectileManager>();
-        //update health
-        playerHealth.currentHealth = playerHealth.maxHealth;
-        playerHealth.currentUIHealth = playerHealth.maxHealth;
-        playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
-        //Update the ammunition
-
-        weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
-        weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
-
-        weapon_ProjectileManager._ammunitionUI.SetAmmunition(
-             weapon_ProjectileManager._weaponAmmo,
-             weapon_ProjectileManager._weaponClip
-         );
-        // update the respawn point
-        value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
-        //set the invincible time
-        Player targetPlayer = null;
-        foreach (Player p in PhotonNetwork.PlayerList)
-        {
-            if (p.ActorNumber == value.Key)
-            {
-                targetPlayer = p;
-                break;
-            }
-        }
-        //Call the "OnRespawn" method on the target player's multiplayer entity via RPC
-        if (targetPlayer != null)
-            if (targetPlayer != null)
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnRespawn), targetPlayer);
-    }
 }
