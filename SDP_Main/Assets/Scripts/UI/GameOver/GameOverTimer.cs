@@ -12,7 +12,7 @@ public class GameOverTimer : MonoBehaviour
 
     Color red = Color.red;
     Color green = Color.green;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -71,13 +71,13 @@ public class GameOverTimer : MonoBehaviour
 
     public void OverThe_Time(float nTime)
     {
-       
+
         if (nTime>= startTime)
         {
             startTime = nTime;
         }
 
-        
+
     }
 
     public void LessThe_Time(float nTime)

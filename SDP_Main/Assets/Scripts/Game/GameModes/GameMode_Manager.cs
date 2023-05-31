@@ -12,7 +12,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     private const float GAME_START_DELAY_SECONDS = 0.8f;
     public IgameMode gameMode;
     public static int gameTime = 999;
-    public static bool timerIsRunning = false;  
+    public static bool timerIsRunning = false;
 
     /// <summary>
     ///Fetch the gameMode from Game_RuntimeData and Invoke InitGame on that gameMode.
@@ -25,7 +25,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
     void Awake()
     {
         Game_RuntimeData.gameMode_Manager = this;
-        
+
         if(Game_RuntimeData.gameMode == null)
         {
             Game_RuntimeData.gameMode = new GameMode_Standard();
