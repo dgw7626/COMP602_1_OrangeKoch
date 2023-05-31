@@ -78,6 +78,8 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public void OnDamageRecieved(string damageInfo)
     {
         s_DamageInfo dmgInfo = (s_DamageInfo)JsonUtility.FromJson(damageInfo, typeof(s_DamageInfo));
+        if (PhotonNetwork.LocalPlayer.ActorNumber != dmgInfo.dmgRecievedId)
+            return;
 
         //Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgRecievedId);
         Debug.Log("SHOULD ONLY BE PLAYER: I am the player: " + playerController.photonView.Owner.ActorNumber + "\nBut I should be: " + PhotonNetwork.LocalPlayer.ActorNumber);
@@ -119,6 +121,12 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public void OnPlayerKilled(string deathInfoStructJSON)
     {
         s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
+        if(info.diedId == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            //The one who died, is ME!
+            gameObject.transform.position = new Vector3(0, 10, 0);
+            playerHealth.Respawn();
+        }
         if(PhotonNetwork.IsMasterClient)
         {
             Game_RuntimeData.gameMode.OnScoreEvent(info);

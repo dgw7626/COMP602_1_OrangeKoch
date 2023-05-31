@@ -87,12 +87,16 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// <param name="damageInfo"></param>
     public void TakeDamage(s_DamageInfo damageInfo)
     {
+        if (Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+            return;
         //Subtract damage
         currentHealth -= damageInfo.dmgValue;
 
         // Check if health reaches zero or below and trigger death
-        if (currentHealth <= 0)
+        Debug.Log("Current health is: " +  currentHealth + " and IsDead: " + IsDead);
+        if (currentHealth <= 0 && !IsDead)
         {
+            Debug.Log("I am dead so I die now");
             Die(damageInfo);
         }
     }
@@ -107,7 +111,7 @@ public class Player_Health : MonoBehaviour, IDamageable
         {
             SoloRespawn();
         }
-        else if(!IsDead)
+        else
         {
             PhotonView pv = null;
             foreach(KeyValuePair<int, Player_MultiplayerEntity> kvp in Game_RuntimeData.activePlayers)
@@ -138,8 +142,9 @@ public class Player_Health : MonoBehaviour, IDamageable
             string json = JsonUtility.ToJson(deathInfo);
             gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
             nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, json);
+            IsDead = true;
+            Respawn();
         }
-        IsDead = true;
     }
 
     /// <summary>
@@ -189,7 +194,9 @@ public class Player_Health : MonoBehaviour, IDamageable
 
     public void Respawn()
     {
-        currentHealth = maxHealth;
         IsDead = false;
+        currentHealth = maxHealth;
+        currentUIHealth = currentHealth;
+        healthBar.SetHealth(currentUIHealth);
     }
 }

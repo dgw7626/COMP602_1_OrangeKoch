@@ -321,7 +321,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// Author: Sky
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
-    [PunRPC]
     public void GetShoot()
     {
         if (_weaponAmmo >= 1)
@@ -380,7 +379,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
                     //get rpc shoot if the mutliplayer is enabled other wise it calls local method.
                     if (Game_RuntimeData.isMultiplayer)
                     {
-                        photonView.RPC(nameof(GetShoot), RpcTarget.AllBuffered);
+                        GetShoot();
                         break;
                     }
                     else

@@ -82,13 +82,14 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// This method implementes the shooting for multiplayer and local player.
     /// </summary>
     /// <param name="origin"></param>
-    [PunRPC]
     public void Fire(Transform origin)
     {
+        if (Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+            return;
         //get the current transform position of the origin.
         transform.position = origin.position;
         //insntatiating the bullet vfx instances.
-        InstantiateGunVFX();
+        transform.GetComponent <PhotonView>().RPC(nameof(InstantiateGunVFX), RpcTarget.All);
         //raycasting the origin position
         //you need to chnange the origin position from here.
         if (Physics.Raycast(_projectileManager.transform.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
@@ -114,7 +115,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                 if (PhotonNetwork.LocalPlayer == transform.GetComponent<PhotonView>().Owner)
                 {
                     //exectue the mutliplayer bullet trace vfx.
-                    transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.AllBuffered, hit.point, origin.position);
+                    transform.GetComponent<PhotonView>().RPC(nameof(RenderGunTrace), RpcTarget.All, hit.point, origin.position);
                     _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
                 }
                 return;
@@ -126,7 +127,8 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// Author:Sky
     /// This method intantiates bullet vfx game instances.
     /// </summary>
-    internal void InstantiateGunVFX()
+    [PunRPC]
+    public void InstantiateGunVFX()
     {
         //get all the object instances from the projectile manager class.
         this._shell = _projectileManager.shellObjects[_currentIndex].gameObject;

@@ -61,6 +61,7 @@ MonoBehaviour:
   - RenderGunTrace
   - PlayFootStep
   - RequestScoreFromMaster
+  - InstantiateGunVFX
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

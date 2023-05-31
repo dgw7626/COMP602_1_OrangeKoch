@@ -177,20 +177,7 @@ public class GameMode_Standard : IgameMode
     /// <param name="deathInfoStruct"></param>
     public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
-        //TODO: Find player and respwan/destroy them here
-        foreach(KeyValuePair<int, Player_MultiplayerEntity> keyValuePair in Game_RuntimeData.activePlayers)
-        {
-            if(keyValuePair.Key == deathInfoStruct.diedId) 
-            {
-                //Here I have found the player that died:
-                PhotonView pv = keyValuePair.Value.playerController.photonView;
-                int myTeam = keyValuePair.Value.teamNumber;
-                keyValuePair.Value.gameObject.transform.position = new Vector3(0, 10, 0);
-                keyValuePair.Value.playerHealth.Respawn(); ;
-
-                return;
-            }
-        }
+        
     }
 
     /// <summary>
