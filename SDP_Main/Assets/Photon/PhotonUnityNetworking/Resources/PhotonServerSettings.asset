@@ -43,6 +43,7 @@ MonoBehaviour:
   - HeresWhy
   - OnPlayerKilled
   - OnGameEnded
+  - UpdateScore
   - Fire
   - Shoot
   - InitBullets
@@ -59,6 +60,8 @@ MonoBehaviour:
   - ShowBulletTrace_RPC
   - RenderGunTrace
   - PlayFootStep
+  - RequestScoreFromMaster
+  - InstantiateGunVFX
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
