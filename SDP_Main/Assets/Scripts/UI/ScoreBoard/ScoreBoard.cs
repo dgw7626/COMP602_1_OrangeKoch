@@ -50,7 +50,7 @@ public class ScoreBoard : MonoBehaviour
       transform.gameObject.SetActive(this._activeSelf);
       return;
     }
-    private void Update()
+    public void Update()
    {
      RestClient.Get<PlayerDetail>("https://project-10bbb-default-rtdb.firebaseio.com/" + "/player1" +".json").Then(response =>
          {

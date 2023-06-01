@@ -4,14 +4,16 @@ using UnityEngine;
 using Proyecto26;
 
 
-public class PutPlayerDetailOnFirebase 
+public class PutPlayerDetailOnFirebase : MonoBehaviour
 {
     
 
  // The start methode put the player detail on Firebase with help of RestClient.   
     void Start()
     {
-        team_1player_1Detail("Joe", 2, 10);
+       // s_GameScore currentScore = Game_RuntimeData.gameScore;
+        //int player2Kills = currentScore.killsPerPlayer[1];
+        //team_1player_1Detail("Joe", 2, 10);
     }
 
     // Team 1 Player 1 details goes on Firebase.
@@ -71,10 +73,6 @@ public class PutPlayerDetailOnFirebase
         RestClient.Put("https://project-10bbb-default-rtdb.firebaseio.com/player8.json", totalKills);
     }
 
-    void Update()
-     {
-          
-         //RestClient.Delete("https://project-10bbb-default-rtdb.firebaseio.com/.json");
-     }
+   
     
 }
