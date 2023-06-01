@@ -8,10 +8,13 @@ public class TargetRespawn : MonoBehaviour
 
     private bool isRespawning = false;
 
+    private ScoreCount scoreCount;
+
     private void Start()
     {
         // Set the initial spawn position to the current position
         respawnPosition = transform.position;
+        scoreCount = FindObjectOfType<ScoreCount>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -19,6 +22,7 @@ public class TargetRespawn : MonoBehaviour
         if (other.CompareTag("Player") && !isRespawning)
         {
             //Destroy(gameObject);
+            scoreCount.IncreaseScore();
             RespawnDelay();
         }
     }
@@ -28,24 +32,16 @@ public class TargetRespawn : MonoBehaviour
         isRespawning = true;
         // Hide object
         gameObject.SetActive(false);
-        Debug.Log("2s");
         // Wait for a moment before activating the object
         Invoke(nameof(Respawn), respawnTime);
-        Debug.Log("3s");
     }
 
     private void Respawn()
     {
-        Debug.Log("3.5s");
-
         // Set the spawn position for new objects
         transform.position = respawnPosition;
-        Debug.Log("4s");
-
         // Activate the object
         gameObject.SetActive(true);
-        Debug.Log("5s");
-
         isRespawning = false;
     }
 }
