@@ -24,7 +24,7 @@ public class Trigger2 : MonoBehaviour
             MoveText.fontStyle |= FontStyles.Strikethrough;
             JumpText.fontStyle |= FontStyles.Strikethrough;
             // Show the Sprint text
-            JumpText.gameObject.SetActive(true);
+            SprintText.gameObject.SetActive(true);
 
             
 
