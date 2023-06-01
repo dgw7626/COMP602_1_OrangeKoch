@@ -18,7 +18,7 @@ public class Weapon_Controller : MonoBehaviour
         // if its multiplayer instantiate bullet object instances otherwise will be instantiated without photon.
         if (Game_RuntimeData.isMultiplayer)
         {
-            _weaponProjectileMananger.InitBullets_P();
+            _weaponProjectileMananger.InitBullets();
         }
         else
         {
