@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,8 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public void OnDamageRecieved(string damageInfo)
     {
         s_DamageInfo dmgInfo = (s_DamageInfo)JsonUtility.FromJson(damageInfo, typeof(s_DamageInfo));
+        if (PhotonNetwork.LocalPlayer.ActorNumber != dmgInfo.dmgRecievedId)
+            return;
 
         //Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgRecievedId);
         Debug.Log("SHOULD ONLY BE PLAYER: I am the player: " + playerController.photonView.Owner.ActorNumber + "\nBut I should be: " + PhotonNetwork.LocalPlayer.ActorNumber);
@@ -89,7 +92,6 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         {
             Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber));
             Debug.Log("The actor who was shot: " + dmgInfo.dmgRecievedId);
-            dmgInfo.dmgValue = 10f;
             playerHealth.TakeDamage(dmgInfo);
 
         }
@@ -119,10 +121,15 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public void OnPlayerKilled(string deathInfoStructJSON)
     {
         s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
-        if (PhotonNetwork.IsMasterClient)
+        if(info.diedId == PhotonNetwork.LocalPlayer.ActorNumber)
         {
-            //TODO: calculate team scores.
-            //Game_RuntimeData.gameScore.killsPerTeam[info.killerTeam] += 1;
+            //The one who died, is ME!
+            gameObject.transform.position = new Vector3(0, 10, 0);
+            playerHealth.Respawn();
+        }
+        if(PhotonNetwork.IsMasterClient)
+        {
+            Game_RuntimeData.gameMode.OnScoreEvent(info);
         }
         if (Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
         {
@@ -134,16 +141,24 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     /// PunRPC callback. The master client has announced that the game has ended, and is telling you the score.
     /// </summary>
     [PunRPC]
-    public void OnGameEnded(string gameScoreStructJSON)
+    public void UpdateScore(string gameScoreStructJSON)
     {
         s_GameScore gameScoreStruct = (s_GameScore)JsonUtility.FromJson(gameScoreStructJSON, typeof(s_GameScore));
 
-        //TODO: store the data into DB?
-
         // MunishesScoreStuff.HereIsTheScore(gameScoreStruct);
+        Game_RuntimeData.gameScore = gameScoreStruct;
+    }
 
-
-        GameMode_Manager.gameIsRunning = false;
+    /// <summary>
+    /// Someone is requesting a score update. If you are the master client, broadcast back the current score
+    /// </summary>
+    [PunRPC]
+    public void RequestScoreFromMaster()
+    {
+        if(PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC(nameof(UpdateScore), RpcTarget.All, JsonUtility.ToJson(Game_RuntimeData.gameScore));
+        }
     }
 
     /// <summary>
@@ -155,9 +170,9 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         playerHealth.isInvincible = true;
         Invoke(nameof(TurnOffInvincibility), 5.0f);
     }
-    
+
     /// <summary>
-    /// turning off the invincibility 
+    /// turning off the invincibility
     /// </summary>
     private void TurnOffInvincibility()
     {
