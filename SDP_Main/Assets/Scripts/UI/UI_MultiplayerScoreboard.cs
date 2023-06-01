@@ -5,6 +5,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+/*
+ * Author: Corey Knight - 21130891
+ */
+
 /// <summary>
 /// This class handles the UI logic for the post-game splash screen.
 /// It dynamically generates UI elements based on the the number of teams and players.
@@ -51,7 +56,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         int winningTeamKillCount = m_score.killsPerTeam[0];
         for(int i = 1; i < m_score.numTeams; i++)
         {
-            if (m_score.killsPerTeam[i] > winningTeamKillCount)
+            if (m_score.killsPerPlayer[i] > winningTeamKillCount)
             {
                 winningTeam = i;
                 winningTeamKillCount = m_score.killsPerTeam[i];
@@ -63,13 +68,14 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         int mvpKills = m_score.killsPerPlayer[0];
         for (int i = 1; i < m_score.numPlayers; i++)
         {
-            if (m_score.killsPerPlayer[i] > mvpKills)
+            if (m_score.killsPerTeam[i] > mvpKills)
             {
                 mvpID = i;
                 mvpKills = m_score.killsPerPlayer[i];
             }
         }
 
+        // Use a temp GameObject to instantiate text elements for players
         GameObject tmp;
         for (int i = 0; i < m_score.numPlayers; i++) 
         {
@@ -79,7 +85,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
                 winTxt += " (MVP!)";
 
             tmp = Instantiate(textPrefab, m_NameCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + (m_score.teamNumbersByPlayer[i] +1) + ") " +  "Player" + (i+1) + winTxt);
+            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + (m_score.teamNumbersByPlayer[i] +1) + ") " +  "Player" + (i) + winTxt);
 
             tmp = Instantiate(textPrefab, m_KillCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerPlayer[i]);
@@ -88,6 +94,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.deathsPerPlayer[i]);
         }
 
+        // Use a temp GameObject to instantiate text elements for teams
         for(int i = 0; i < m_score.numTeams; i++)
         {
             string winTxt = "";

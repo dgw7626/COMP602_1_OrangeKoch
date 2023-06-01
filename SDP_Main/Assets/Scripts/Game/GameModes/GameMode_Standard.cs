@@ -4,6 +4,10 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
+/*
+ * Author: Corey Knight - 21130891
+ */
+
 /// <summary>
 /// The standard game mode. This is used by default, unless another mode is selected.
 /// Players are divided into two teams, a timer is set, and players have until the timer runs out to 
