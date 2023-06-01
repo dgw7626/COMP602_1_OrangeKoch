@@ -27,7 +27,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
     private VerticalLayoutGroup m_TeamDeathCollumn;
 
     public GameObject textPrefab;
-
+    public GameObject tmp;
     /// <summary>
     /// Assigns UI layout groups to member references, and gets the score from RuntimeData
     /// </summary>
@@ -76,7 +76,6 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         }
 
         // Use a temp GameObject to instantiate text elements for players
-        GameObject tmp;
         for (int i = 0; i < m_score.numPlayers; i++) 
         {
             string winTxt = "";
