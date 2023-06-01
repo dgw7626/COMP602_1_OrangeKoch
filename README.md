@@ -39,17 +39,19 @@
 <li>Storage: 10 GB available space</li>
 
 <h2>Installation</h2>
-<ol>Download the game files from GitHub or a trusted source.</ul>
-<ol>Extract the downloaded files to your desired location on your computer.</ul>
-<ol>TBC</ul>
-<ol>TBC</ul>
-<ol>Launch the game and enjoy playing!</ul>
+<ol>
+<li>Download the game files from GitHub or a trusted source.</ul>
+<li>Extract the downloaded files to your desired location on your computer.</ul>
+<li>TBC</ul>
+<li>TBC</ul>
+<li>Launch the game and enjoy playing!</ul>
+</ol>
 
 <h2>Building Project from GitHub</h2>
-<ol></ul>
-<ol></ul>
-<ol></ul>
-<ol></ul>
+<ol>
+<li></ul>
+<ll></ul>
+</ol>
 
 <h2>Troubleshooting</h2>
 <p>If you encounter any issues while playing the game, try the following troubleshooting steps:</p>
