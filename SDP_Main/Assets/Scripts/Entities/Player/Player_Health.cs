@@ -16,7 +16,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     public float UI_HealthTime = 0.16f;
 
     public Vector3 respawnPosition;
-    public HealthBar healthBar;
+    public PlayerUI_HealthBar healthBar;
     private IEnumerator coroutine;
 
     public bool IsDead;

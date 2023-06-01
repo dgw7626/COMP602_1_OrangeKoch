@@ -5,13 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Trigger2 : MonoBehaviour
+public class Trigger3 : MonoBehaviour
 {
     public TextMeshProUGUI MoveText;
-    public TextMeshProUGUI SprintText;
     public TextMeshProUGUI JumpText;
+    public TextMeshProUGUI SprintText;
+    public TextMeshProUGUI ShootText;
 
-    // public GameObject trigger2;
+    // public GameObject trigger3;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,12 +22,14 @@ public class Trigger2 : MonoBehaviour
             //Move downward the tip text
             MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
             JumpText.rectTransform.anchoredPosition -= new Vector2(0, 50);
+            SprintText.rectTransform.anchoredPosition -= new Vector2(0, 50);
+            //Strikethrough the tip
             MoveText.fontStyle |= FontStyles.Strikethrough;
             JumpText.fontStyle |= FontStyles.Strikethrough;
-            // Show the Sprint text
-            JumpText.gameObject.SetActive(true);
+            SprintText.fontStyle |= FontStyles.Strikethrough;
 
-            
+            // Show the Sprint text
+            ShootText.gameObject.SetActive(true);
 
             gameObject.SetActive(false);
         }
