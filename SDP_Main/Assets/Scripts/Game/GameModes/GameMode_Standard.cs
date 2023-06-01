@@ -18,6 +18,8 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
     public s_GameScore teamScores;
+
+    // Kevin add: if make any problem, please delete that.
     private Player_Health playerHealth;
     private Weapon_ProjectileManager weapon_ProjectileManager;
     private Coroutine Coroutine;
@@ -120,7 +122,7 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         if (Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.IsMasterClient)
         {
             Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
-                nameof(Player_MultiplayerEntity.OnGameEnded),
+                nameof(Player_MultiplayerEntity.UpdateScore),
                 RpcTarget.All,
                 JsonUtility.ToJson(teamScores)
             );
@@ -143,7 +145,7 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
     public IEnumerator OnOneSecondCountdown()
     {
         Debug.Log("Begin! ");
-        while (GameMode_Manager.gameIsRunning)
+        while (GameMode_Manager.timerIsRunning)
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -153,17 +155,16 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
                     RpcTarget.Others,
                     GameMode_Manager.gameTime
                 );
-
                 // If the timer expires, tell the other players what the score is.
                 if (GameMode_Manager.gameTime < 1)
                 {
                     Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
-                        nameof(Player_MultiplayerEntity.OnGameEnded),
+                        nameof(Player_MultiplayerEntity.UpdateScore),
                         RpcTarget.Others,
                         JsonUtility.ToJson(Game_RuntimeData.gameScore)
                     );
 
-                    GameMode_Manager.gameIsRunning = false;
+                    GameMode_Manager.timerIsRunning = false;
                 }
             }
 
@@ -182,6 +183,13 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
     {
     }
 
+    /* public void OnScoreEvent(int score, int teamNumber) //TODO: CODE ADDED DUE TO MERGE BUT CONFLICTS
+    {
+        if (teamNumber > NUM_TEAMS || teamNumber < 0)
+            Debug.LogError(
+                "ERROR: Team " + teamNumber + " does not exist! Cannot assign points to team"
+            );
+    */
     /// <summary>
     /// Only the Master Client will execute this method. Counts score locally, to be shared with others later.
     /// </summary>
@@ -215,6 +223,7 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
             }
         }
     }
+
 
     public void LeaveScene(string sceneName)
     {
@@ -291,7 +300,6 @@ public class GameMode_Standard : MonoBehaviour, IgameMode
         }
         //Call the "OnRespawn" method on the target player's multiplayer entity via RPC
         if (targetPlayer != null)
-            if (targetPlayer != null)
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnRespawn), targetPlayer);
+            Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnRespawn), targetPlayer);
     }
 }
