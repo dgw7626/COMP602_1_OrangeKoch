@@ -1,18 +1,7 @@
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.CompilerServices;
-using System.ComponentModel;
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Net.Mime;
-using System.Threading;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using Color = UnityEngine.Color;
 using TMPro;
-using ICSharpCode.NRefactory.Ast;
 
 public class GameOverTimer : MonoBehaviour
 {
@@ -23,7 +12,7 @@ public class GameOverTimer : MonoBehaviour
 
     Color red = Color.red;
     Color green = Color.green;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -82,13 +71,13 @@ public class GameOverTimer : MonoBehaviour
 
     public void OverThe_Time(float nTime)
     {
-       
+
         if (nTime>= startTime)
         {
             startTime = nTime;
         }
 
-        
+
     }
 
     public void LessThe_Time(float nTime)

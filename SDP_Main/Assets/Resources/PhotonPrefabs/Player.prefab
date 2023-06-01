@@ -219,6 +219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3261135226639761469}
+  - component: {fileID: 2533150372593592177}
   m_Layer: 0
   m_Name: Model
   m_TagString: Player_Model
@@ -242,6 +243,20 @@ Transform:
   m_Father: {fileID: 9033863217191558648}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2533150372593592177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560335855464545266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d06d3adf0a58d41b1e2c7afa034270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  purple: {fileID: 2100000, guid: 573f9dd8457cc234f92023fcf23cebcc, type: 2}
+  orange: {fileID: 2100000, guid: 5da954f92a5bd824aad79319fabec30d, type: 2}
 --- !u!1 &2314404446829259426
 GameObject:
   m_ObjectHideFlags: 0
@@ -2227,6 +2242,7 @@ MonoBehaviour:
   UI_HealthTime: 0.16
   respawnPosition: {x: 0, y: 0, z: 0}
   healthBar: {fileID: 4142007182795401793}
+  IsDead: 0
 --- !u!1001 &3556487426557695805
 PrefabInstance:
   m_ObjectHideFlags: 0

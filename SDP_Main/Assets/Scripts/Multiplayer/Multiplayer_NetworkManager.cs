@@ -168,24 +168,6 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         Multiplayer_MenuManager.Instance.OpenMenu("error");
     }
 
-    /// <summary>
-    /// Method to quit multiplayer and return to Lobby.
-    /// </summary>
-    public void QuitMultiplayer()
-    {
-        Debug.Log("Quit Multiplayer Invoked - Returning to Lobby.");
-        Game_RuntimeData.CleanUp_Multiplayer_Data();
-
-        // Get a reference to the Photon Voice Manager object
-        var voiceManager = GameObject.Find("VoiceManager");
-        // If the object exists, stop and destroy the voice service
-        if (voiceManager != null)
-        {
-            Destroy(voiceManager);
-        }
-
-        StartCoroutine(QuitAfterDelay());
-    }
 
      /// <summary>
      /// Method to delay quitting and wait to disconnect from Photon Server.
@@ -234,7 +216,7 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         Debug.Log(PhotonNetwork.NickName+" has started a Game!");
-        PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Uknown);
+        PhotonNetwork.LoadLevel(Data_Scenes.Multiplayer_GameMap_Unknown);
         PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 }

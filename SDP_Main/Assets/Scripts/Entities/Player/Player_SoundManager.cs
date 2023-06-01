@@ -81,8 +81,9 @@ public class Player_SoundManager : MonoBehaviour
         {
             //Start Transmitting Voice
             OnPTTButtonPressed();
-        } else if(!transform.parent.GetComponent<Player_InputManager>().GetPTTButtonIsPressed() &&
-            transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled)
+        }
+        else if (!transform.parent.GetComponent<Player_InputManager>().GetPTTButtonIsPressed() &&
+          transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled)
         {
             //Finish Transmitting Voice
             OnPTTButtonReleased();
@@ -154,7 +155,8 @@ public class Player_SoundManager : MonoBehaviour
             Debug.Log("PTT Button Pressed!");
             transform.GetChild(0).GetComponent<Recorder>().TransmitEnabled = true;
             transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().SetPTTtext("(Press \"LEFT ALT\") PTT: ON");
-        } else
+        }
+        else
         {
             //Continue Transmitting Voice
         }
@@ -208,6 +210,9 @@ public class Player_SoundManager : MonoBehaviour
 
     internal void PlayLand()
     {
-        AudioSource.PlayOneShot(LandSfx);
+        if (!AudioSource.isPlaying)
+        {
+            AudioSource.PlayOneShot(LandSfx);
+        }
     }
 }
