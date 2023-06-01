@@ -27,16 +27,28 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
     private VerticalLayoutGroup m_TeamDeathCollumn;
 
     public GameObject textPrefab;
-    public GameObject tmp;
+
+    private bool initialized = false;
     /// <summary>
     /// Assigns UI layout groups to member references, and gets the score from RuntimeData
     /// </summary>
     void Start()
     {
+        if (initialized)
+            return;
+        Begin();
+        
+    }
+    public void Begin()
+    {
+        if (initialized)
+            return;
+
+        initialized = true;
         m_NameCollumn = transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
         m_KillCollumn = transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
         m_DeathCollumn = transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
-        
+
         m_TeamNameCollumn = transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
         m_TeamKillCollumn = transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<VerticalLayoutGroup>();
         m_TeamDeathCollumn = transform.GetChild(0).GetChild(3).GetChild(2).GetComponent<VerticalLayoutGroup>();
@@ -44,8 +56,8 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         m_score = Game_RuntimeData.gameScore;
 
         Init();
-    }
 
+    }
     /// <summary>
     /// Dynamically instantiate UI elements, assigns text elements a value from the score struct.
     /// </summary>
@@ -75,7 +87,8 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             }
         }
 
-        // Use a temp GameObject to instantiate text elements for players
+        // instantiate text elements for players into temp GameObject 
+        GameObject tmp;
         for (int i = 0; i < m_score.numPlayers; i++) 
         {
             string winTxt = "";
@@ -93,7 +106,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.deathsPerPlayer[i]);
         }
 
-        // Use a temp GameObject to instantiate text elements for teams
+        // instantiate text elements for teams into temp GameObject 
         for(int i = 0; i < m_score.numTeams; i++)
         {
             string winTxt = "";
