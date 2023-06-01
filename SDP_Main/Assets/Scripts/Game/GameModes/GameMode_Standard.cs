@@ -166,13 +166,23 @@ public class GameMode_Standard : IgameMode
     /// <param name="deathInfoStruct"></param>
     public void OnScoreEvent(s_DeathInfo deathInfoStruct)
     {
-        teamScores.killsPerPlayer[deathInfoStruct.killerId-1]++;
-        teamScores.deathsPerPlayer[deathInfoStruct.diedId-1]++;
+        CalculateScore(deathInfoStruct);
+
+        Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
+    }
+
+    /// <summary>
+    /// Calculate the score and store it locally
+    /// </summary>
+    /// <param name="deathInfoStruct"></param>
+    public void CalculateScore(s_DeathInfo deathInfoStruct)
+    {
+        teamScores.killsPerPlayer[deathInfoStruct.killerId - 1]++;
+        teamScores.deathsPerPlayer[deathInfoStruct.diedId - 1]++;
         teamScores.killsPerTeam[deathInfoStruct.killerTeam]++;
         teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
-
+        
         Game_RuntimeData.gameScore = teamScores;
-        Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
     }
 
     /// <summary>

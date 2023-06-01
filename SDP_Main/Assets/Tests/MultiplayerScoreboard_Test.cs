@@ -6,8 +6,8 @@ using UnityEditor;
 
 public class MultiplayerScorebard_Test
 {
-    private s_GameScore score;
     private GameObject scoreboardGameObj;
+    private GameMode_Standard gameMode;
 
     /// <summary>
     /// Method to create required objects in preparation for the Tests.
@@ -15,8 +15,7 @@ public class MultiplayerScorebard_Test
     [SetUp]
     public void Setup()
     {
-        score = new s_GameScore();
-        
+        gameMode = new GameMode_Standard();
     }
 
 
@@ -58,9 +57,12 @@ public class MultiplayerScorebard_Test
         // Scoreboard will act immediatley after instantiation
         //----------------------------------------------------
         
-        //8 players, 4 teams
+        // 8 players, 4 teams
         InitScoreStruct(8, 4);
-     
+
+        // Add some kills
+        gameMode.CalculateScore(new s_DeathInfo());
+
         // Instantiate Object and get references
         scoreboardGameObj = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Multiplayer_PostgameScoreboard.prefab");
         UI_MultiplayerScoreboard scoreScript = scoreboardGameObj.GetComponent<UI_MultiplayerScoreboard>();
@@ -76,19 +78,19 @@ public class MultiplayerScorebard_Test
 
     private void InitScoreStruct(int players, int teams)
     {
-        score.numPlayers = players;
-        score.numTeams = teams;
-        score.killsPerTeam = new int[teams];
-        score.deathsPerTeam = new int[teams];
-        score.killsPerPlayer = new int[players];
-        score.deathsPerPlayer = new int[players];
-        score.teamNumbersByPlayer = new int[players];
-        for (int i = 0; i < score.numPlayers; i++)
+        gameMode.teamScores = new s_GameScore();
+        gameMode.teamScores.numPlayers = players;
+        gameMode.teamScores.numTeams = teams;
+        gameMode.teamScores.killsPerTeam = new int[teams];
+        gameMode.teamScores.deathsPerTeam = new int[teams];
+        gameMode.teamScores.killsPerPlayer = new int[players];
+        gameMode.teamScores.deathsPerPlayer = new int[players];
+        gameMode.teamScores.teamNumbersByPlayer = new int[players];
+        for (int i = 0; i < gameMode.teamScores.numPlayers; i++)
         {
-            score.teamNumbersByPlayer[i] = (i + teams) % (teams);
+            gameMode.teamScores.teamNumbersByPlayer[i] = (i + teams) % (teams);
         }
 
-        Game_RuntimeData.gameScore = score;
 
     }
 }
