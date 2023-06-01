@@ -28,8 +28,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 
         if(Game_RuntimeData.gameMode == null)
         {
-            GameObject gameObject = new GameObject();
-            Game_RuntimeData.gameMode = gameObject.AddComponent<GameMode_Standard>();
+            Game_RuntimeData.gameMode = new GameMode_Standard();
         }
         gameMode = Game_RuntimeData.gameMode;
 

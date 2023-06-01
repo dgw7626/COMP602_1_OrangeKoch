@@ -62,7 +62,6 @@ MonoBehaviour:
   - PlayFootStep
   - RequestScoreFromMaster
   - InstantiateGunVFX
-  - OnRespawn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
