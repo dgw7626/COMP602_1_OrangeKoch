@@ -1717,6 +1717,11 @@ MonoBehaviour:
   proximityMuteText: {fileID: 0}
   pushToTalkText: {fileID: 0}
   timerText: {fileID: 4421130603208223025}
+  orangeColor: {r: 1, g: 0.65, b: 0, a: 1}
+  redAlertThreshold: 5
+  orangeAlertThreshold: 15
+  yellowAlertThreshold: 30
+  isRedAlert: 0
 --- !u!1 &7663682148274534915
 GameObject:
   m_ObjectHideFlags: 0

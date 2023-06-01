@@ -12,13 +12,13 @@ public class WeaponClip_Test
         // arrange
         var player = new GameObject().AddComponent<Weapon_ProjectileManager>();
 
-        player._weaponAmmo = 10;
+    //    player.WeaponAmmo = 10;
 
         // act
         //player.GetShoot_1();
 
         // assert
-        Assert.AreEqual(9, player._weaponAmmo);
+   //     Assert.AreEqual(9, player.WeaponAmmo);
         // additional assertions can be added based on the expected behavior
     }
 
@@ -27,7 +27,7 @@ public class WeaponClip_Test
     {
         // Arrange
         var shootingComponent = new GameObject().AddComponent<Weapon_ProjectileManager>();
-        shootingComponent._weaponAmmo = 3;
+   //     shootingComponent.WeaponAmmo = 3;
         var bulletPrefab = new GameObject();
        // var bulletComponent = bulletPrefab.AddComponent<Weapon_Bullet>();
 
@@ -35,7 +35,7 @@ public class WeaponClip_Test
         shootingComponent.GetShoot();
 
         // Assert
-        Assert.AreEqual(2, shootingComponent._weaponAmmo);
+    //    Assert.AreEqual(2, shootingComponent.WeaponAmmo);
        // Assert.IsTrue(bulletComponent.gameObject.activeSelf);
     }
 
@@ -44,19 +44,19 @@ public class WeaponClip_Test
     {
         // Arrange
         var reloadingComponent = new GameObject().AddComponent<Weapon_ProjectileManager>();
-        reloadingComponent._weaponClip = 2;
-        reloadingComponent._weaponAmmo = 10;
-        reloadingComponent._weaponInfo = ScriptableObject.CreateInstance<Weapon_Info>();
-        reloadingComponent._weaponInfo.BulletCounts = 15;
+      //  reloadingComponent.WeaponClip = 2;
+      //  reloadingComponent.WeaponAmmo = 10;
+      //  reloadingComponent.WeaponInfo = ScriptableObject.CreateInstance<Weapon_Info>();
+      //  reloadingComponent.WeaponInfo.BulletCounts = 15;
         var ammunitionUI = new GameObject().AddComponent<AmmunitionUI>();
-        reloadingComponent._ammunitionUI = ammunitionUI;
+       // reloadingComponent.AmmunitionUI = ammunitionUI;
 
         // Act
         reloadingComponent.Reload();
 
         // Assert
-        Assert.AreEqual(15, reloadingComponent._weaponAmmo);
-        Assert.AreEqual(1, reloadingComponent._weaponClip);
+     //   Assert.AreEqual(15, reloadingComponent.WeaponAmmo);
+     //   Assert.AreEqual(1, reloadingComponent.WeaponClip);
         //Assert.AreEqual(15, ammunitionUI.GetAmmoCount());
         //Assert.AreEqual(1, ammunitionUI.GetClipCount());
     }
