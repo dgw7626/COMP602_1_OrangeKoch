@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Author: Corey Knight - 21130891
+ */
 public class Game_MultiplayerState : AbstractState
 {
     public IgameMode gameMode;
