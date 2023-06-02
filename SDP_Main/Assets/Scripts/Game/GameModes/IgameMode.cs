@@ -1,6 +1,9 @@
 using Photon.Realtime;
 using System.Collections;
 
+/*
+ * Author: Corey Knight - 21130891
+ */
 
 /// <summary>
 /// Implemented by different game modes to handle different game logic.

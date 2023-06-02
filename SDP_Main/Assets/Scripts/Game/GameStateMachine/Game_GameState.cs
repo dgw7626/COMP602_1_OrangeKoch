@@ -5,6 +5,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * Author: Corey Knight - 21130891
+ */
+
+/// <summary>
+/// Game state machine. Can be used to implement gamestate specific action.
+/// </summary>
 public static class Game_GameState
 {
     public static AbstractState state;

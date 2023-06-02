@@ -2306,6 +2306,82 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 105529176479449258, guid: 512feea1e2de5414d9a66a89475e0dab, type: 3}
   m_PrefabInstance: {fileID: 328788894}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &328788896 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5074471211155539553, guid: 512feea1e2de5414d9a66a89475e0dab, type: 3}
+  m_PrefabInstance: {fileID: 328788894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &328788897 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3748439158543490194, guid: 512feea1e2de5414d9a66a89475e0dab, type: 3}
+  m_PrefabInstance: {fileID: 328788894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &328788898 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4477485401378234368, guid: 512feea1e2de5414d9a66a89475e0dab, type: 3}
+  m_PrefabInstance: {fileID: 328788894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &328788899 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2856387782199977673, guid: 512feea1e2de5414d9a66a89475e0dab, type: 3}
+  m_PrefabInstance: {fileID: 328788894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &328788900
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328788896}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2519473635315226807, guid: f6a73f66055e84540bb7bd434f5ccc63, type: 3}
+--- !u!64 &328788901
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328788897}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8105683404088807454, guid: f6a73f66055e84540bb7bd434f5ccc63, type: 3}
+--- !u!64 &328788902
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328788898}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3983063591393173388, guid: f6a73f66055e84540bb7bd434f5ccc63, type: 3}
+--- !u!64 &328788903
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328788899}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7702779526387289552, guid: f6a73f66055e84540bb7bd434f5ccc63, type: 3}
 --- !u!1001 &329281253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6815,6 +6891,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8b243bd4191fe1438a05dfd0dd7850a, type: 3}
+--- !u!1 &1251135558 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3935194980541397757, guid: c8b243bd4191fe1438a05dfd0dd7850a, type: 3}
+  m_PrefabInstance: {fileID: 1251135557}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1251135559
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251135558}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4493585093827132993, guid: e14514529cbf19f49a465a55c9955ecc, type: 3}
 --- !u!1001 &1251740683
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9495,11 +9590,11 @@ Transform:
   - {fileID: 1796464002}
   - {fileID: 1369828663}
   - {fileID: 651817833}
-  - {fileID: 1273148036}
   - {fileID: 1924406564}
   - {fileID: 988496447}
   - {fileID: 82965170}
   - {fileID: 99130323}
+  - {fileID: 1273148036}
   - {fileID: 1851449957}
   - {fileID: 1271615278}
   - {fileID: 688045798}
