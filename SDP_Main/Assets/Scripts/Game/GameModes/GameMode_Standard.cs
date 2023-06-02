@@ -178,14 +178,6 @@ public class GameMode_Standard : IgameMode
         Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
     }
 
-    /// <summary>
-    /// Executed by everyone. This tells a machine that a particular player has been killed, so you should handle respawning if applicable.
-    /// </summary>
-    /// <param name="deathInfoStruct"></param>
-    public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
-    {
-
-    }
 
     /// <summary>
     /// Use this to handle a player dropping.
@@ -220,44 +212,8 @@ public class GameMode_Standard : IgameMode
         }
     }
 
-
-    /// <summary>
-    /// Respawns the player and performs health and ammunition updates.
-    /// </summary>
-    /// <param name="value">Key-value pair representing the player's unique identifier and corresponding multiplayer entity.</param>
-    public void OnPlayerRespawn(KeyValuePair<int, Player_MultiplayerEntity> value)
+    public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
     {
-
-        Player_Health playerHealth = value.Value.GetComponent<Player_Health>();
-        Weapon_ProjectileManager weapon_ProjectileManager = value.Value.gameObject.GetComponentInChildren<Weapon_ProjectileManager>();
-        //update health
-        playerHealth.currentHealth = playerHealth.maxHealth;
-        playerHealth.currentUIHealth = playerHealth.maxHealth;
-        playerHealth.healthBar.SetHealth(playerHealth.currentUIHealth);
-        //Update the ammunition
-
-        weapon_ProjectileManager._weaponAmmo = weapon_ProjectileManager._weaponInfo.BulletCounts;
-        weapon_ProjectileManager._weaponClip = weapon_ProjectileManager._weaponInfo.ClipCounts;
-
-        weapon_ProjectileManager._ammunitionUI.SetAmmunition(
-             weapon_ProjectileManager._weaponAmmo,
-             weapon_ProjectileManager._weaponClip
-         );
-        // update the respawn point
-        value.Value.gameObject.transform.position = new Vector3(0, 30, 0);
-        //set the invincible time
-        Player targetPlayer = null;
-        foreach (Player p in PhotonNetwork.PlayerList)
-        {
-            if (p.ActorNumber == value.Key)
-            {
-                targetPlayer = p;
-                break;
-            }
-        }
-        //Call the "OnRespawn" method on the target player's multiplayer entity via RPC
-        if (targetPlayer != null)
-            if (targetPlayer != null)
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.OnRespawn), targetPlayer);
+        throw new System.NotImplementedException();
     }
 }

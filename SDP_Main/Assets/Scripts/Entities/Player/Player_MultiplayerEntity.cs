@@ -22,6 +22,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
 
     public Player_Health playerHealth;
 
+    private Weapon_ProjectileManager weapon_ProjectileManager;
     // A unique identifier for multiplayer matches
     public string uniqueID { get; private set; }
     public int teamNumber;
@@ -44,6 +45,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         // Finde the PlayerController within this game object
         playerController = GetComponent<Player_PlayerController>();
 
+        weapon_ProjectileManager = GetComponentInChildren<Weapon_ProjectileManager>();
 
         playerHealth = gameObject.GetComponent<Player_Health>();
 
@@ -123,17 +125,21 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
         if(info.diedId == PhotonNetwork.LocalPlayer.ActorNumber)
         {
-            //The one who died, is ME!
-            gameObject.transform.position = new Vector3(0, 10, 0);
+            // The one who died, is ME!
+            gameObject.transform.position = new Vector3(0, 30, 0);
+
+            // Reset Health
             playerHealth.Respawn();
+            
+            // Update the ammunition
+            weapon_ProjectileManager.ResetAmmo();
+
+            // Hanlde Invincibility if neccecary
+            OnRespawn();
         }
         if(PhotonNetwork.IsMasterClient)
         {
             Game_RuntimeData.gameMode.OnScoreEvent(info);
-        }
-        if (Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
-        {
-            Game_RuntimeData.gameMode.OnPlayerKilled(info);
         }
     }
 
@@ -162,9 +168,8 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// PunRPC callback. making the player character invincible
+    /// Making the player character invincible
     /// </summary>
-    [PunRPC]
     public void OnRespawn()
     {
         playerHealth.isInvincible = true;
