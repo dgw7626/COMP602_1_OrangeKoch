@@ -21,6 +21,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     private IEnumerator coroutine;
 
     public bool IsDead;
+
     /// <summary>
     /// Initializes the player's health.
     /// </summary>
@@ -91,11 +92,13 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// <param name="damageInfo"></param>
     public void TakeDamage(s_DamageInfo damageInfo)
     {
-        if (Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+        if (
+            Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine
+        )
             return;
 
         //If invincible deal no damage
-        if(isInvincible)
+        if (isInvincible)
         {
             return;
         }
@@ -103,7 +106,7 @@ public class Player_Health : MonoBehaviour, IDamageable
         currentHealth -= damageInfo.dmgValue;
 
         // Check if health reaches zero or below and trigger death
-        Debug.Log("Current health is: " +  currentHealth + " and IsDead: " + IsDead);
+        Debug.Log("Current health is: " + currentHealth + " and IsDead: " + IsDead);
         if (currentHealth <= 0 && !IsDead)
         {
             Debug.Log("I am dead so I die now");
@@ -124,20 +127,22 @@ public class Player_Health : MonoBehaviour, IDamageable
         else
         {
             PhotonView pv = null;
-            foreach(KeyValuePair<int, Player_MultiplayerEntity> kvp in Game_RuntimeData.activePlayers)
+            foreach (
+                KeyValuePair<int, Player_MultiplayerEntity> kvp in Game_RuntimeData.activePlayers
+            )
             {
-                if(kvp.Key == damageInfo.dmgRecievedId)
+                if (kvp.Key == damageInfo.dmgRecievedId)
                 {
                     pv = kvp.Value.playerController.photonView;
                     break;
                 }
             }
-            if(pv == null)
+            if (pv == null)
             {
                 Debug.LogError("NULL photon view found on player killed");
             }
 
-            if(PhotonNetwork.LocalPlayer.ActorNumber != pv.Owner.ActorNumber)
+            if (PhotonNetwork.LocalPlayer.ActorNumber != pv.Owner.ActorNumber)
             {
                 Debug.LogError("Trying to kill a clone!");
                 return;
@@ -150,8 +155,13 @@ public class Player_Health : MonoBehaviour, IDamageable
             deathInfo.diedId = damageInfo.dmgRecievedId;
 
             string json = JsonUtility.ToJson(deathInfo);
-            gameObject.GetComponent<Player_PlayerController>().photonView.RPC(
-            nameof(Player_MultiplayerEntity.OnPlayerKilled), RpcTarget.All, json);
+            gameObject
+                .GetComponent<Player_PlayerController>()
+                .photonView.RPC(
+                    nameof(Player_MultiplayerEntity.OnPlayerKilled),
+                    RpcTarget.All,
+                    json
+                );
             IsDead = true;
             Respawn();
         }
@@ -201,7 +211,9 @@ public class Player_Health : MonoBehaviour, IDamageable
             yield return new WaitForSeconds(UI_HealthTime);
         }
     }
-
+    /// <summary>
+    ///  Reset Health when respawn
+    /// </summary>
     public void Respawn()
     {
         IsDead = false;
