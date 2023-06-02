@@ -40,15 +40,19 @@ public class Player_Health_Tests
     }
 
     [UnityTest]
+    /// <summary>
+    /// Coroutine that updates the UI health value over time.
+    /// </summary>
+    /// <returns>An IEnumerator used for the coroutine.</returns>
     public IEnumerator UpdateUI_HealthDecreasesOverTime()
     {
-        // 设置当前UI健康值
+        // Set the current UI health value
         playerHealth.currentUIHealth = playerHealth.maxHealth;
 
-        // 设置协程的等待时间
+        // Set the wait time for the coroutine
         playerHealth.UI_HealthTime = 0.16f;
 
-        // 启动协程
+        // Start the coroutine
         updateUICoroutine = playerHealth.StartCoroutine(playerHealth.UpdateUI());
 
         float elapsedTime = 0f;
@@ -58,14 +62,13 @@ public class Player_Health_Tests
             yield return null;
         }
 
-        // 获取更新后的当前UI健康值
+        // Get the updated current UI health value
         float updatedUIHealth = playerHealth.currentUIHealth;
 
-        // 验证健康值是否减少，即UI是否更新
+        // Validate if the health value has decreased, indicating that the UI has been updated
         Assert.Less(updatedUIHealth, 100.0f);
 
-
-        // 停止协程的运行
+        // Stop the coroutine
         playerHealth.StopCoroutine(updateUICoroutine);
     }
 }
