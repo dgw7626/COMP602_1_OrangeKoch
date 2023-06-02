@@ -65,7 +65,6 @@ MonoBehaviour:
   - InstantiateGunVFX
   - RPC_Reload
   - RemoveAllPlayerCounts
-  - RPC_RemoveAllPlayerCounts
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

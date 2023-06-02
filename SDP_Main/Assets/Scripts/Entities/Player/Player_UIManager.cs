@@ -35,6 +35,8 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        //added PlayerCounts ui to check the remove instances.
+        PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
         //Return if not playing multiplayer, such that it is single.
         if (!Game_RuntimeData.isMultiplayer)
             return;
