@@ -12,6 +12,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     // Variables
     public float maxHealth = 100;
     public float currentHealth;
+    public bool isInvincible = false;
     public float currentUIHealth;
     public float UI_HealthTime = 0.16f;
 
@@ -46,7 +47,8 @@ public class Player_Health : MonoBehaviour, IDamageable
     void Update()
     {
         // Check if player falls below a certain height and cause damage
-        if (transform.position.y < -20)
+        // if (transform.position.y >=  2)
+        if (transform.position.y <= -10)
         {
             s_DamageInfo damageInfo = new s_DamageInfo();
             damageInfo.dmgValue = 10f;
@@ -59,13 +61,15 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// </summary>
     public void Begin(Player_MultiplayerEntity entity)
     {
-
         if (entity.playerController.photonView.IsMine)
         {
             // Check if the PhotonView is owned by the local player
             if (entity.playerController.photonView.IsMine)
             {
-                Debug.Log("The photon view belongs to: " + entity.playerController.photonView.Owner.ActorNumber);
+                Debug.Log(
+                    "The photon view belongs to: "
+                        + entity.playerController.photonView.Owner.ActorNumber
+                );
                 Debug.Log("Local ID: " + PhotonNetwork.LocalPlayer.ActorNumber);
             }
 
@@ -89,6 +93,12 @@ public class Player_Health : MonoBehaviour, IDamageable
     {
         if (Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
             return;
+
+        //If invincible deal no damage
+        if(isInvincible)
+        {
+            return;
+        }
         //Subtract damage
         currentHealth -= damageInfo.dmgValue;
 
@@ -170,7 +180,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     /// <summary>
     /// Updates the UI representing the player's health over time.
     /// </summary>
-    IEnumerator UpdateUI()
+    public IEnumerator UpdateUI()
     {
         while (true)
         {

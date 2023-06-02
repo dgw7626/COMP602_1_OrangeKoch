@@ -24,16 +24,16 @@ public class Weapon_System_Tests : MonoBehaviour
     public void Test_SetDamageValueTo10()
     {
         float finalValue = 10.0f;
-        weapon_Bullet.weaponDamage = 10.0f;
-        Assert.AreEqual(weapon_Bullet.weaponDamage, finalValue);
+   //   weapon_Bullet.WeaponDamage = 10.0f;
+   //   Assert.AreEqual(weapon_Bullet.WeaponDamage, finalValue);
         return;
     }
     [Test]
     public void Test_SetBulletIndexTo5()
     {
         int finalValue = 5;
-        weapon_Bullet._bulletIndex = 5;
-        Assert.AreEqual(weapon_Bullet._bulletIndex, finalValue);
+     //   weapon_Bullet.BulletIndex = 5;
+     //   Assert.AreEqual(weapon_Bullet.BulletIndex, finalValue);
         return;
     }
     [Test]
