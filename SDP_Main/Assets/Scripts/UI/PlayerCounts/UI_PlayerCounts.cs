@@ -37,9 +37,10 @@ public class UI_PlayerCounts : MonoBehaviour
      
             for (int j = 0; j < Game_RuntimeData.instantiatedPlayers.Count; j++)
         {
-            numPlayers++;
+         
             if (Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber % 2 == 0)
             {
+                    Debug.Log("test");
                 teamTwo++;
                     var viewLayers = Instantiate(
                     Resources.Load(Path.Combine("LocalPrefabs", "PlayerStatusUI")) as GameObject,
@@ -61,13 +62,14 @@ public class UI_PlayerCounts : MonoBehaviour
                     viewLayers.GetComponent<Image>().color = orange.color;
                     viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = teamOne.ToString();
                 }
-        }
+                numPlayers++;
+            }
 
         
             //get the game object instances here
  
-            totalLeftPlayers.text = "Team " + (numTeams -1) + "\n Total Players: " + teamOne;
-            totalRightPlayers.text = "Team " + (numTeams) + "\n Total Players: " +teamTwo;
+            totalLeftPlayers.text = "Team " + (numTeams -1) + "\n Total Players: " + teamTwo;
+            totalRightPlayers.text = "Team " + (numTeams) + "\n Total Players: " + teamOne;
      
         }
     }
