@@ -85,6 +85,9 @@ public class Player_PlayerController : MonoBehaviour
     [Tooltip("Damage recieved when falling at the maximum speed")]
     public float FallDamageAtMaxSpeed = 50f;
 
+    [Tooltip("Y position that causes the player to die, eg. falling off the map")]
+    public float killHeight = -10;
+
     public UnityAction<bool> OnStanceChanged;
     public Vector3 CharacterVelocity { get; set; }
     public bool IsGrounded { get; private set; }
@@ -192,10 +195,20 @@ public class Player_PlayerController : MonoBehaviour
             return;
 
         // TODO: check for Y kill
-        /*  if (!IsDead && transform.position.y < KillHeight)
-          {
-              m_Health.Kill();
-          }*/
+        if (transform.position.y < killHeight)
+        {
+            controller.enabled = false;
+            gameObject.transform.position = new Vector3(0, 30, 0);
+            controller.enabled = true;
+
+            s_DamageInfo d = new s_DamageInfo();
+            d.dmgDealerTeam = -1;
+            d.dmgDealerId = -1;
+            d.dmgRecievedTeam = Game_RuntimeData.thisMachinesMultiplayerEntity.teamNumber;
+            d.dmgRecievedId = photonView.Owner.ActorNumber;
+            d.dmgValue = 101f;
+            gameObject.GetComponent<Player_Health>().TakeDamage(d);
+        }
 
         HasJumpedThisFrame = false;
 

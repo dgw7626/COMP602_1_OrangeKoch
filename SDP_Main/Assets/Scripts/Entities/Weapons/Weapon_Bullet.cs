@@ -22,9 +22,9 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     {
         if (Game_RuntimeData.isMultiplayer && Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
         {
-      
+
             //check if the photon view is not null and is current multiplayer.
-     
+
                 //get the current index of the transform
                 _currentIndex = GetCurrentBuildIndex(transform.name);
                 if (_bulletIndex == _currentIndex)
@@ -34,7 +34,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                 _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
                 return;
                 }
-            
+
         }
         //get the player child object instance.
         Transform parentTransform = transform.parent;
@@ -132,7 +132,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// Author:Sky
     /// This method intantiates bullet vfx game instances.
     /// </summary>
-   
+
     public void InstantiateGunVFX()
     {
         //get all the object instances from the projectile manager class.
@@ -208,7 +208,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         s_DamageInfo dmg = new s_DamageInfo();
         dmg.bodyPart = e_BodyPart.NONE;
         dmg.dmgValue = 10f;
-        dmg.dmgDealerId = m_MultiplayerEntity.playerController.photonView.Owner.ActorNumber; 
+        dmg.dmgDealerId = m_MultiplayerEntity.playerController.photonView.Owner.ActorNumber;
         dmg.dmgRecievedId = pv.Owner.ActorNumber;
         dmg.dmgRecievedTeam = hit.transform.GetComponentInParent<Player_MultiplayerEntity>().teamNumber;
         dmg.dmgDealerTeam = m_MultiplayerEntity.teamNumber;

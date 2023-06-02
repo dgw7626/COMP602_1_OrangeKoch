@@ -4,6 +4,10 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
+/*
+ * Author: Corey Knight - 21130891
+ */
+
 /// <summary>
 /// The standard game mode. This is used by default, unless another mode is selected.
 /// Players are divided into two teams, a timer is set, and players have until the timer runs out to
@@ -169,17 +173,30 @@ public class GameMode_Standard : IgameMode
     /// <param name="deathInfoStruct"></param>
     public void OnScoreEvent(s_DeathInfo deathInfoStruct)
     {
-        teamScores.killsPerPlayer[deathInfoStruct.killerId-1]++;
-        teamScores.deathsPerPlayer[deathInfoStruct.diedId-1]++;
-        teamScores.killsPerTeam[deathInfoStruct.killerTeam]++;
-        teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
+        CalculateScore(deathInfoStruct);
 
-        Game_RuntimeData.gameScore = teamScores;
         Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
     }
 
-
     /// <summary>
+    /// Calculate the score and store it locally
+    /// </summary>
+    /// <param name="deathInfoStruct"></param>
+    public void CalculateScore(s_DeathInfo deathInfoStruct)
+    {
+        if(deathInfoStruct.killerId != -1)
+        {
+            teamScores.killsPerPlayer[deathInfoStruct.killerId - 1]++;
+            teamScores.killsPerTeam[deathInfoStruct.killerTeam]++;
+        }
+
+        teamScores.deathsPerPlayer[deathInfoStruct.diedId - 1]++;
+        teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
+
+        Game_RuntimeData.gameScore = teamScores;
+    }
+
+       /// <summary>
     /// Use this to handle a player dropping.
     /// </summary>
     /// <param name="playerLeftMatch"></param>
