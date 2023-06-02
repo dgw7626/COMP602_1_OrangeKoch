@@ -125,12 +125,13 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
         if(info.diedId == PhotonNetwork.LocalPlayer.ActorNumber)
         {
+            // The one who died, is ME!
             // reset the position
             gameObject.transform.position = new Vector3(0, 30, 0);
 
             // Reset Health
             playerHealth.Respawn();
-            
+
             // Update the ammunition
             weapon_ProjectileManager.ResetAmmo();
 
