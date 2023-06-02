@@ -1,7 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/*
 
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Dion Hemmes		            *
+ * Student ID: 		21154191		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+ */
+/// <summary>
+/// This Class holds static names for Maps and Map Patterns used for future development of selecting maps
+/// </summary>
 public static class Data_Scenes
 {
     public const string GameMap_Prefix = "GameMap_";
