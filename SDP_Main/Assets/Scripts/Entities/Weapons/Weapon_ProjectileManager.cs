@@ -248,7 +248,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
                 bullets.transform
             );
 
-
+            Debug.Log("CREATED!");
             //create muzzle flash object instnace in bulelts transform position.
             bulletObject.name = "(" + i + ")Bullet";
             bulletObject.GetComponent<AudioSource>().clip = WeaponInfo.ShootEffect;

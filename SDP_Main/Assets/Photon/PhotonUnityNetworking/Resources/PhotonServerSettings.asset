@@ -66,6 +66,7 @@ MonoBehaviour:
   - RPC_Reload
   - RemoveAllPlayerCounts
   - RPC_RemoveAllPlayerCounts
+  - RPC_InitBullets_P
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
