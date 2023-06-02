@@ -68,7 +68,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         int winningTeamKillCount = m_score.killsPerTeam[0];
         for(int i = 1; i < m_score.numTeams; i++)
         {
-            if (m_score.killsPerPlayer[i] > winningTeamKillCount)
+            if (m_score.killsPerTeam[i] > winningTeamKillCount)
             {
                 winningTeam = i;
                 winningTeamKillCount = m_score.killsPerTeam[i];
@@ -80,7 +80,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         int mvpKills = m_score.killsPerPlayer[0];
         for (int i = 1; i < m_score.numPlayers; i++)
         {
-            if (m_score.killsPerTeam[i] > mvpKills)
+            if (m_score.killsPerPlayer[i] > mvpKills)
             {
                 mvpID = i;
                 mvpKills = m_score.killsPerPlayer[i];
@@ -97,7 +97,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
                 winTxt += " (MVP!)";
 
             tmp = Instantiate(textPrefab, m_NameCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + (m_score.teamNumbersByPlayer[i] +1) + ") " +  "Player" + (i) + winTxt);
+            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + (m_score.teamNumbersByPlayer[i] +1) + ") " +  "Player" + (i + 1) + winTxt);
 
             tmp = Instantiate(textPrefab, m_KillCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerPlayer[i]);

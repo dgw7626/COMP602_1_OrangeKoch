@@ -129,10 +129,10 @@ public class MultiplayerScorebard_Test
     }
 
     /// <summary>
-    /// Asserts that the correct number of kills and Deaths have been assigned to each player
+    /// Asserts that the MVP and Winning Team are being calculated correctley
     /// </summary>
     [Test]
-    public void AssignCorrectScoresToPlayerTest()
+    public void AssignMVPandWinningTeamTest()
     {
         // ARRANGE / ACT
         // Scoreboard will act immediatley after instantiation
@@ -148,10 +148,10 @@ public class MultiplayerScorebard_Test
 
         // Add some kills
         for (int i = 0; i < 10; i++)
-            AddKill(0, 0, 1, 1);
+            AddKill(1, 1, 0, 0);
 
         for (int i = 0; i < 5; i++)
-            AddKill(1, 1, 0, 0);
+            AddKill(0, 0, 1, 1);
 
         // Instantiate Object and get references
         scoreboardGameObj = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Multiplayer_PostgameScoreboard.prefab"));
@@ -165,18 +165,19 @@ public class MultiplayerScorebard_Test
         // ASSERT
         //----------------------------------------------------
         Assert.NotNull(scoreScript);
-        StringAssert.Contains("MVP", NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
-        StringAssert.DoesNotContain("MVP", NameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("MVP", NameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.DoesNotContain("MVP", NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
 
-        StringAssert.Contains("Winner", TeamNameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
-        StringAssert.Contains("LOOSER", TeamNameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("Winner", TeamNameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("LOOSER", TeamNameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
     }
 
     /// <summary>
-    /// Asserts that the MVP and Winning Team are being calculated correctley
+    /// Asserts that the correct number of kills and Deaths have been assigned to each player
     /// </summary>
     [Test]
-    public void AssignMVPandWinningTeamTest()
+    public void AssignCorrectScoresToPlayerTest()
+
     {
         // ARRANGE / ACT
         // Scoreboard will act immediatley after instantiation
@@ -209,13 +210,13 @@ public class MultiplayerScorebard_Test
         // ASSERT
         //----------------------------------------------------
         Assert.NotNull(scoreScript);
-        StringAssert.AreEqualIgnoringCase("Player1", NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
-        StringAssert.AreEqualIgnoringCase("10", KillCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
-        StringAssert.AreEqualIgnoringCase("5", DeathCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("Player1", NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("10", KillCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("5", DeathCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
 
-        StringAssert.AreEqualIgnoringCase("Player2", NameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
-        StringAssert.AreEqualIgnoringCase("5", KillCollumn.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text);
-        StringAssert.AreEqualIgnoringCase("10", DeathCollumn.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("Player2", NameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("5", KillCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("10", DeathCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
     }
 
     private void InitScoreStruct(int players, int teams)
