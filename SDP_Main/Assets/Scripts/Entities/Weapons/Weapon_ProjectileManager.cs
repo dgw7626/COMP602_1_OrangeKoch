@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using System.IO;
 using Photon.Pun;
+using System;
 //[RequireComponent(typeof(PhotonView))]
 public class Weapon_ProjectileManager : MonoBehaviour
 {
@@ -26,15 +27,10 @@ public class Weapon_ProjectileManager : MonoBehaviour
     internal Coroutine _currentCoroutine;
     private Vector3 _fw, _up;
     private Transform _camera;
-    [HideInInspector]
     public List<Transform> muzzleFlashObjects;
-    [HideInInspector]
     public List<Transform> bulletTracerObjects;
-    [HideInInspector]
     public List<Transform> bulletObjects;
-    [HideInInspector]
     public List<Transform> shellObjects;
-    [HideInInspector]
     public List<Transform> hitObjects;
     internal Transform _firePos;
 
@@ -187,7 +183,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         //get all the parent objects.
         foreach (GameObject obj in allObjects)
         {
-            if (obj.transform.parent == null) 
+            if (obj.transform.parent == null)
             {
                 topLevelObjects.Add(obj);
             }
@@ -211,7 +207,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
     public void InitBullets()
-    { 
+    {
         Transform bullets;
         //check if the bullet object instnace is null
         if (transform.Find("Bullets") == null)
@@ -290,7 +286,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             hitObjects.Add(hitObject.transform);
             bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex = (int)i;
             bulletObject.SetActive(true);
-            
+
             //add the local bullet object instance to the weapon_bullet class.
             _localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
         }
@@ -332,7 +328,8 @@ public class Weapon_ProjectileManager : MonoBehaviour
             {
                 if (!bullet.transform.GetChild(0).gameObject.activeSelf)
                 {
-                    bullet.GetComponent<Weapon_Bullet>().Fire(_firePos);
+                    Weapon_Bullet weaponBullet = bullet.GetComponent<Weapon_Bullet>();
+                    weaponBullet.Fire(_firePos);
                     return;
                 }
             }
@@ -344,6 +341,17 @@ public class Weapon_ProjectileManager : MonoBehaviour
     ///  This method reloads the current gun, ammo display will be refreshed after reload.
     /// </summary>
     [PunRPC]
+    public void RPC_Reload()
+    {
+        //only reloads when the clip is greater than 0.
+        if (this._weaponClip > 0)
+        {
+            //update the current ammo.
+            this._weaponAmmo = _weaponInfo.BulletCounts;
+            this._weaponClip--;
+            _ammunitionUI.SetAmmunition(this._weaponAmmo, this._weaponClip);
+        }
+    }
     public void Reload()
     {
         //only reloads when the clip is greater than 0.
@@ -379,7 +387,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
                     //get rpc shoot if the mutliplayer is enabled other wise it calls local method.
                     if (Game_RuntimeData.isMultiplayer)
                     {
-                        GetShoot();
+                        transform.GetComponent<PhotonView>().RPC(nameof(GetShoot),RpcTarget.All);
                         break;
                     }
                     else
@@ -394,5 +402,13 @@ public class Weapon_ProjectileManager : MonoBehaviour
             }
         }
         return;
+    }
+    // Reset the Ammo when player respawn
+    public void ResetAmmo()
+    {
+        _weaponAmmo = _weaponInfo.BulletCounts;
+        _weaponClip = _weaponInfo.ClipCounts;
+
+        _ammunitionUI.SetAmmunition(_weaponAmmo, _weaponClip);
     }
 }

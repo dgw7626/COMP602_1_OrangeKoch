@@ -37,7 +37,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         if (initialized)
             return;
         Begin();
-        
+
     }
     public void Begin()
     {
@@ -87,9 +87,9 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             }
         }
 
-        // instantiate text elements for players into temp GameObject 
+        // instantiate text elements for players into temp GameObject
         GameObject tmp;
-        for (int i = 0; i < m_score.numPlayers; i++) 
+        for (int i = 0; i < m_score.numPlayers; i++)
         {
             string winTxt = "";
 
@@ -97,16 +97,16 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
                 winTxt += " (MVP!)";
 
             tmp = Instantiate(textPrefab, m_NameCollumn.transform);
-            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + (m_score.teamNumbersByPlayer[i] +1) + ") " +  "Player" + (i + 1) + winTxt);
+            tmp.GetComponent<TextMeshProUGUI>().text = ("(Team" + (m_score.teamNumbersByPlayer[i] +1) + ") " +  "Player" + (i+1) + winTxt);
 
             tmp = Instantiate(textPrefab, m_KillCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerPlayer[i]);
-            
+
             tmp = Instantiate(textPrefab, m_DeathCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.deathsPerPlayer[i]);
         }
 
-        // instantiate text elements for teams into temp GameObject 
+        // instantiate text elements for teams into temp GameObject
         for(int i = 0; i < m_score.numTeams; i++)
         {
             string winTxt = "";
@@ -133,7 +133,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
     void Update()
     {
         // Messy hack that breaks all of our conventions
-        if(Input.GetKeyDown(KeyCode.Escape)) 
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
             Game_GameState.NextScene("Lobby");
         }

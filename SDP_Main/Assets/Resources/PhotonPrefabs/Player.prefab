@@ -1717,6 +1717,11 @@ MonoBehaviour:
   proximityMuteText: {fileID: 0}
   pushToTalkText: {fileID: 0}
   timerText: {fileID: 4421130603208223025}
+  orangeColor: {r: 1, g: 0.65, b: 0, a: 1}
+  redAlertThreshold: 5
+  orangeAlertThreshold: 15
+  yellowAlertThreshold: 30
+  isRedAlert: 0
 --- !u!1 &7663682148274534915
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,6 +2243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  isInvincible: 0
   currentUIHealth: 0
   UI_HealthTime: 0.16
   respawnPosition: {x: 0, y: 0, z: 0}
