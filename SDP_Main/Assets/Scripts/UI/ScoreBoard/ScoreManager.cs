@@ -23,7 +23,6 @@ public class ScoreManager
     public ScoreManager(int winningTeamName)
     {
         this.winningTeamName = winningTeamName;
-        
     }
 
    

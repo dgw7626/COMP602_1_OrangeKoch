@@ -8,11 +8,22 @@ using UnityEngine.TestTools;
 public class PutPlayerDetailOnFirebaseTests
 {
     public PutPlayerDetailOnFirebase playerDetailOnFirebase;
+    
 
+    
     [SetUp]
     public void Setup()
     {
-        playerDetailOnFirebase = new PutPlayerDetailOnFirebase();
+     playerDetailOnFirebase = new PutPlayerDetailOnFirebase();
+     GameObject playerObject = new GameObject();
+     playerDetailOnFirebase = playerObject.AddComponent<PutPlayerDetailOnFirebase>();
+        
+    }
+
+    [TearDown]
+    public void Teardown()
+    {
+        Object.DestroyImmediate(playerDetailOnFirebase);
     }
 
     [Test]
@@ -27,7 +38,7 @@ public class PutPlayerDetailOnFirebaseTests
         playerDetailOnFirebase.team_1player_1Detail(playerName, kills, deaths);
 
         // Assert
-        RestClient.Get<ScoreManager>("https://project-10bbb-default-rtdb.firebaseio.com/player6.json")
+        RestClient.Get<ScoreManager>("https://project-10bbb-default-rtdb.firebaseio.com/player2.json")
        .Then(response =>
        {
            Assert.IsNotNull(response); // Check if the response is not null
