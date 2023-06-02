@@ -1,11 +1,20 @@
+/*
+
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+*/
 using NUnit.Framework;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEditor;
-using System.Collections;
-using System.Threading.Tasks;
-using System;
 
 /*
  * Author: Corey Knight - 21130891
@@ -58,7 +67,6 @@ public class MultiplayerScorebard_Test
     [TearDown]
     public void Teardown()
     {
-        //Object.DestroyImmediate(scoreboardGameObj);
     }
 
 

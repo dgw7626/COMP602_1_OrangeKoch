@@ -1,12 +1,20 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-/*
- * Author: Corey Knight - 21130891
- */
 
 /// <summary>
 /// An instance of this will exist inside multiplayer scenes. Used to create a c# native gameMode, and start coroutines.
@@ -96,6 +104,10 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         Debug.Log("Player" +  otherPlayer.ActorNumber + " left the room!");
         Debug.Log("The master client is: " + PhotonNetwork.MasterClient.ActorNumber);
     }
+
+    /// <summary>
+    /// Decrement the timer value. Only the master client will do this. Called by RPC
+    /// </summary>
     public static void SetSynchronousTimerValue()
     {
         if (PhotonNetwork.IsMasterClient)

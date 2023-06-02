@@ -1,7 +1,22 @@
+/*
+
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+*/
 using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
 
+/// <summary>
+/// Main controller class for player, both single and multiplayer
+/// </summary>
 [RequireComponent(typeof(CharacterController), typeof(Player_InputManager))]
 public class Player_PlayerController : MonoBehaviour
 {
@@ -92,18 +107,20 @@ public class Player_PlayerController : MonoBehaviour
     public Vector3 CharacterVelocity { get; set; }
     public bool IsGrounded { get; private set; }
     public bool HasJumpedThisFrame { get; private set; }
-    public bool IsDead { get; private set; }
     public bool IsCrouching { get; private set; }
 
     public bool IsInputLocked;
     public PhotonView photonView;
     public Player_SoundManager soundManager;
     
-    [SerializeField]private ScoreBoard _scoreBoard;
+    [SerializeField]
+    private ScoreBoard _scoreBoard;
     //private List<Weapon> weapons = new List<Weapon>();
     //private Weapon currentWeapon = null;
 
-
+    /// <summary>
+    /// Slowdown rotation during aiming
+    /// </summary>
     public float RotationMultiplier
     {
         get
@@ -131,6 +148,9 @@ public class Player_PlayerController : MonoBehaviour
     const float k_JumpGroundingPreventionTime = 0.2f;
     const float k_GroundCheckDistanceInAir = 0.1f;
 
+    /// <summary>
+    /// Assert required references not null
+    /// </summary>
     void Awake()
     {
         if (Game_RuntimeData.isMultiplayer)
@@ -145,30 +165,14 @@ public class Player_PlayerController : MonoBehaviour
         soundManager = GetComponentInChildren<Player_SoundManager>();
         if (soundManager == null)
             Debug.LogError("ERROR: SoundManager is NULL for " + gameObject.name);
-        //TODO: Add weapons
-        /*
-        Weapon[] myGuns = GetComponentsInChildren<Weapon>();
-        if (myGuns.Length > 0)
-        {
-            for (int i = 0; i < myGuns.Length; i++)
-                weapons.Add(myGuns[i]);
-
-            currentWeapon = myGuns[0];
-        }
-        else
-        {
-            Debug.LogError("Player " + gameObject.name + " has no weapons!");
-        }*.
-
-        //TODO: Register as an actor in the scene
-        /*ActorsManager actorsManager = FindObjectOfType<ActorsManager>();
-        if (actorsManager != null)
-            actorsManager.SetPlayer(gameObject);*/
     }
 
+    /// <summary>
+    /// Initialize variables
+    /// </summary>
     void Start()
     {
-
+        // Destroy camera in multiplayer clones
         if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -186,15 +190,19 @@ public class Player_PlayerController : MonoBehaviour
         UpdateCharacterHeight(true);
     }
 
+    /// <summary>
+    /// Handle player movement
+    /// </summary>
     void Update()
     {
+        // Prevent mulitplayer clones from moving
         if (Game_RuntimeData.isMultiplayer && !photonView.IsMine)
             return;
 
         if (IsInputLocked)
             return;
 
-        // TODO: check for Y kill
+        //Check for Y kill
         if (transform.position.y < killHeight)
         {
             controller.enabled = false;
@@ -271,18 +279,10 @@ public class Player_PlayerController : MonoBehaviour
             _scoreBoard.GetScoreboard();
         }
     }
-    
-    void OnDie()
-    {
-        IsDead = true;
 
-        //TODO: weapon
-        // Tell the weapons manager to switch to a non-existing weapon in order to lower the weapon
-        /*        m_WeaponsManager.SwitchToWeaponIndex(-1, true);
-
-                EventManager.Broadcast(Events.PlayerDeathEvent);*/
-    }
-
+    /// <summary>
+    /// Do not jump if in the air
+    /// </summary>
     void GroundCheck()
     {
         // Make sure that the ground check distance while already in air is very small, to prevent suddenly snapping to ground
@@ -321,6 +321,9 @@ public class Player_PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Turn mouse input into a camera movement
+    /// </summary>
     void HandleCharacterMovement()
     {
         // horizontal character rotation
@@ -434,32 +437,51 @@ public class Player_PlayerController : MonoBehaviour
         }
     }
 
-    // Returns true if the slope angle represented by the given normal is under the slope angle limit of the character controller
+    /// <summary>
+    /// Returns true if the slope angle represented by the given normal is under the slope angle limit of the character controller
+    /// </summary>
+    /// <param name="normal"></param>
+    /// <returns></returns>
     bool IsNormalUnderSlopeLimit(Vector3 normal)
     {
         return Vector3.Angle(transform.up, normal) <= controller.slopeLimit;
     }
 
-    // Gets the center point of the bottom hemisphere of the character controller capsule
+    /// <summary>
+    /// Gets the center point of the bottom hemisphere of the character controller capsule
+    /// </summary>
+    /// <returns></returns>
     Vector3 GetCapsuleBottomHemisphere()
     {
         return transform.position + (transform.up * controller.radius);
     }
 
-    // Gets the center point of the top hemisphere of the character controller capsule
+    /// <summary>
+    /// Gets the center point of the top hemisphere of the character controller capsule
+    /// </summary>
+    /// <param name="atHeight"></param>
+    /// <returns></returns>
     Vector3 GetCapsuleTopHemisphere(float atHeight)
     {
         return transform.position + (transform.up * (atHeight - controller.radius));
     }
 
-    // Gets a reoriented direction that is tangent to a given slope
+    /// <summary>
+    /// Gets a reoriented direction that is tangent to a given slope
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="slopeNormal"></param>
+    /// <returns></returns>
     public Vector3 GetDirectionReorientedOnSlope(Vector3 direction, Vector3 slopeNormal)
     {
         Vector3 directionRight = Vector3.Cross(direction, transform.up);
         return Vector3.Cross(slopeNormal, directionRight).normalized;
     }
 
-    //TODO: Actor Transform
+    /// <summary>
+    /// Update character height
+    /// </summary>
+    /// <param name="force"></param>
     void UpdateCharacterHeight(bool force)
     {
         // Update height instantly
@@ -468,7 +490,6 @@ public class Player_PlayerController : MonoBehaviour
             controller.height = m_TargetCharacterHeight;
             controller.center = Vector3.up * controller.height * 0.5f;
             PlayerCamera.transform.localPosition = Vector3.up * m_TargetCharacterHeight * CameraHeightRatio;
-            //m_Actor.AimPoint.transform.localPosition = controller.center;
         }
         // Update smooth height
         else if (controller.height != m_TargetCharacterHeight)
@@ -479,11 +500,15 @@ public class Player_PlayerController : MonoBehaviour
             controller.center = Vector3.up * controller.height * 0.5f;
             PlayerCamera.transform.localPosition = Vector3.Lerp(PlayerCamera.transform.localPosition,
                 Vector3.up * m_TargetCharacterHeight * CameraHeightRatio, CrouchingSharpness * Time.deltaTime);
-            //m_Actor.AimPoint.transform.localPosition = controller.center;
         }
     }
 
-    // Checks for collisions in a radius
+    /// <summary>
+    /// Checks for collisions in a radius
+    /// </summary>
+    /// <param name="crouched"></param>
+    /// <param name="ignoreObstructions"></param>
+    /// <returns></returns>
     bool CanCrouchOrJump(bool crouched, bool ignoreObstructions)
     {
         // set appropriate heights

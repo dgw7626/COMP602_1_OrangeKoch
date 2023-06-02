@@ -1,9 +1,18 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using Photon.Realtime;
 using System.Collections;
 
-/*
- * Author: Corey Knight - 21130891
- */
 
 /// <summary>
 /// Implemented by different game modes to handle different game logic.

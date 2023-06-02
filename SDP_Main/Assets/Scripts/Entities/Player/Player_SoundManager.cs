@@ -1,10 +1,25 @@
+/*
+
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+*/
 using Photon.Voice.Unity;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using Photon.Pun;
+
+/// <summary>
+/// Handles sound emission on the Player prefab
+/// </summary>
 public class Player_SoundManager : MonoBehaviour
 {
     [Tooltip("Master Audio Mixer")]
@@ -23,8 +38,11 @@ public class Player_SoundManager : MonoBehaviour
     [Tooltip("Sound played for footsteps")]
     public AudioClip FootstepSfx;
 
-    [Tooltip("Sound played when jumping")] public AudioClip JumpSfx;
-    [Tooltip("Sound played when landing")] public AudioClip LandSfx;
+    [Tooltip("Sound played when jumping")] 
+    public AudioClip JumpSfx;
+
+    [Tooltip("Sound played when landing")] 
+    public AudioClip LandSfx;
 
     [Tooltip("Sound played when taking damage from a fall")]
     public AudioClip FallDamageSfx;
@@ -171,11 +189,19 @@ public class Player_SoundManager : MonoBehaviour
         transform.parent.Find("PlayerUI").GetComponent<Player_UIManager>().SetPTTtext("(Press \"LEFT ALT\") PTT: OFF");
     }
 
+    /// <summary>
+    /// Sound when taking fall damage, seperate to landing sound
+    /// </summary>
     internal void PlayFallDamage()
     {
         //AudioSource.PlayOneShot(FallDamageSfx);
     }
 
+    /// <summary>
+    /// Walking sound. Calculates a minimun cooldown between plays while walking
+    /// </summary>
+    /// <param name="isSprinting"></param>
+    /// <param name="magnitude"></param>
     internal void PlayFootstep(bool isSprinting, float magnitude)
     {
         float chosenFootstepSfxFrequency =
@@ -198,16 +224,27 @@ public class Player_SoundManager : MonoBehaviour
 
 
     }
+
+    /// <summary>
+    /// Networked multiplayer footsteps
+    /// </summary>
     [PunRPC]
     internal void PlayFootStep()
     {
         AudioSource.PlayOneShot(FootstepSfx);
     }
+
+    /// <summary>
+    /// Sound when starting a jump
+    /// </summary>
     internal void PlayJump()
     {
         //AudioSource.PlayOneShot(JumpSfx);
     }
 
+    /// <summary>
+    /// Sound when landing a jump
+    /// </summary>
     internal void PlayLand()
     {
         if (!AudioSource.isPlaying)

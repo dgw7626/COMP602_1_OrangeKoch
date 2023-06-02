@@ -1,8 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/*
 
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+*/
+using System;
+
+/// <summary>
+/// Used to identify body parts on the player model
+/// </summary>
 [Serializable]
 public enum e_BodyPart
 {
@@ -14,6 +26,9 @@ public enum e_BodyPart
     LEGS
 }
 
+/// <summary>
+/// Used to pass game scores between calsses
+/// </summary>
 [Serializable]
 public struct s_GameScore
 {
@@ -26,6 +41,9 @@ public struct s_GameScore
     public int[] teamNumbersByPlayer;
 }
 
+/// <summary>
+/// Used to pass damage across classes
+/// </summary>
 [Serializable]
 public struct s_DamageInfo
 {
@@ -36,6 +54,10 @@ public struct s_DamageInfo
     public float dmgValue;
     public e_BodyPart bodyPart;
 }
+
+/// <summary>
+/// Used to pass death events across classes
+/// </summary>
 [Serializable]
 public struct s_DeathInfo
 {

@@ -1,12 +1,20 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-
-/*
- * Author: Corey Knight - 21130891
- */
 
 /// <summary>
 /// The standard game mode. This is used by default, unless another mode is selected.
@@ -118,7 +126,6 @@ public class GameMode_Standard : IgameMode
         {
             p.playerController.IsInputLocked = true;
         }
-        //TODO: Cleanup
 
         s_GameScore score = Game_RuntimeData.gameScore;
 
@@ -196,7 +203,7 @@ public class GameMode_Standard : IgameMode
         Game_RuntimeData.gameScore = teamScores;
     }
 
-       /// <summary>
+    /// <summary>
     /// Use this to handle a player dropping.
     /// </summary>
     /// <param name="playerLeftMatch"></param>

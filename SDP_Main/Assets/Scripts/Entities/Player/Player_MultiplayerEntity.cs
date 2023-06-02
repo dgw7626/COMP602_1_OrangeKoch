@@ -1,14 +1,17 @@
-using Photon.Pun;
-using Photon.Realtime;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
 /*
- * Author: Corey Knight - 21130891
- */
+
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+*/
+using Photon.Pun;
+using UnityEngine;
 
 /// <summary>
 /// Represents an active player. Contains PunRPC callbacks for all multiplayer network actions.
@@ -19,18 +22,18 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
 {
     // The controller that is attatched to this PlayerPrefab
     public Player_PlayerController playerController;
-
     public Player_Health playerHealth;
-
     private Weapon_ProjectileManager weapon_ProjectileManager;
+
     // A unique identifier for multiplayer matches
     public string uniqueID { get; private set; }
     public int teamNumber;
 
-    //--------------------------------------------------------------------------------------------------------------
-
-    //TODO: May be redundant. A Unique ID is stored as a key-value pair in Game_RuntimeData upon entering a match.
-    // May be used in future for account sign-in.
+    /// <summary>
+    /// Store the PhotonView.Owner.ActorNumber locally
+    /// </summary>
+    /// <param name="uniqueID"></param>
+    /// <returns></returns>
     public bool RegisterUniqueID(string uniqueID)
     {
         if (this.uniqueID != null)
@@ -40,6 +43,9 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         return true;
     }
 
+    /// <summary>
+    /// Gather references, If multiplayer, register yourself with static collections
+    /// </summary>
     private void Start()
     {
         // Finde the PlayerController within this game object
@@ -152,7 +158,6 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     {
         s_GameScore gameScoreStruct = (s_GameScore)JsonUtility.FromJson(gameScoreStructJSON, typeof(s_GameScore));
 
-        // MunishesScoreStuff.HereIsTheScore(gameScoreStruct);
         Game_RuntimeData.gameScore = gameScoreStruct;
     }
 

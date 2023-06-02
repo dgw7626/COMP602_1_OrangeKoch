@@ -1,13 +1,19 @@
-using System.Collections;
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-/*
- * Author: Corey Knight - 21130891
- */
 
 /// <summary>
 /// Game state machine. Can be used to implement gamestate specific action.
@@ -16,6 +22,10 @@ public static class Game_GameState
 {
     public static AbstractState state;
 
+    /// <summary>
+    /// Run the current state.
+    /// </summary>
+    /// <param name="param"></param>
     public static void RunCurrentState(System.Object param)
     {
         state = state.RunState(param);

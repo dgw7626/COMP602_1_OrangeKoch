@@ -1,12 +1,24 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-/*
- * Author: Corey Knight - 21130891
- */
+/// <summary>
+/// Static data class that stores essential shared data for a session.
+/// Warning! Do not abuse the convenience of chucking references in here!
+/// That is an anit-pattern! Only use this class if neccecary.
+/// </summary>
 public class Game_RuntimeData
 {
     /// <summary>
@@ -104,15 +116,10 @@ public class Game_RuntimeData
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.Disconnect();
 
-        //TODO: these members need to be alive after this method, because
-        // they are required to cleanup the game.
-        // consider another cleanup method to garbage collect these after the scoreboard.
-        //gameMode_Manager = null;
         instantiatedPlayers = new List<Player_MultiplayerEntity>();
         teams = new List<List<Player_MultiplayerEntity>>();
         activePlayers = null;
         isMultiplayer = false;
-        //gameMode = null;
         thisMachinesPlayersPhotonView = null;
     }
 }

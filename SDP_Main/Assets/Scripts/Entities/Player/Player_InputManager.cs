@@ -1,7 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Corey Knigth	            *
+ * Student ID: 		21130891		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+*/
 using UnityEngine;
 
+/// <summary>
+/// This class acts as a buffer between the keyboard/mouse and other classes.
+/// It sets a state in realtime for an input, then rather than having the input call a 
+/// method, a method can check the keystate and act accordingly.
+/// </summary>
 public class Player_InputManager : MonoBehaviour
 {
     public float lookSensitivity = 1f;
@@ -12,6 +27,9 @@ public class Player_InputManager : MonoBehaviour
     Player_PlayerController playerControllerscript;
     bool isShootHeld;
 
+    /// <summary>
+    /// Initialize variables
+    /// </summary>
     void Start()
     {
         // Set look sensitivity speed from the Options Window
@@ -25,18 +43,27 @@ public class Player_InputManager : MonoBehaviour
         Cursor.visible = false;
     }
 
+    /// <summary>
+    /// Mouse button input handled after mouse movement. 
+    /// </summary>
     void LateUpdate()
     {
         isShootHeld = GetFireInputHeld();
     }
 
-    //TODO: Lock input for Gameover, other
+    /// <summary>
+    /// Prevents any input action from the player.
+    /// </summary>
+    /// <returns></returns>
     public bool InputIsLocked()
     {
         return false;
     }
 
-    //TODO: Put input names into a static class.
+    /// <summary>
+    /// Converts vertical and horizontal keyboard movement into a single vector
+    /// </summary>
+    /// <returns></returns>
     public Vector3 GetMoveInput()
     {
         if (InputIsLocked())
@@ -50,22 +77,29 @@ public class Player_InputManager : MonoBehaviour
 
         return move;
     }
-
-    public bool OnTest()
-    {
-        return Input.GetButtonDown("Test");
-    }
-
+    
+    /// <summary>
+    /// Horizontal mouse
+    /// </summary>
+    /// <returns></returns>
     public float GetLookInputsHorizontal()
     {
         return GetMouseLookAxis("Mouse X");
     }
 
+    /// <summary>
+    /// Vertical mouse
+    /// </summary>
+    /// <returns></returns>
     public float GetLookInputsVertical()
     {
         return GetMouseLookAxis("Mouse Y");
     }
 
+    /// <summary>
+    /// Spacebar
+    /// </summary>
+    /// <returns></returns>
     public bool IsJumping()
     {
         if (InputIsLocked())
@@ -73,19 +107,19 @@ public class Player_InputManager : MonoBehaviour
         return Input.GetButton("Jump");
     }
 
-    public bool IsJumpHeld()
-    {
-        if (InputIsLocked())
-            return false;
-
-        return Input.GetButton("Jump");
-    }
-
+    /// <summary>
+    /// When the shoot button is released
+    /// </summary>
+    /// <returns></returns>
     public bool GetFireInputReleased()
     {
         return !GetFireInputHeld() && isShootHeld;
     }
 
+    /// <summary>
+    /// Is the fire button currentley down
+    /// </summary>
+    /// <returns></returns>
     public bool GetFireInputHeld()
     {
         if (InputIsLocked())
@@ -94,6 +128,10 @@ public class Player_InputManager : MonoBehaviour
         return Input.GetAxis("Shoot") > 0f;
     }
 
+    /// <summary>
+    /// Right click mouse
+    /// </summary>
+    /// <returns></returns>
     public bool GetAimInputHeld()
     {
         if (InputIsLocked())
@@ -102,6 +140,10 @@ public class Player_InputManager : MonoBehaviour
         return Input.GetAxis("Aim") >= 0f;
     }
 
+    /// <summary>
+    /// Spirnt button(shift)
+    /// </summary>
+    /// <returns></returns>
     public bool GetSprintInputHeld()
     {
         if (InputIsLocked())
@@ -110,6 +152,10 @@ public class Player_InputManager : MonoBehaviour
         return Input.GetButton("Sprint");
     }
 
+    /// <summary>
+    /// Crouch button (ctrl)
+    /// </summary>
+    /// <returns></returns>
     public bool GetCrouchInputDown()
     {
         if (InputIsLocked())
@@ -118,6 +164,10 @@ public class Player_InputManager : MonoBehaviour
         return Input.GetButtonDown("Crouch");
     }
 
+    /// <summary>
+    /// Crouch button (ctrl)
+    /// </summary>
+    /// <returns></returns>
     public bool GetCrouchInputReleased()
     {
         if (InputIsLocked())
@@ -126,6 +176,10 @@ public class Player_InputManager : MonoBehaviour
         return Input.GetButtonUp("Crouch");
     }
 
+    /// <summary>
+    /// Reload (r)
+    /// </summary>
+    /// <returns></returns>
     public bool GetReloadButtonDown()
     {
         if (InputIsLocked())
@@ -133,7 +187,11 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetButtonDown("Reload");
     }
-    //Weapon Script for semi.
+
+    /// <summary>
+    /// Shoot
+    /// </summary>
+    /// <returns></returns>
     public bool GetFireInputDown()
     {
         if (InputIsLocked())
@@ -141,6 +199,11 @@ public class Player_InputManager : MonoBehaviour
 
         return Input.GetButtonDown("Shoot");
     }
+
+    /// <summary>
+    /// Mouse scroll
+    /// </summary>
+    /// <returns></returns>
     public int GetSwitchWeaponInput()
     {
         if (InputIsLocked())
@@ -154,7 +217,12 @@ public class Player_InputManager : MonoBehaviour
             return 0;
     }
 
-    public bool GetScoreBoardInputDown(){
+    /// <summary>
+    /// Tab
+    /// </summary>
+    /// <returns></returns>
+    public bool GetScoreBoardInputDown()
+    {
         if(InputIsLocked())
             return false;
         
@@ -162,6 +230,10 @@ public class Player_InputManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Number keys
+    /// </summary>
+    /// <returns></returns>
     public int GetSelectWeaponInput()
     {
         if (InputIsLocked())
@@ -188,6 +260,11 @@ public class Player_InputManager : MonoBehaviour
             return 0;
     }
 
+    /// <summary>
+    /// Mouse movement
+    /// </summary>
+    /// <param name="mouseInputName"></param>
+    /// <returns></returns>
     float GetMouseLookAxis(string mouseInputName)
     {
         if (InputIsLocked())
