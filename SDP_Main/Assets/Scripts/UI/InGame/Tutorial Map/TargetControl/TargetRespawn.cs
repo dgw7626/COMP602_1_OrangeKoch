@@ -17,7 +17,6 @@ public class TargetRespawn : MonoBehaviour
 {
     public float respawnTime = 3f; // The time it takes for the target to respawn
     public Vector3 respawnPosition; // The position where the object will respawn
-    private bool isRespawning = false; // Indicates if the object is currently respawning
     public ScoreCount scoreCount; // Reference to the ScoreCount script
 
     /// <summary>
@@ -34,7 +33,6 @@ public class TargetRespawn : MonoBehaviour
     /// </summary>
     public void RespawnDelay()
     {
-        isRespawning = true;
         gameObject.SetActive(false); // Hide the object
         Invoke(nameof(Respawn), respawnTime); // Wait for a moment before activating the object
     }
@@ -46,6 +44,6 @@ public class TargetRespawn : MonoBehaviour
     {
         transform.position = respawnPosition; // Set the spawn position for new objects
         gameObject.SetActive(true); // Activate the target
-        isRespawning = false;
+      
     }
 }

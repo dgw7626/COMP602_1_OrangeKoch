@@ -34,9 +34,9 @@ public class Trigger3 : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             //Move downward the tip text
-            MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
-            JumpText.rectTransform.anchoredPosition -= new Vector2(0, 50);
-            SprintText.rectTransform.anchoredPosition -= new Vector2(0, 50);
+            MoveText.rectTransform.anchoredPosition -= new Vector2(0, 100);
+            JumpText.rectTransform.anchoredPosition -= new Vector2(0, 100);
+            SprintText.rectTransform.anchoredPosition -= new Vector2(0, 100);
             //Strikethrough the tip
             MoveText.fontStyle |= FontStyles.Strikethrough;
             JumpText.fontStyle |= FontStyles.Strikethrough;

@@ -31,7 +31,7 @@ public class Trigger1 : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // Move the tip text downward
-            MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
+            MoveText.rectTransform.anchoredPosition -= new Vector2(0, 100);
             MoveText.fontStyle |= FontStyles.Strikethrough;
             // Show the Jump text
             JumpText.gameObject.SetActive(true);
