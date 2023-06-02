@@ -66,6 +66,7 @@ public class Player_UIManager : MonoBehaviour
         {
             return;
         }
+        // if its photon mine get the player count ui.
         PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
     }
 
