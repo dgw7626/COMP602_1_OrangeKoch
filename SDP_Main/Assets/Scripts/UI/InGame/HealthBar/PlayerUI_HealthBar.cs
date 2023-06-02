@@ -1,5 +1,4 @@
-    /*
-
+/*
  ************************************************
  *                                              *				
  * Primary Dev: 	Siyi Wang		            *
@@ -8,7 +7,6 @@
  * Assessment Item: Orange Koch                 *
  * 						                        *			
  ************************************************
-
  */
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SDP_Main/Assets/Scripts/UI/InGame/Tutorial Map/TargetControl/ScoreCount.cs.meta
 guid: 4e5194efd7df82f498df375d96bd601a
+========
+guid: cba289c8558493d4c8942f73427315f0
+>>>>>>>> Kevin---ShootDummy:SDP_Main/Assets/Scripts/UI/InGame/Tutorial Map/TargetControl/MoveObject.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
