@@ -254,7 +254,7 @@ public class Player_PlayerController : MonoBehaviour
           //  _projectMananger.Reload();
         }
         //checking Scoreboard
-        if(inputHandler.GetScoreBoardInputDown()){
+        if(Game_RuntimeData.isMultiplayer && inputHandler.GetScoreBoardInputDown()){
             _scoreBoard.GetScoreboard();
         }
     }
