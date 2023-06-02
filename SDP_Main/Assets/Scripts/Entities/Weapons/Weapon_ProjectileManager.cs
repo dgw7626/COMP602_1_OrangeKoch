@@ -183,7 +183,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         //get all the parent objects.
         foreach (GameObject obj in allObjects)
         {
-            if (obj.transform.parent == null) 
+            if (obj.transform.parent == null)
             {
                 topLevelObjects.Add(obj);
             }
@@ -207,7 +207,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
     public void InitBullets()
-    { 
+    {
         Transform bullets;
         //check if the bullet object instnace is null
         if (transform.Find("Bullets") == null)
@@ -286,7 +286,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             hitObjects.Add(hitObject.transform);
             bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex = (int)i;
             bulletObject.SetActive(true);
-            
+
             //add the local bullet object instance to the weapon_bullet class.
             _localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
         }
@@ -404,7 +404,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         }
         return;
     }
-
+    // Reset the Ammo when player respawn
     public void ResetAmmo()
     {
         _weaponAmmo = _weaponInfo.BulletCounts;
