@@ -11,24 +11,24 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   AppSettings:
     AppIdRealtime: bbf7a3e6-3ffe-4a31-b5e6-cddf3f2a14fd
-    AppIdFusion:
-    AppIdChat:
+    AppIdFusion: 
+    AppIdChat: 
     AppIdVoice: 0f938494-a53a-4189-b4a8-78af8d3b4797
-    AppVersion:
+    AppVersion: 
     UseNameServer: 1
     FixedRegion: au
-    Server:
+    Server: 
     Port: 0
-    ProxyServer:
+    ProxyServer: 
     Protocol: 0
     EnableProtocolFallback: 1
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion:
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -65,7 +65,6 @@ MonoBehaviour:
   - InstantiateGunVFX
   - RPC_Reload
   - RemoveAllPlayerCounts
-  - RPC_RemoveAllPlayerCounts
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
