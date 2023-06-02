@@ -100,9 +100,11 @@ public class Game_RuntimeData
     public static void CleanUp_Multiplayer_Data()
     {
         Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
-
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.Disconnect();
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+        }
 
         //TODO: these members need to be alive after this method, because
         // they are required to cleanup the game.
