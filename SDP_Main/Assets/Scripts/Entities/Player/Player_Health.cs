@@ -202,6 +202,9 @@ public class Player_Health : MonoBehaviour, IDamageable
         }
     }
 
+    /// <summary>
+    /// reaset the player's health when respawn.
+    /// </summary>
     public void Respawn()
     {
         IsDead = false;
