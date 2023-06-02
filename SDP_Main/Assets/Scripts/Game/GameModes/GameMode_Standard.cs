@@ -6,9 +6,9 @@ using Photon.Realtime;
 
 /// <summary>
 /// The standard game mode. This is used by default, unless another mode is selected.
-/// Players are divided into two teams, a timer is set, and players have until the timer runs out to 
+/// Players are divided into two teams, a timer is set, and players have until the timer runs out to
 /// get as many kills as possible. The team with the highest number of kills wins.
-/// 
+///
 /// This is a native c# class, and is held statically by game_RuntimeData. Implements the IgameMode interface.
 /// </summary>
 public class GameMode_Standard : IgameMode
@@ -18,10 +18,10 @@ public class GameMode_Standard : IgameMode
     private const int INITIAL_SCORE = 0;
     private int numPlayers;
     public s_GameScore teamScores;
-    
+
     /// <summary>
     /// Called by the gameModeManager instace from within the scene.
-    /// Sets up the game and initializes values. 
+    /// Sets up the game and initializes values.
     /// </summary>
     public void InitGame()
     {
@@ -64,7 +64,7 @@ public class GameMode_Standard : IgameMode
         // Initialize Countdown
         if (PhotonNetwork.IsMasterClient)
         {
-            GameMode_Manager.gameTime =  MAX_GAME_TIME_SECONDS;
+            GameMode_Manager.gameTime = MAX_GAME_TIME_SECONDS;
         }
 
         StartGame();
@@ -81,15 +81,18 @@ public class GameMode_Standard : IgameMode
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
         {
             p.playerController.IsInputLocked = false;
-      
-            if(p.playerController.photonView.IsMine)
+
+            if (p.playerController.photonView.IsMine)
             {
                 Game_RuntimeData.thisMachinesPlayersPhotonView = p.playerController.photonView;
-                Debug.Log("At START GAME: ThisMachines PhotonView is mine, and my number is: " + PhotonNetwork.LocalPlayer.ActorNumber + 
-                    " " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber);
+                Debug.Log(
+                    "At START GAME: ThisMachines PhotonView is mine, and my number is: "
+                        + PhotonNetwork.LocalPlayer.ActorNumber
+                        + " "
+                        + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber
+                );
             }
         }
-
     }
 
     /// <summary>
@@ -104,7 +107,7 @@ public class GameMode_Standard : IgameMode
         Debug.Log("Game Stoped!");
 
         Game_RuntimeData.matchIsRunning = false;
-       
+
 
         //Lock Controlls
         foreach (Player_MultiplayerEntity p in Game_RuntimeData.instantiatedPlayers)
@@ -130,10 +133,14 @@ public class GameMode_Standard : IgameMode
         Debug.Log("Begin! ");
         while(GameMode_Manager.timerIsRunning)
         {
-            if(PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
             {
                 GameMode_Manager.SetSynchronousTimerValue();
-                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC("GetSynchronousTimerValue", RpcTarget.Others, GameMode_Manager.gameTime);
+                Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(
+                    "GetSynchronousTimerValue",
+                    RpcTarget.Others,
+                    GameMode_Manager.gameTime
+                );
 
             }
 
@@ -171,14 +178,6 @@ public class GameMode_Standard : IgameMode
         Game_RuntimeData.thisMachinesPlayersPhotonView.RPC(nameof(Player_MultiplayerEntity.UpdateScore), RpcTarget.All, JsonUtility.ToJson(teamScores));
     }
 
-    /// <summary>
-    /// Executed by everyone. This tells a machine that a particular player has been killed, so you should handle respawning if applicable.
-    /// </summary>
-    /// <param name="deathInfoStruct"></param>
-    public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
-    {
-        
-    }
 
     /// <summary>
     /// Use this to handle a player dropping.
@@ -205,10 +204,16 @@ public class GameMode_Standard : IgameMode
         {
             if (e.GetComponent<PhotonView>().Owner.ActorNumber == id)
             {
-                Game_RuntimeData.RegisterNewMultiplayerPlayer(e.GetComponent<PhotonView>().Owner.ActorNumber, e);
+                Game_RuntimeData.RegisterNewMultiplayerPlayer(
+                    e.GetComponent<PhotonView>().Owner.ActorNumber,
+                    e
+                );
             }
         }
     }
 
-
+    public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
+    {
+        throw new System.NotImplementedException();
+    }
 }
