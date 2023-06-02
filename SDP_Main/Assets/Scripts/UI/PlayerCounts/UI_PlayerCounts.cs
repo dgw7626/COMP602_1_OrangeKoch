@@ -52,7 +52,7 @@ public class UI_PlayerCounts : MonoBehaviour
                     leftView);
                     viewLayers.GetComponent<Image>().color = purple.color;
 
-                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (numPlayers +1).ToString();
+                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber.ToString();
                 }
             else 
             {
@@ -63,7 +63,7 @@ public class UI_PlayerCounts : MonoBehaviour
                    Quaternion.identity,
                    rightView);
                     viewLayers.GetComponent<Image>().color = orange.color;
-                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (numPlayers+1).ToString();
+                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber.ToString();
                 }
                 numPlayers++;
             }
