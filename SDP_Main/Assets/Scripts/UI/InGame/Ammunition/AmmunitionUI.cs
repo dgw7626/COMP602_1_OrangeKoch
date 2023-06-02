@@ -1,22 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Siyi Wang		            *
+ * Student ID: 		19036757		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using UnityEngine;
 using UnityEngine.UI;
+
 public class AmmunitionUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-  
-    public Text Text;
-    public void SetAmmunition(int currentBullet,int bulletmag)
-    {
-        Text.text = currentBullet + " / " + bulletmag;
-        
-    }
+    public Text Text; // Reference to the Text component
 
-
-        public void UpdateUI(int currentBullet,int bulletmag)
+    /// <summary>
+    /// Sets the ammunition count in the UI.
+    /// </summary>
+    /// <param name="currentBullet">The current bullet count.</param>
+    /// <param name="bulletmag">The maximum bullet count.</param>
+    public void SetAmmunition(int currentBullet, int bulletmag)
     {
+        // Update the text with the current bullet count and maximum bullet count
         Text.text = currentBullet + " / " + bulletmag;
     }
- 
+
+    /// <summary>
+    /// Updates the ammunition count in the UI.
+    /// </summary>
+    /// <param name="currentBullet">The current bullet count.</param>
+    /// <param name="bulletmag">The maximum bullet count.</param>
+    public void UpdateUI(int currentBullet, int bulletmag)
+    {
+        // Update the text with the current bullet count and maximum bullet count
+        Text.text = currentBullet + " / " + bulletmag;
+    }
 }
