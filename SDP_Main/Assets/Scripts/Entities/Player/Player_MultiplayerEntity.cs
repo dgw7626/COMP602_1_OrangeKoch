@@ -130,7 +130,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
 
             // Reset Health
             playerHealth.Respawn();
-            
+
             // Update the ammunition
             weapon_ProjectileManager.ResetAmmo();
 

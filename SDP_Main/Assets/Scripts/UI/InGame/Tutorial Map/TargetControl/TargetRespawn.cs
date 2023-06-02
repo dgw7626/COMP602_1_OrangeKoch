@@ -1,4 +1,4 @@
-﻿/*
+/*
 
  ************************************************
  *                                              *
@@ -44,6 +44,6 @@ public class TargetRespawn : MonoBehaviour
     {
         transform.position = respawnPosition; // Set the spawn position for new objects
         gameObject.SetActive(true); // Activate the target
-      
+
     }
 }

@@ -4,6 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Author: Corey Knight - 21130891
+ */
+
 /// <summary>
 /// An instance of this will exist inside multiplayer scenes. Used to create a c# native gameMode, and start coroutines.
 /// </summary>

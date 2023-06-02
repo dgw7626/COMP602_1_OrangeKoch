@@ -120,7 +120,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                 else if (hit.transform.tag == "Dummy")
                 {
                     TargetRespawn target = hit.transform.GetComponent<TargetRespawn>();
-                      target.scoreCount.IncreaseScore();
+                    target.scoreCount.IncreaseScore();
                     target.RespawnDelay();
                 }
                 RenderGunTrace(hit.point, origin.position);
