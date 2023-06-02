@@ -12,7 +12,6 @@
  */
 using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEditor.SceneManagement;
 
 public class OrangeKoch : MonoBehaviour
 {

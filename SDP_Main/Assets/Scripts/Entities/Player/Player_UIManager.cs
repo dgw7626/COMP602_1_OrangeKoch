@@ -192,7 +192,10 @@ public class Player_UIManager : MonoBehaviour
             if (!Game_RuntimeData.matchIsRunning)
                 return;
             //it removes all current player instances. the who left the game will be deleted.
-            transform.GetComponent<PhotonView>().RPC(nameof(RPC_RemoveAllPlayerCounts), RpcTarget.All);
+            if (transform.GetComponent<PhotonView>() != null)
+            {
+                transform.GetComponent<PhotonView>().RPC(nameof(RPC_RemoveAllPlayerCounts), RpcTarget.All);
+            }
             Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
         }
         else
