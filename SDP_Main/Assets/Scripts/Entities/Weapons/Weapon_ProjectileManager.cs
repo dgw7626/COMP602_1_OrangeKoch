@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using System.IO;
 using Photon.Pun;
+using System;
 //[RequireComponent(typeof(PhotonView))]
 public class Weapon_ProjectileManager : MonoBehaviour
 {
@@ -402,5 +403,13 @@ public class Weapon_ProjectileManager : MonoBehaviour
             }
         }
         return;
+    }
+    // Reset the Ammo when player respawn
+    public void ResetAmmo()
+    {
+        _weaponAmmo = _weaponInfo.BulletCounts;
+        _weaponClip = _weaponInfo.ClipCounts;
+
+        _ammunitionUI.SetAmmunition(_weaponAmmo, _weaponClip);
     }
 }

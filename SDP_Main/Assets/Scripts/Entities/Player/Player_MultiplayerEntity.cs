@@ -22,8 +22,9 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
 
     public Player_Health playerHealth;
 
+    private Weapon_ProjectileManager weapon_ProjectileManager;
     // A unique identifier for multiplayer matches
-    public string uniqueID {  get; private set; }
+    public string uniqueID { get; private set; }
     public int teamNumber;
 
     //--------------------------------------------------------------------------------------------------------------
@@ -44,6 +45,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         // Finde the PlayerController within this game object
         playerController = GetComponent<Player_PlayerController>();
 
+        weapon_ProjectileManager = GetComponentInChildren<Weapon_ProjectileManager>();
 
         playerHealth = gameObject.GetComponent<Player_Health>();
 
@@ -57,7 +59,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
             Game_RuntimeData.instantiatedPlayers.Add(this);
 
             // Register the PhotnView with the local machine
-            if(playerController.photonView.IsMine)
+            if (playerController.photonView.IsMine)
             {
                 Game_RuntimeData.thisMachinesPlayersPhotonView = playerController.photonView;
                 Game_RuntimeData.thisMachinesMultiplayerEntity = this;
@@ -83,17 +85,17 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
 
         //Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(dmgInfo.dmgRecievedId);
         Debug.Log("SHOULD ONLY BE PLAYER: I am the player: " + playerController.photonView.Owner.ActorNumber + "\nBut I should be: " + PhotonNetwork.LocalPlayer.ActorNumber);
-        if(playerController.photonView.IsMine)
+        if (playerController.photonView.IsMine)
         {
             Debug.Log("The PV is mine (" + dmgInfo.dmgRecievedId + ")and I was shot by " + dmgInfo.dmgDealerId);
         }
 
         if (playerController.photonView.IsMine)
         {
-            Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber)    );
+            Debug.Log("My actor number: " + (playerController.photonView.IsMine ? PhotonNetwork.LocalPlayer.ActorNumber : playerController.photonView.Owner.ActorNumber));
             Debug.Log("The actor who was shot: " + dmgInfo.dmgRecievedId);
             playerHealth.TakeDamage(dmgInfo);
-                
+
         }
     }
 
@@ -123,17 +125,21 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
         s_DeathInfo info = (s_DeathInfo)JsonUtility.FromJson(deathInfoStructJSON, typeof(s_DeathInfo));
         if(info.diedId == PhotonNetwork.LocalPlayer.ActorNumber)
         {
-            //The one who died, is ME!
-            gameObject.transform.position = new Vector3(0, 10, 0);
+            // reset the position
+            gameObject.transform.position = new Vector3(0, 30, 0);
+
+            // Reset Health
             playerHealth.Respawn();
+            
+            // Update the ammunition
+            weapon_ProjectileManager.ResetAmmo();
+
+            // Hanlde Invincibility if neccecary
+            OnRespawn();
         }
         if(PhotonNetwork.IsMasterClient)
         {
             Game_RuntimeData.gameMode.OnScoreEvent(info);
-        }
-        if(Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
-        {
-            Game_RuntimeData.gameMode.OnPlayerKilled(info);
         }
     }
 
@@ -144,7 +150,7 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     public void UpdateScore(string gameScoreStructJSON)
     {
         s_GameScore gameScoreStruct = (s_GameScore)JsonUtility.FromJson(gameScoreStructJSON, typeof(s_GameScore));
-        
+
         // MunishesScoreStuff.HereIsTheScore(gameScoreStruct);
         Game_RuntimeData.gameScore = gameScoreStruct;
     }
@@ -155,9 +161,26 @@ public class Player_MultiplayerEntity : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RequestScoreFromMaster()
     {
-        if(PhotonNetwork.IsMasterClient) 
+        if(PhotonNetwork.IsMasterClient)
         {
             photonView.RPC(nameof(UpdateScore), RpcTarget.All, JsonUtility.ToJson(Game_RuntimeData.gameScore));
         }
+    }
+
+    /// <summary>
+    /// Making the player character invincible
+    /// </summary>
+    public void OnRespawn()
+    {
+        playerHealth.isInvincible = true;
+        Invoke(nameof(TurnOffInvincibility), 5.0f);
+    }
+
+    /// <summary>
+    /// turning off the invincibility
+    /// </summary>
+    private void TurnOffInvincibility()
+    {
+        playerHealth.isInvincible = false;
     }
 }
