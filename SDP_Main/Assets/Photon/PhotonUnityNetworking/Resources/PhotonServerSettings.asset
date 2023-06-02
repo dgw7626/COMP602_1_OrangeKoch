@@ -63,6 +63,7 @@ MonoBehaviour:
   - OnRespawn
   - RequestScoreFromMaster
   - InstantiateGunVFX
+  - RPC_Reload
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

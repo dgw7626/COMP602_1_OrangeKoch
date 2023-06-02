@@ -27,15 +27,10 @@ public class Weapon_ProjectileManager : MonoBehaviour
     internal Coroutine _currentCoroutine;
     private Vector3 _fw, _up;
     private Transform _camera;
-    [HideInInspector]
     public List<Transform> muzzleFlashObjects;
-    [HideInInspector]
     public List<Transform> bulletTracerObjects;
-    [HideInInspector]
     public List<Transform> bulletObjects;
-    [HideInInspector]
     public List<Transform> shellObjects;
-    [HideInInspector]
     public List<Transform> hitObjects;
     internal Transform _firePos;
 
@@ -322,6 +317,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// Author: Sky
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
+    [PunRPC]
     public void GetShoot()
     {
         if (_weaponAmmo >= 1)
@@ -333,7 +329,8 @@ public class Weapon_ProjectileManager : MonoBehaviour
             {
                 if (!bullet.transform.GetChild(0).gameObject.activeSelf)
                 {
-                    bullet.GetComponent<Weapon_Bullet>().Fire(_firePos);
+                    Weapon_Bullet weaponBullet = bullet.GetComponent<Weapon_Bullet>();
+                    weaponBullet.Fire(_firePos);
                     return;
                 }
             }
@@ -345,6 +342,17 @@ public class Weapon_ProjectileManager : MonoBehaviour
     ///  This method reloads the current gun, ammo display will be refreshed after reload.
     /// </summary>
     [PunRPC]
+    public void RPC_Reload()
+    {
+        //only reloads when the clip is greater than 0.
+        if (this._weaponClip > 0)
+        {
+            //update the current ammo.
+            this._weaponAmmo = _weaponInfo.BulletCounts;
+            this._weaponClip--;
+            _ammunitionUI.SetAmmunition(this._weaponAmmo, this._weaponClip);
+        }
+    }
     public void Reload()
     {
         //only reloads when the clip is greater than 0.
@@ -380,7 +388,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
                     //get rpc shoot if the mutliplayer is enabled other wise it calls local method.
                     if (Game_RuntimeData.isMultiplayer)
                     {
-                        GetShoot();
+                        transform.GetComponent<PhotonView>().RPC(nameof(GetShoot),RpcTarget.All);
                         break;
                     }
                     else
