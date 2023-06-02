@@ -9,6 +9,7 @@ public class UI_PlayerCounts : MonoBehaviour
 {
     public TextMeshProUGUI totalLeftPlayers;
     public TextMeshProUGUI totalRightPlayers;
+    public TextMeshProUGUI currentPlayer;
     public Material purple;
     public Material orange;
     public Transform viewLeftPlayers;
@@ -22,6 +23,8 @@ public class UI_PlayerCounts : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Get Plaeyr 
+        currentPlayer = transform.Find("CurrentPlayer").GetComponent<TextMeshProUGUI>();
         totalLeftPlayers = transform.Find("LeftPlayers").Find("TotalLeftPlayers").GetComponent<TextMeshProUGUI>();
         totalRightPlayers = transform.Find("RightPlayers").Find("TotalRightPlayers").GetComponent<TextMeshProUGUI>();
         viewLeftPlayers = totalLeftPlayers.transform.parent;
@@ -48,8 +51,8 @@ public class UI_PlayerCounts : MonoBehaviour
                     Quaternion.identity,
                     leftView);
                     viewLayers.GetComponent<Image>().color = purple.color;
-                
-                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = teamTwo.ToString();
+
+                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (numPlayers +1).ToString();
                 }
             else 
             {
@@ -60,14 +63,11 @@ public class UI_PlayerCounts : MonoBehaviour
                    Quaternion.identity,
                    rightView);
                     viewLayers.GetComponent<Image>().color = orange.color;
-                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = teamOne.ToString();
+                    viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (numPlayers+1).ToString();
                 }
                 numPlayers++;
             }
-
-        
-            //get the game object instances here
- 
+            currentPlayer.text = "You are: " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;    
             totalLeftPlayers.text = "Team " + (numTeams -1) + "\n Total Players: " + teamTwo;
             totalRightPlayers.text = "Team " + (numTeams) + "\n Total Players: " + teamOne;
      
