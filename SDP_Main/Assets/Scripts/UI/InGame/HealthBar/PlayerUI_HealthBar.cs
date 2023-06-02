@@ -1,4 +1,4 @@
-/*
+    /*
 
  ************************************************
  *                                              *				
@@ -38,9 +38,12 @@ public class PlayerUI_HealthBar : MonoBehaviour
     /// <param name="health">The current health value.</param>
     public void SetHealth(float health)
     {
-        // Set the current value of the slider to the provided health value
-        slider.value = health;
-        // Set the fill color using the gradient at the normalized value of the slider
-        fill.color = gradient.Evaluate(slider.normalizedValue);
+        if (slider != null && fill != null)
+        {
+            // Set the current value of the slider to the provided health value
+            slider.value = health;
+            // Set the fill color using the gradient at the normalized value of the slider
+            fill.color = gradient.Evaluate(slider.normalizedValue);
+        }
     }
 }
