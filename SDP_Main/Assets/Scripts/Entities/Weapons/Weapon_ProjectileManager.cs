@@ -404,7 +404,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
         }
         return;
     }
-    // Reset the Ammo when player respawn
+
     public void ResetAmmo()
     {
         _weaponAmmo = _weaponInfo.BulletCounts;

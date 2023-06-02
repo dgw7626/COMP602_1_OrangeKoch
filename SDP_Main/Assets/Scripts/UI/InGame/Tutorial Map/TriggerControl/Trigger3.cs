@@ -1,3 +1,15 @@
+/*
+
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Siyi Wang		            *
+ * Student ID: 		19036757		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,8 +24,10 @@ public class Trigger3 : MonoBehaviour
     public TextMeshProUGUI SprintText;
     public TextMeshProUGUI ShootText;
 
-    // public GameObject trigger3;
-
+    /// <summary>
+    /// Called when a collider enters the trigger.
+    /// </summary>
+    /// <param name="other">The collider that entered the trigger.</param>
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger work");
@@ -30,7 +44,7 @@ public class Trigger3 : MonoBehaviour
 
             // Show the Sprint text
             ShootText.gameObject.SetActive(true);
-
+            // disable the trigger.
             gameObject.SetActive(false);
         }
     }
