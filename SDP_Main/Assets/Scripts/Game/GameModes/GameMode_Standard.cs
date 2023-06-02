@@ -192,16 +192,7 @@ public class GameMode_Standard : IgameMode
         Game_RuntimeData.gameScore = teamScores;
     }
 
-    /// <summary>
-    /// Executed by everyone. This tells a machine that a particular player has been killed, so you should handle respawning if applicable.
-    /// </summary>
-    /// <param name="deathInfoStruct"></param>
-    public void OnPlayerKilled(s_DeathInfo deathInfoStruct)
-    {
-
-    }
-
-    /// <summary>
+       /// <summary>
     /// Use this to handle a player dropping.
     /// </summary>
     /// <param name="playerLeftMatch"></param>

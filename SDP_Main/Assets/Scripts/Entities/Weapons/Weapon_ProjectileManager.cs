@@ -317,6 +317,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
     /// Author: Sky
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
+    [PunRPC]
     public void GetShoot()
     {
         if (_weaponAmmo >= 1)
