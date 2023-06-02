@@ -8,7 +8,7 @@ public class TargetRespawn : MonoBehaviour
 
     private bool isRespawning = false;
 
-    private ScoreCount scoreCount;
+    public ScoreCount scoreCount;
 
     private void Start()
     {
@@ -16,17 +16,6 @@ public class TargetRespawn : MonoBehaviour
         respawnPosition = transform.position;
         scoreCount = FindObjectOfType<ScoreCount>();
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") && !isRespawning)
-        {
-            //Destroy(gameObject);
-            scoreCount.IncreaseScore();
-            RespawnDelay();
-        }
-    }
-
     public void RespawnDelay()
     {
         isRespawning = true;

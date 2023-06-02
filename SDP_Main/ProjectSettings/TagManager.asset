@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SoundSystem
   - Player_Model
+  - Dummy
   layers:
   - Default
   - TransparentFX

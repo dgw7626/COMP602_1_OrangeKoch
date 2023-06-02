@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using System.Text.RegularExpressions;
 
-
 public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
 {
     internal GameObject _hit;
@@ -18,23 +17,24 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal Weapon_Controller _projectController;
     public Player_MultiplayerEntity m_MultiplayerEntity;
     public float weaponDamage;
+
     private void Start()
     {
         if (Game_RuntimeData.isMultiplayer && Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
         {
-      
             //check if the photon view is not null and is current multiplayer.
-     
-                //get the current index of the transform
-                _currentIndex = GetCurrentBuildIndex(transform.name);
-                if (_bulletIndex == _currentIndex)
-                {
+
+            //get the current index of the transform
+            _currentIndex = GetCurrentBuildIndex(transform.name);
+            if (_bulletIndex == _currentIndex)
+            {
                 // if the current index meets get the Weapon Projecile manager class and return it.
-                m_MultiplayerEntity = transform.parent.parent.parent.GetComponent<Player_MultiplayerEntity>();
-                _projectileManager = transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
+                m_MultiplayerEntity =
+                    transform.parent.parent.parent.GetComponent<Player_MultiplayerEntity>();
+                _projectileManager =
+                    transform.parent.parent.GetComponent<Weapon_ProjectileManager>();
                 return;
-                }
-            
+            }
         }
         //get the player child object instance.
         Transform parentTransform = transform.parent;
@@ -47,7 +47,8 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
             if (controller != null && !Game_RuntimeData.isMultiplayer)
             {
                 // get the projectile manager class and controller class.
-                _projectileManager = parentTransform.parent.GetComponent<Weapon_ProjectileManager>();
+                _projectileManager =
+                    parentTransform.parent.GetComponent<Weapon_ProjectileManager>();
                 _projectController = controller;
             }
         }
@@ -79,6 +80,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         // if not found return 0.
         return 0;
     }
+
     /// <summary>
     /// Author: Sky
     /// This method implementes the shooting for multiplayer and local player.
@@ -86,7 +88,9 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// <param name="origin"></param>
     public void Fire(Transform origin)
     {
-        if (Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine)
+        if (
+            Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine
+        )
             return;
         //get the current transform position of the origin.
         transform.position = origin.position;
@@ -95,7 +99,14 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         InstantiateGunVFX();
         //raycasting the origin position
         //you need to chnange the origin position from here.
-        if (Physics.Raycast(_projectileManager.transform.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
+        if (
+            Physics.Raycast(
+                _projectileManager.transform.position,
+                _projectileManager.transform.forward,
+                out RaycastHit hit,
+                Mathf.Infinity
+            )
+        )
         {
             //if the transform is not null.
             if (hit.transform != null)
@@ -106,33 +117,41 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     //it will call and check health and damage count.
                     HitPlayer(hit);
                 }
+                else if (hit.transform.tag == "Dummy")
+                {
+                    TargetRespawn target = hit.transform.GetComponent<TargetRespawn>();
+                      target.scoreCount.IncreaseScore();
+                    target.RespawnDelay();
+                }
                 RenderGunTrace(hit.point, origin.position);
-                _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
+                _currentCoroutine = StartCoroutine(
+                    DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length)
+                );
                 //check if the controller is not null and is multiplayer is false.
                 if (_projectController != null && !Game_RuntimeData.isMultiplayer)
                 {
                     //exectue the mutliplayer bullet trace vfx.
                     RenderGunTrace(hit.point, origin.position);
-                    _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
+                    _currentCoroutine = StartCoroutine(
+                        DisableBullet(
+                            this._bullet.transform.GetComponent<AudioSource>().clip.length
+                        )
+                    );
                     return;
                 }
                 //exectue the mutliplayer bullet trace vfx.
                 return;
 
-
-
                 //check if the photonnetwork is local.
-
-
             }
         }
-
     }
+
     /// <summary>
     /// Author:Sky
     /// This method intantiates bullet vfx game instances.
     /// </summary>
-   
+
     public void InstantiateGunVFX()
     {
         //get all the object instances from the projectile manager class.
@@ -146,9 +165,16 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         this._shell = _projectileManager.shellObjects[_bulletIndex].gameObject;
         this._shell.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this._shell.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        this._shell.transform.position = this.transform.parent.parent.GetChild(0).Find("BulletShellPos").position;
+        this._shell.transform.position = this.transform.parent.parent
+            .GetChild(0)
+            .Find("BulletShellPos")
+            .position;
         //add a force to the shell game object in y position and x position.
-        this._shell.GetComponent<Rigidbody>().AddForce((transform.up * Random.Range(160, 210)) + (transform.right * Random.Range(160, 210)));
+        this._shell
+            .GetComponent<Rigidbody>()
+            .AddForce(
+                (transform.up * Random.Range(160, 210)) + (transform.right * Random.Range(160, 210))
+            );
         //enable the muzzle flash vfx.
         this._muzzleFlash.SetActive(true);
         //play the muzzle falsh particle system
@@ -181,9 +207,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         _bulletTracer.transform.parent = null;
         // play the audio sound of the hit transform.
         _hit.transform.GetComponent<AudioSource>().Play();
-
     }
-
 
     /// <summary>
     /// Author: Corey John Knight
@@ -208,17 +232,30 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         s_DamageInfo dmg = new s_DamageInfo();
         dmg.bodyPart = e_BodyPart.NONE;
         dmg.dmgValue = 10f;
-        dmg.dmgDealerId = m_MultiplayerEntity.playerController.photonView.Owner.ActorNumber; 
+        dmg.dmgDealerId = m_MultiplayerEntity.playerController.photonView.Owner.ActorNumber;
         dmg.dmgRecievedId = pv.Owner.ActorNumber;
-        dmg.dmgRecievedTeam = hit.transform.GetComponentInParent<Player_MultiplayerEntity>().teamNumber;
+        dmg.dmgRecievedTeam = hit.transform
+            .GetComponentInParent<Player_MultiplayerEntity>()
+            .teamNumber;
         dmg.dmgDealerTeam = m_MultiplayerEntity.teamNumber;
-        pv.RPC(nameof(Player_MultiplayerEntity.OnDamageRecieved), pv.Owner, JsonUtility.ToJson(dmg));
+        pv.RPC(
+            nameof(Player_MultiplayerEntity.OnDamageRecieved),
+            pv.Owner,
+            JsonUtility.ToJson(dmg)
+        );
     }
 
     public void Hit(Transform origin)
     {
         //get the raycast from the origin position
-        if (Physics.Raycast(origin.position, Camera.main.transform.forward, out RaycastHit hit, Mathf.Infinity))
+        if (
+            Physics.Raycast(
+                origin.position,
+                Camera.main.transform.forward,
+                out RaycastHit hit,
+                Mathf.Infinity
+            )
+        )
         {
             //check if the transform is null.
             if (hit.transform != null)
@@ -230,8 +267,8 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                 return;
             }
         }
-
     }
+
     /// <summary>
     /// Author: Sky
     /// The method waits for a specified delay, then performs various operations to disable certain game objects and stop a coroutine.
@@ -245,7 +282,11 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         //change the _buleltTracer transform to the original bullet transform.
         _bulletTracer.transform.SetParent(transform);
         //change the rotatin to the camera postion.
-        _bulletTracer.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)), GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0);
+        _bulletTracer.transform.rotation = Quaternion.Euler(
+            (Camera.main.transform.rotation.eulerAngles.x + (-90f)),
+            GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y,
+            0
+        );
         _hit.transform.SetParent(transform);
         this._shell.transform.SetParent(transform);
         //deactive all the object instances.
