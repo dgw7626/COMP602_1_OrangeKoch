@@ -67,7 +67,14 @@ public class UI_PlayerCounts : MonoBehaviour
                 }
                 numPlayers++;
             }
-            currentPlayer.text = "You are: " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;    
+            currentPlayer.text = "You are: Player " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+            if (Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber % 2 == 0) {
+                currentPlayer.color = purple.color;
+            }
+            else
+            {
+                currentPlayer.color = orange.color;
+            }
             totalLeftPlayers.text = "Team " + (numTeams -1) + "\n Total Players: " + teamTwo;
             totalRightPlayers.text = "Team " + (numTeams) + "\n Total Players: " + teamOne;
      
