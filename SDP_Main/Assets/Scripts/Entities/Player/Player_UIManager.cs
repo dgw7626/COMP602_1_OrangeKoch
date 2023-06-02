@@ -56,6 +56,19 @@ public class Player_UIManager : MonoBehaviour
             PreLoadVoiceUI();
         }
     }
+    /// <summary>
+    /// Functions to run once when object is initialized.
+    /// </summary>
+    private void Start()
+    {
+        //when the game is mulitplayer
+        if (Game_RuntimeData.isMultiplayer && !transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            return;
+        }
+        // if its photon mine get the player count ui.
+        PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
+    }
 
     /// <summary>
     /// Update method to constantly check for changes.
