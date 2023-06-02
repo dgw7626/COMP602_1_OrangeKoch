@@ -1,33 +1,47 @@
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Runtime.CompilerServices;
-using System.ComponentModel;
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Net.Mime;
-using System.Threading;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using Color = UnityEngine.Color;
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Munish Kumar                *
+ * Student ID: 		19083476		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using UnityEngine.SceneManagement;
-using TMPro;
+using UnityEngine;
+using UnityEditor.SceneManagement;
 
 public class OrangeKoch : MonoBehaviour
 {
-    public string Main_Menu = "MainMenuUI";
+    public string Main_Menu = "Assets/Scenes/MainMenuUI.unity";
+    public bool loadNextSceneInvoked = false;
 
+    /// <summary>
+    /// The start method load the main page after 3secends.
+    /// </summary>
     public void Start()
     {
         Invoke("LoadNextScene", 3f);
     }
 
-    void LoadNextScene()
+    /// <summary>
+    /// This method load the next scene.
+    /// </summary>
+    public  void LoadNextScene()
     {
+        loadNextSceneInvoked = true;
         SceneManager.LoadScene(Main_Menu);
     }
+
+    /// <summary>
+    /// This method check if there is next scene
+    /// </summary>
+    /// <returns> If next secen, it return true </returns>
+    public bool IsLoadNextSceneInvoked()
+    {
+        return loadNextSceneInvoked;
+    }
 }
-
-
