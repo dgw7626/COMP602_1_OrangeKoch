@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
 /*
 
  ************************************************
@@ -15,6 +10,15 @@ using UnityEngine.UI;
  ************************************************
 
  */
+using System.Collections.Generic;
+using System.IO;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+/// <summary>
+/// This UI_PlayerCounts displays current user in the team UI and (alive/active).
+/// </summary>
 public class UI_PlayerCounts : MonoBehaviour
 {
     public TextMeshProUGUI totalLeftPlayers; //Object for the team text component.
