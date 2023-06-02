@@ -38,6 +38,13 @@
 <li>Network: Broadband internet connection</li>
 <li>Storage: 10 GB available space</li>
 
+<h2>Game Dependencies</h2>
+<li>Photon Unity Networking (PUN2)</li>
+<li>Photon Voice</li>
+<li>RESTClient</li>
+<li>TextMeshPro</li>
+<li>TerrainTools</li>
+
 <h2>Installation</h2>
 <ol>
 <li>Download the game files from GitHub or a trusted source.</ul>
