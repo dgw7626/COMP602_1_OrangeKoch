@@ -3,23 +3,35 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+/*
 
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Hanul Rheem		            *
+ * Student ID: 		20109218		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 public class UI_PlayerCounts : MonoBehaviour
 {
-    public TextMeshProUGUI totalLeftPlayers;
-    public TextMeshProUGUI totalRightPlayers;
-    public TextMeshProUGUI currentPlayer;
-    public Material purple;
-    public Material orange;
-    public Transform viewLeftPlayers;
+    public TextMeshProUGUI totalLeftPlayers; //Object for the team text component.
+    public TextMeshProUGUI totalRightPlayers;//Object for the other team text component
+    public TextMeshProUGUI currentPlayer;    //objext for the current player user name text component.
+    public Material purple; // default color for team 2
+    public Material orange; // default color for team 1
+    public Transform viewLeftPlayers; 
     public Transform viewRightPlayers;
     internal Transform leftView;
     internal Transform rightView;
-    private int numPlayers = 0;
     internal int numTeams = 2;
     internal int teamOne = 0;
     internal int teamTwo = 0;
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start method which is called when this instance is created.
+    /// </summary>
     void Start()
     {
         //Initialize the local variable instances.
@@ -53,25 +65,23 @@ public class UI_PlayerCounts : MonoBehaviour
                     Quaternion.identity,
                     leftView);
                     viewLayers.GetComponent<Image>().color = purple.color;
-                    //set it to current player user id.
+                    //set text to current player user id.
                     viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber.ToString();
                 }
                 // Orange team
                 else
                 {
                     teamOne++;
-                    //instnatiate 2D ui element so the player can view it.
+                    //instantiate 2D ui element so the player can view it.
                     var viewLayers = Instantiate(
                    Resources.Load(Path.Combine("LocalPrefabs", "PlayerStatusUI")) as GameObject,
                    Vector3.zero,
                    Quaternion.identity,
                    rightView);
                     viewLayers.GetComponent<Image>().color = orange.color;
-                    //set it to current player user id.
+                    //set text to current player user id.
                     viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber.ToString();
                 }
-                //add one by player.
-                numPlayers++;
             }
             // added player identifier.
             currentPlayer.text = "You are: Player " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
@@ -97,7 +107,7 @@ public class UI_PlayerCounts : MonoBehaviour
     {
         //get all the players instances
         TextMeshProUGUI[] totalLeft = leftView.GetComponentsInChildren<TextMeshProUGUI>();
-        TextMeshProUGUI[] totaRight = rightView.GetComponentsInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI[] totalRight = rightView.GetComponentsInChildren<TextMeshProUGUI>();
         int playerNumber = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
 
         //if the player is multiplayer
@@ -117,7 +127,7 @@ public class UI_PlayerCounts : MonoBehaviour
                 }
             }
             //check if the player contains with the current user id.
-            foreach (TextMeshProUGUI player in totaRight)
+            foreach (TextMeshProUGUI player in totalRight)
             {
                 Debug.Log(player.transform.name);
                 if (player != null)
