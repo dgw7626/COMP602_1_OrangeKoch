@@ -13,7 +13,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-
+using Photon.Pun;
 /// <summary>
 /// This class is designed to Manage Objects on the Players Interface within the Game
 /// </summary>
@@ -23,6 +23,7 @@ public class Player_UIManager : MonoBehaviour
     public TextMeshProUGUI proximityMuteText;
     public TextMeshProUGUI pushToTalkText;
     public TextMeshProUGUI timerText;
+    public UI_PlayerCounts PlayerCountsUI;
     public Color orangeColor = new Color(1f, 0.65f, 0f); //Create orange as it does not exist by default
     public int redAlertThreshold = 5; // Used for CountdownTimer
     public int orangeAlertThreshold = 15; // Used for CountdownTimer
@@ -34,6 +35,7 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
         //Return if not playing multiplayer, such that it is single.
         if (!Game_RuntimeData.isMultiplayer)
             return;
@@ -182,17 +184,23 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void OnQuitGameButtonPressed()
     {
-        Debug.Log("Player quit game.");
+        Debug.Log("Player quit game. ");
         if (Game_RuntimeData.isMultiplayer)
         {
             if (!Game_RuntimeData.matchIsRunning)
                 return;
-
+            transform.GetComponent<PhotonView>().RPC(nameof(RemoveAllPlayerCounts), RpcTarget.All);
             Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
         } else
         {
             Game_RuntimeData.gameMode_Manager.QuitSinglePlayer();
         }
+    }
+
+    [PunRPC]
+   internal void RemoveAllPlayerCounts()
+    {
+        PlayerCountsUI.RemovePlayerCounts();
     }
 
     /// <summary>

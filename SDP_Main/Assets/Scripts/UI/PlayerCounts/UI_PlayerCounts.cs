@@ -80,4 +80,43 @@ public class UI_PlayerCounts : MonoBehaviour
      
         }
     }
+    
+    public void RemovePlayerCounts()
+    {
+        TextMeshProUGUI[] totalLeft = leftView.GetComponentsInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI[] totaRight = rightView.GetComponentsInChildren<TextMeshProUGUI>();
+        int playerNumber = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            //check player isntance
+            foreach(TextMeshProUGUI player in totalLeft) 
+            {
+                if (player != null)
+                {
+                    if (player.text.Contains(playerNumber.ToString()))
+                    {
+                   
+                        Destroy(player.gameObject);
+                        teamOne--;
+                    }
+                }
+            }
+            foreach(TextMeshProUGUI player in totaRight)
+            {
+                Debug.Log(player.transform.name);
+                if (player != null)
+                {
+                    if (player.text.Contains(playerNumber.ToString()))
+                    {
+                  
+                        Destroy(player.gameObject);
+                        teamTwo--;
+                    }
+                }
+            }
+
+            totalLeftPlayers.text = "Team " + (numTeams - 1) + "\n Total Players: " + teamTwo;
+            totalRightPlayers.text = "Team " + (numTeams) + "\n Total Players: " + teamOne;
+        }
+    }
 }

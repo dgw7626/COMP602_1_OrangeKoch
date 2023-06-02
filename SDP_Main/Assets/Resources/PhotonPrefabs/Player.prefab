@@ -2096,6 +2096,7 @@ GameObject:
   - component: {fileID: 7839544411530030526}
   - component: {fileID: 5622637745393185312}
   - component: {fileID: 3255898779213423478}
+  - component: {fileID: 5116964855178630437}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
@@ -2206,11 +2207,34 @@ MonoBehaviour:
   proximityMuteText: {fileID: 0}
   pushToTalkText: {fileID: 0}
   timerText: {fileID: 4421130603208223025}
+  PlayerCountsUI: {fileID: 0}
   orangeColor: {r: 1, g: 0.65, b: 0, a: 1}
   redAlertThreshold: 5
   orangeAlertThreshold: 15
   yellowAlertThreshold: 30
   isRedAlert: 0
+--- !u!114 &5116964855178630437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6821953248771522266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7663682148274534915
 GameObject:
   m_ObjectHideFlags: 0
