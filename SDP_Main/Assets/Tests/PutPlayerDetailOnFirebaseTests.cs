@@ -8,9 +8,7 @@ using UnityEngine.TestTools;
 public class PutPlayerDetailOnFirebaseTests
 {
     public PutPlayerDetailOnFirebase playerDetailOnFirebase;
-    
 
-    
     [SetUp]
     public void Setup()
     {

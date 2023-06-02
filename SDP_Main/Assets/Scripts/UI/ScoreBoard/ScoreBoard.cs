@@ -1,3 +1,15 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Munish Kumar                *
+ * Student ID: 		19083476		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,7 +54,9 @@ public class ScoreBoard : MonoBehaviour
      public static int playerKills;
      public static int playerDeaths;
 
-// This methode update player 1 detail print on Scoreboard.
+/// <summary>
+/// This methode update player 1 detail print on Scoreboard.
+/// </summary>
      public void UpdatePlayerDetail_1()
     { 
       playerNameText_1.text = playerdetail.playerName;
@@ -50,7 +64,9 @@ public class ScoreBoard : MonoBehaviour
       playerDeathsText_1.text = playerdetail.deaths.ToString();
     }
 
-// This methode update player 2 detail print on Scoreboard.
+/// <summary>
+/// This methode update player 2 detail print on Scoreboard.
+/// </summary>
     public void UpdatePlayerDetail_2()
     { 
       playerNameText_2.text = playerdetail.playerName;
@@ -58,6 +74,9 @@ public class ScoreBoard : MonoBehaviour
       playerDeathsText_2.text = playerdetail.deaths.ToString();
     }
 
+    /// <summary>
+    /// This methode update player 3 detail print on Scoreboard.
+    /// </summary>
     public void UpdatePlayerDetail_3()
     {
         playerNameText_3.text = playerdetail.playerName;
@@ -65,6 +84,9 @@ public class ScoreBoard : MonoBehaviour
         playerDeathsText_3.text = playerdetail.deaths.ToString();
     }
 
+    /// <summary>
+    /// This methode update player 4 detail print on Scoreboard.
+    /// </summary>
     public void UpdatePlayerDetail_4()
     {
         playerNameText_4.text = playerdetail.playerName;
@@ -72,6 +94,9 @@ public class ScoreBoard : MonoBehaviour
         playerDeathsText_4.text = playerdetail.deaths.ToString();
     }
 
+    /// <summary>
+    /// This methode update player 5 detail print on Scoreboard.
+    /// </summary>
     public void UpdatePlayerDetail_5()
     {
         playerNameText_5.text = playerdetail.playerName;
@@ -79,6 +104,9 @@ public class ScoreBoard : MonoBehaviour
         playerDeathsText_5.text = playerdetail.deaths.ToString();
     }
 
+    /// <summary>
+    /// This methode update player 6 detail print on Scoreboard.
+    /// </summary>
     public void UpdatePlayerDetail_6()
     {
         playerNameText_6.text = playerdetail.playerName;
@@ -86,7 +114,9 @@ public class ScoreBoard : MonoBehaviour
         playerDeathsText_6.text = playerdetail.deaths.ToString();
     }
 
-
+    /// <summary>
+    /// This method disable the game object of each UI element
+    /// </summary>
     private void Start(){
       this._activeSelf = false;
         StartCoroutine(GetDetails());
@@ -96,6 +126,10 @@ public class ScoreBoard : MonoBehaviour
             child.gameObject.SetActive(_activeSelf);
         }
     }
+
+    /// <summary>
+    /// This method show scoreboard on main game room.
+    /// </summary>
     public void GetScoreboard(){
       this._activeSelf = !_activeSelf;
         foreach (Transform child in transform)
@@ -107,6 +141,10 @@ public class ScoreBoard : MonoBehaviour
       return;
     }
 
+    /// <summary>
+    /// This methode get player data from firebase and pass to updateplayerdetal method.
+    /// </summary>
+    /// <returns> It return the time 1.1sec </returns>
     private IEnumerator GetDetails()
     {
         while(true)
@@ -151,9 +189,4 @@ public class ScoreBoard : MonoBehaviour
         }
     }
 
-
-    public void Update()
-    {
-
-    }
 }

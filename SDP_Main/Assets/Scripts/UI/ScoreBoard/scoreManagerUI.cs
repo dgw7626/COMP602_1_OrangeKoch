@@ -1,3 +1,15 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Munish Kumar                *
+ * Student ID: 		19083476		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using Proyecto26;
 using System;
 using System.Collections;
@@ -9,19 +21,19 @@ public class scoreManagerUI : MonoBehaviour
     PutPlayerDetailOnFirebase putPlayerDetailOnFirebase = new PutPlayerDetailOnFirebase();
     ScoreBoard scoreBoard = new ScoreBoard();
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     void Start()
     {
         RestClient.Delete("https://project-10bbb-default-rtdb.firebaseio.com/.json");
         StartCoroutine(UpdateDbScores());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    /// <summary>
+    /// This function update batabase on scoreboard.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator UpdateDbScores()
     {
         while (true)
