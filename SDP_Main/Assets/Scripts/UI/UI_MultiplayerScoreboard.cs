@@ -114,7 +114,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             if (i == winningTeam)
                 winTxt += "\nWinner!";
             else
-                winTxt += "\nLOOSER!";
+                winTxt += "\nLoser!";
 
             tmp = Instantiate(textPrefab, m_TeamNameCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("Team " + (i + 1) + winTxt);

@@ -169,7 +169,7 @@ public class MultiplayerScorebard_Test
         StringAssert.DoesNotContain("MVP", NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
 
         StringAssert.Contains("Winner", TeamNameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
-        StringAssert.Contains("LOOSER", TeamNameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("Loser", TeamNameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
     }
 
     /// <summary>
