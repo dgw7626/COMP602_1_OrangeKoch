@@ -46,7 +46,8 @@ public class UI_PlayerCounts : MonoBehaviour
                     Vector3.zero,
                     Quaternion.identity,
                     leftView);
-                    viewLayers.GetComponent<Image>().color = orange.color;
+                    viewLayers.GetComponent<Image>().color = purple.color;
+                
                     viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = teamTwo.ToString();
                 }
             else 
@@ -57,7 +58,7 @@ public class UI_PlayerCounts : MonoBehaviour
                    Vector3.zero,
                    Quaternion.identity,
                    rightView);
-                    viewLayers.GetComponent<Image>().color = purple.color;
+                    viewLayers.GetComponent<Image>().color = orange.color;
                     viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = teamOne.ToString();
                 }
         }
