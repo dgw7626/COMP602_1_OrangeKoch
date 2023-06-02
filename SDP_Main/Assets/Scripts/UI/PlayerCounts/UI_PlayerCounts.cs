@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -23,7 +22,7 @@ public class UI_PlayerCounts : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Get Plaeyr 
+        //Initialize the local variable instances.
         currentPlayer = transform.Find("CurrentPlayer").GetComponent<TextMeshProUGUI>();
         totalLeftPlayers = transform.Find("LeftPlayers").Find("TotalLeftPlayers").GetComponent<TextMeshProUGUI>();
         totalRightPlayers = transform.Find("RightPlayers").Find("TotalRightPlayers").GetComponent<TextMeshProUGUI>();
@@ -31,90 +30,107 @@ public class UI_PlayerCounts : MonoBehaviour
         viewRightPlayers = totalRightPlayers.transform.parent;
         leftView = viewLeftPlayers.Find("ViewPlayers");
         rightView = viewRightPlayers.Find("ViewPlayers");
+        //if its multiplayer
         if (Game_RuntimeData.isMultiplayer)
         {
+            //start initializing team members and add empty lists of player_multiplayer entities.
             for (int i = 0; i < numTeams; i++)
             {
                 Game_RuntimeData.teams.Add(new List<Player_MultiplayerEntity>());
             }
-     
+            //get all the instantiated paleyrs and start adding them too.
             for (int j = 0; j < Game_RuntimeData.instantiatedPlayers.Count; j++)
-        {
-         
-            if (Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber % 2 == 0)
             {
-                    Debug.Log("test");
-                teamTwo++;
+
+                // Purple team
+                if (Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber % 2 == 0)
+                {
+                    teamTwo++;
+                    //instnatiate 2D ui element so the player can view it.
                     var viewLayers = Instantiate(
                     Resources.Load(Path.Combine("LocalPrefabs", "PlayerStatusUI")) as GameObject,
                     Vector3.zero,
                     Quaternion.identity,
                     leftView);
                     viewLayers.GetComponent<Image>().color = purple.color;
-
+                    //set it to current player user id.
                     viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber.ToString();
                 }
-            else 
-            {
-                teamOne++;
+                // Orange team
+                else
+                {
+                    teamOne++;
+                    //instnatiate 2D ui element so the player can view it.
                     var viewLayers = Instantiate(
                    Resources.Load(Path.Combine("LocalPrefabs", "PlayerStatusUI")) as GameObject,
                    Vector3.zero,
                    Quaternion.identity,
                    rightView);
                     viewLayers.GetComponent<Image>().color = orange.color;
+                    //set it to current player user id.
                     viewLayers.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Game_RuntimeData.instantiatedPlayers[j].photonView.Owner.ActorNumber.ToString();
                 }
+                //add one by player.
                 numPlayers++;
             }
+            // added player identifier.
             currentPlayer.text = "You are: Player " + Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
-            if (Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber % 2 == 0) {
+            //check if the actor number is odd or whole number.
+            if (Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber % 2 == 0)
+            {
                 currentPlayer.color = purple.color;
             }
             else
             {
                 currentPlayer.color = orange.color;
             }
-            totalLeftPlayers.text = "Team " + (numTeams -1) + "\n Total Players: " + teamTwo;
+            //print out with current team and number of total players each team.
+            totalLeftPlayers.text = "Team " + (numTeams - 1) + "\n Total Players: " + teamTwo;
             totalRightPlayers.text = "Team " + (numTeams) + "\n Total Players: " + teamOne;
-     
+
         }
     }
-    
+    /// <summary>
+    /// This method removes player instance when the player leave the game, it returns nothing.
+    /// </summary>
     public void RemovePlayerCounts()
     {
+        //get all the players instances
         TextMeshProUGUI[] totalLeft = leftView.GetComponentsInChildren<TextMeshProUGUI>();
         TextMeshProUGUI[] totaRight = rightView.GetComponentsInChildren<TextMeshProUGUI>();
         int playerNumber = Game_RuntimeData.thisMachinesPlayersPhotonView.Owner.ActorNumber;
+
+        //if the player is multiplayer
         if (Game_RuntimeData.isMultiplayer)
         {
-            //check player isntance
-            foreach(TextMeshProUGUI player in totalLeft) 
+            //check if the player contains with the current user id.
+            foreach (TextMeshProUGUI player in totalLeft)
             {
                 if (player != null)
                 {
                     if (player.text.Contains(playerNumber.ToString()))
                     {
-                   
+                        // if the player left destroy it and decrease by 1.
                         Destroy(player.gameObject);
                         teamOne--;
                     }
                 }
             }
-            foreach(TextMeshProUGUI player in totaRight)
+            //check if the player contains with the current user id.
+            foreach (TextMeshProUGUI player in totaRight)
             {
                 Debug.Log(player.transform.name);
                 if (player != null)
                 {
                     if (player.text.Contains(playerNumber.ToString()))
-                    {
-                  
+                    {  
+                        // if the player left destroy it and decrease by 1.
                         Destroy(player.gameObject);
                         teamTwo--;
                     }
                 }
             }
-
+            //print out with current team and number of total players each team.
             totalLeftPlayers.text = "Team " + (numTeams - 1) + "\n Total Players: " + teamTwo;
             totalRightPlayers.text = "Team " + (numTeams) + "\n Total Players: " + teamOne;
         }

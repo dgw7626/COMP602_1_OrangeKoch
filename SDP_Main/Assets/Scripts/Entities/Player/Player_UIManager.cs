@@ -10,10 +10,10 @@
  ************************************************
 
  */
+using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using Photon.Pun;
 /// <summary>
 /// This class is designed to Manage Objects on the Players Interface within the Game
 /// </summary>
@@ -35,6 +35,7 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        //added PlayerCounts ui to check the remove instances.
         PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
         //Return if not playing multiplayer, such that it is single.
         if (!Game_RuntimeData.isMultiplayer)
@@ -189,16 +190,21 @@ public class Player_UIManager : MonoBehaviour
         {
             if (!Game_RuntimeData.matchIsRunning)
                 return;
-            transform.GetComponent<PhotonView>().RPC(nameof(RemoveAllPlayerCounts), RpcTarget.All);
+            //it removes all current player instances. the who left the game will be deleted.
+            transform.GetComponent<PhotonView>().RPC(nameof(RPC_RemoveAllPlayerCounts), RpcTarget.All);
             Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
-        } else
+        }
+        else
         {
             Game_RuntimeData.gameMode_Manager.QuitSinglePlayer();
         }
     }
 
+    /// <summary>
+    /// it removes all current player instances. the who left the game will be deleted.
+    /// </summary>
     [PunRPC]
-   internal void RemoveAllPlayerCounts()
+    internal void RPC_RemoveAllPlayerCounts()
     {
         PlayerCountsUI.RemovePlayerCounts();
     }
