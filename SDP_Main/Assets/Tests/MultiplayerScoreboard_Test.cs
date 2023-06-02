@@ -106,30 +106,30 @@ public class MultiplayerScorebard_Test
         // ASSERT
         Assert.NotNull(scoreboardGameObj.transform);
 
-        Assert.NotNull(scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>());
-        Assert.NotNull(scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>());
-        Assert.NotNull(scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>());
+        Assert.NotNull(NameCollumn);
+        Assert.NotNull(KillCollumn);
+        Assert.NotNull(DeathCollumn);
         
-        Assert.NotNull(scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>());
-        Assert.NotNull(scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<VerticalLayoutGroup>());
-        Assert.NotNull(scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(2).GetComponent<VerticalLayoutGroup>());
+        Assert.NotNull(TeamNameCollumn);
+        Assert.NotNull(TeamKillCollumn);
+        Assert.NotNull(TeamDeathCollumn);
 
-        for(int i = 0; i < numPlayers; i+= 3)
+        for(int i = 0; i < numPlayers; i++)
         {
-            Assert.NotNull(textMeshProUGUIs[i]);
-            Assert.NotNull(textMeshProUGUIs[i + 1]);
-            Assert.NotNull(textMeshProUGUIs[i + 2]);
+            Assert.NotNull(NameCollumn.transform.GetChild(i).GetComponent<TextMeshProUGUI>());
+            Assert.NotNull(KillCollumn.transform.GetChild(i).GetComponent<TextMeshProUGUI>());
+            Assert.NotNull(DeathCollumn.transform.GetChild(i).GetComponent<TextMeshProUGUI>());
         }
-        for (int i = 0; i < numTeams; i+= 3)
+        for (int i = 0; i < numTeams; i++)
         {
-            Assert.NotNull(textMeshProUGUIs[numPlayers + i]);
-            Assert.NotNull(textMeshProUGUIs[numPlayers + i + 1]);
-            Assert.NotNull(textMeshProUGUIs[numPlayers + i + 2]);
+            Assert.NotNull(TeamNameCollumn.transform.GetChild(i).GetComponent<TextMeshProUGUI>());
+            Assert.NotNull(TeamKillCollumn.transform.GetChild(i).GetComponent<TextMeshProUGUI>());
+            Assert.NotNull(TeamDeathCollumn.transform.GetChild(i).GetComponent<TextMeshProUGUI>());
         }
     }
 
     /// <summary>
-    /// Asserts that the correct number of kills have been assigned to each player
+    /// Asserts that the correct number of kills and Deaths have been assigned to each player
     /// </summary>
     [Test]
     public void AssignCorrectScoresToPlayerTest()
@@ -137,24 +137,85 @@ public class MultiplayerScorebard_Test
         // ARRANGE / ACT
         // Scoreboard will act immediatley after instantiation
         //----------------------------------------------------
-        
+
+        //Refresh the GameMode to create a blank Score
+        gameMode = new GameMode_Standard();
+
         // 8 players, 4 teams
-        InitScoreStruct(2, 2);
+        int numPlayers = 2;
+        int numTeams = 2;
+        InitScoreStruct(numPlayers, numTeams);
 
         // Add some kills
-        
+        for (int i = 0; i < 10; i++)
+            AddKill(0, 0, 1, 1);
+
+        for (int i = 0; i < 5; i++)
+            AddKill(1, 1, 0, 0);
 
         // Instantiate Object and get references
-        scoreboardGameObj = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Multiplayer_PostgameScoreboard.prefab");
+        scoreboardGameObj = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Multiplayer_PostgameScoreboard.prefab"));
         UI_MultiplayerScoreboard scoreScript = scoreboardGameObj.GetComponent<UI_MultiplayerScoreboard>();
-        //TextMeshProUGUI[] textMeshProUGUIs = scoreScript.tmp.GetComponents<TextMeshProUGUI>();
+        scoreScript.Begin(); //IT now works
+
+        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
+
+        VerticalLayoutGroup TeamNameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
         
+        // ASSERT
+        //----------------------------------------------------
+        Assert.NotNull(scoreScript);
+        StringAssert.Contains("MVP", NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.DoesNotContain("MVP", NameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+
+        StringAssert.Contains("Winner", TeamNameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.Contains("LOOSER", TeamNameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+    }
+
+    /// <summary>
+    /// Asserts that the MVP and Winning Team are being calculated correctley
+    /// </summary>
+    [Test]
+    public void AssignMVPandWinningTeamTest()
+    {
+        // ARRANGE / ACT
+        // Scoreboard will act immediatley after instantiation
+        //----------------------------------------------------
+
+        //Refresh the GameMode to create a blank Score
+        gameMode = new GameMode_Standard();
+
+        // 8 players, 4 teams
+        int numPlayers = 2;
+        int numTeams = 2;
+        InitScoreStruct(numPlayers, numTeams);
+
+        // Add some kills
+        for (int i = 0; i < 10; i++)
+            AddKill(0, 0, 1, 1);
+
+        for (int i = 0; i < 5; i++)
+            AddKill(1, 1, 0, 0);
+
+        // Instantiate Object and get references
+        scoreboardGameObj = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Multiplayer_PostgameScoreboard.prefab"));
+        UI_MultiplayerScoreboard scoreScript = scoreboardGameObj.GetComponent<UI_MultiplayerScoreboard>();
+        scoreScript.Begin(); //IT now works
+
+        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup KillCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup DeathCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
 
         // ASSERT
         //----------------------------------------------------
         Assert.NotNull(scoreScript);
-        //StringAssert.AreEqualIgnoringCase("1", textMeshProUGUIs[1].text);
+        StringAssert.AreEqualIgnoringCase("Player1", NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.AreEqualIgnoringCase("10", KillCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.AreEqualIgnoringCase("5", DeathCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
 
+        StringAssert.AreEqualIgnoringCase("Player2", NameCollumn.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.AreEqualIgnoringCase("5", KillCollumn.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text);
+        StringAssert.AreEqualIgnoringCase("10", DeathCollumn.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
     }
 
     private void InitScoreStruct(int players, int teams)
