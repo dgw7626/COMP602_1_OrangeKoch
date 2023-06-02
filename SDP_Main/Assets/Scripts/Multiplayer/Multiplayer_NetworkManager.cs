@@ -1,12 +1,12 @@
 /*
 
  ************************************************
- *                                              *				
+ *                                              *
  * Primary Dev: 	Dion Hemmes		            *
  * Student ID: 		21154191		            *
  * Course Code: 	COMP602_2023_S1             *
  * Assessment Item: Orange Koch                 *
- * 						                        *			
+ * 						                        *
  ************************************************
 
  */
@@ -17,7 +17,9 @@ using TMPro;
 using Photon.Realtime;
 using System.Linq;
 
-
+/// <summary>
+/// This Class handles the connections of players with the Pun Server in preparing a game
+/// </summary>
 public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
 {
     public const float quitDelay = 0.5f;
@@ -95,7 +97,6 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void FindRoom()
     {
-
         RoomOptions options = new RoomOptions();    //Creates a RoomOptions object to be set for the room
         options.MaxPlayers = 16;        //Limit the room to X players
           //Creates or joins the room
