@@ -1,50 +1,56 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Hanul Rheem		            *
+ * Student ID: 		20109218		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using System.IO;
 using Photon.Pun;
-using System;
-//[RequireComponent(typeof(PhotonView))]
+/// <summary>
+/// this class is designed to control the weapon controller and bullet instance and managing weapon information.
+/// </summary>
 public class Weapon_ProjectileManager : MonoBehaviour
 {
     [Header("Weapon Controls")]
-    [SerializeField]
-    public Weapon_Info _weaponInfo;
-
-    [SerializeField]
-    public List<Weapon_Bullet> _localBullets;
-
-    [SerializeField]
-    public int _weaponAmmo;
-
-    [SerializeField]
-    public int _weaponClip;
-
-    [SerializeField]
-    public AmmunitionUI _ammunitionUI;
-    private Weapon_Controller _weaponController;
-    internal Coroutine _currentCoroutine;
-    private Vector3 _fw, _up;
-    private Transform _camera;
-    public List<Transform> muzzleFlashObjects;
-    public List<Transform> bulletTracerObjects;
-    public List<Transform> bulletObjects;
-    public List<Transform> shellObjects;
-    public List<Transform> hitObjects;
-    internal Transform _firePos;
-
-    public PhotonView photonView;
-    public AudioMixerGroup masterMixer;
+    public Weapon_Info WeaponInfo;              //Scriptable object data that contains weapon information.
+    public List<Weapon_Bullet> LocalBullets;    //Weapon bullet script lists
+    public int WeaponAmmo;                      //Weapon ammo
+    public int WeaponClip;                      //Weapon megazine.
+    public AmmunitionUI AmmunitionUI;           //Ammunition UI class for the setting up the weapon ui display.
+    private Weapon_Controller _weaponController;//Private weapon controller script for weapon projectile manager.
+    internal Coroutine _currentCoroutine;       //Private coroutine for the  destorying reaminaing bullet object instances.
+    private Vector3 _fw, _up;                   //private vector3 for forward and up transform position.
+    private Transform _camera;                  //private transform camera position.
+    public List<Transform> MuzzleFlashObjects;  //Muzzle flash vfx lists
+    public List<Transform> BulletTracerObjects; //Bullet trace vfx lists
+    public List<Transform> BulletObjects;       //bullet script lists
+    public List<Transform> ShellObjects;        //shell rigidbody lists
+    public List<Transform> HitObjects;          //hit transform object lists.
+    internal Transform _firePos;                //current position of the gun fire position.
+    public PhotonView PhotonView;               //current photon view for this class
+    public AudioMixerGroup MasterMixer;         //current audio group for this class
+    /// <summary>
+    ///  Functions to run once when object is instantiated.
+    /// </summary>
     void Awake()
     {
         //check if the photon is mine.
-        if (!transform.GetComponentInParent<PhotonView>().IsMine)
+        if (!Game_RuntimeData.isMultiplayer && !transform.GetComponentInParent<PhotonView>().IsMine)
         {
             return;
         }
         //get the camera rotation and position by calling transform methods.
-        this._camera = this.transform.parent.GetComponentInChildren<Camera>().transform;
+        this._camera = this.transform.parent.GetComponentInChildren<Camera>().transform.Find("Player_Raycast").transform;
         GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
         this._fw = _camera.transform.InverseTransformDirection(transform.forward);
         GuardClause.InspectGuardClauseNullRef<Vector3>(this._fw, nameof(this._fw));
@@ -52,36 +58,44 @@ public class Weapon_ProjectileManager : MonoBehaviour
         GuardClause.InspectGuardClauseNullRef<Vector3>(this._up, nameof(this._up));
     }
 
+    /// <summary>
+    ///  Functions to run once when object is initialized.
+    /// </summary>
     void Start()
     {
         //get all the ammunition and weapon controller classes.
-        _ammunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
+        AmmunitionUI = transform.parent.GetComponentInChildren<AmmunitionUI>();
         _weaponController = transform.GetComponent<Weapon_Controller>();
-        _ammunitionUI.gameObject.SetActive(false);
+        AmmunitionUI.gameObject.SetActive(false);
 
-        //if the transform object is current multiplayer.
+        //if the player is multiplayer, it will enable the ammunition ui display.
         if (Game_RuntimeData.isMultiplayer && transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
-            _ammunitionUI.gameObject.SetActive(true);
-        } else if(!Game_RuntimeData.isMultiplayer)
+            AmmunitionUI.gameObject.SetActive(true);
+        } 
+        //if the player is local multiplayer, it will enable the ammunition ui display.
+        else if(!Game_RuntimeData.isMultiplayer)
         {
-            _ammunitionUI.gameObject.SetActive(true);
+            AmmunitionUI.gameObject.SetActive(true);
         }
-
-        photonView = GetComponent<PhotonView>();
-        _weaponAmmo = _weaponInfo.BulletCounts;
-        _weaponClip = _weaponInfo.ClipCounts;
+        //getting the current photon view object instace.
+        PhotonView = GetComponent<PhotonView>();
+        //getting the current weapon ammo
+        WeaponAmmo = WeaponInfo.BulletCounts;
+        //getting the current weapon megazine.
+        WeaponClip = WeaponInfo.ClipCounts;
+        //getting the currrent gun fire transform position.
         _firePos = transform.GetChild(0).GetChild(0).transform;
+        //check if the object type is present or matches to the type casting.
         GuardClause.InspectGuardClauseNullRef<AmmunitionUI>(
-            this._ammunitionUI,
-            nameof(this._ammunitionUI)
+            this.AmmunitionUI,
+            nameof(this.AmmunitionUI)
         );
         //update the ammunition ammos.
-        _ammunitionUI.SetAmmunition(_weaponAmmo, _weaponClip);
+        AmmunitionUI.SetAmmunition(WeaponAmmo, WeaponClip);
     }
 
     /// <summary>
-    /// Author: Sky
     /// This method will update the target object of the postion and rotation, the position values will be duplicated from parent object.
     /// </summary>
     [PunRPC]
@@ -99,11 +113,10 @@ public class Weapon_ProjectileManager : MonoBehaviour
 
 
     /// <summary>
-    /// Auther: Sky
     /// method is responsible for destroying specific game objects related to bullet visual effects in a game scene.
     /// </summary>
     [PunRPC]
-    public void InitBullets_P()
+    public void RPC_InitBullets_P()
     {
         //check if the bullet object instance is not null.
         Transform bulletsTransform = transform.Find("Bullets");
@@ -115,44 +128,44 @@ public class Weapon_ProjectileManager : MonoBehaviour
             bulletsTransform.SetParent(transform);
         }
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
-        for (int i = 0; i < _weaponInfo.BulletCounts; i++)
+        for (int i = 0; i < WeaponInfo.BulletCounts; i++)
         {
             //instantating bullet object throught the photon network.
             GameObject bulletObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Bullet"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
             bulletObject.GetComponent<Weapon_Bullet>().m_MultiplayerEntity = transform.parent.GetComponent<Player_MultiplayerEntity>();
             bulletObject.name = "(" + i + ")Bullet";
-            bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
+            bulletObject.GetComponent<AudioSource>().clip = WeaponInfo.ShootEffect;
 
             bulletObject.transform.SetParent(bulletsTransform);
-            bulletObjects.Add(bulletObject.transform);
+            BulletObjects.Add(bulletObject.transform);
             //instantating muzzleflash object throught the photon network.
             GameObject muzzleFlash = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "MuzzleFlash"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
             muzzleFlash.name = "(" + i + ")muzzleFlash";
             muzzleFlash.transform.SetParent(bulletObject.transform);
             muzzleFlash.SetActive(false);
-            muzzleFlashObjects.Add(muzzleFlash.transform);
+            MuzzleFlashObjects.Add(muzzleFlash.transform);
 
             //instantating bullet tracer object throught the photon network.
-            GameObject bulletTrace = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "BulletTracer"), firePos.position + new Vector3(0, -3f, 0), _weaponInfo.BulletTrace.transform.rotation, 0);
+            GameObject bulletTrace = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "BulletTracer"), firePos.position + new Vector3(0, -3f, 0), WeaponInfo.BulletTrace.transform.rotation, 0);
             bulletTrace.name = "(" + i + ")bulletTracer";
             bulletTrace.transform.SetParent(bulletObject.transform);
             bulletTrace.SetActive(false);
-            bulletTracerObjects.Add(bulletTrace.transform);
+            BulletTracerObjects.Add(bulletTrace.transform);
 
             //instantating shell object throught the photon network.
             GameObject shellObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Shell"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
             shellObject.name = "(" + i + ")shell";
             shellObject.transform.SetParent(bulletObject.transform);
             shellObject.SetActive(false);
-            shellObjects.Add(shellObject.transform);
+            ShellObjects.Add(shellObject.transform);
 
             //instantating hit object throught the photon network.
             GameObject hitObject = PhotonNetwork.Instantiate(Path.Combine("LocalPrefabs", "Hit"), Vector3.zero + new Vector3(0, 0, 5), Quaternion.identity, 0);
             hitObject.transform.SetParent(bulletObject.transform);
             hitObject.name = "(" + i + ")hitObject";
-            hitObject.GetComponent<AudioSource>().outputAudioMixerGroup = masterMixer;
+            hitObject.GetComponent<AudioSource>().outputAudioMixerGroup = MasterMixer;
             hitObject.SetActive(false);
-            hitObjects.Add(hitObject.transform);
+            HitObjects.Add(hitObject.transform);
 
             bulletObject.SetActive(true);
 
@@ -161,7 +174,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             {
                 //set the bullet index to the iterator.
                 weaponBullet._bulletIndex = i;
-                _localBullets.Add(weaponBullet);
+                LocalBullets.Add(weaponBullet);
             }
         }
         //destory all the remaining instantation (there is a bug that creates antoher bullet intance).
@@ -169,20 +182,22 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Auther: Sky
     /// This method is responsible for destroying specific game objects related to bullet visual effects in a game scene.
     /// </summary>
     [PunRPC]
     public void DestoryBulletVFXS()
     {
+        //get the taraget object instance names.
         string[] targets = { "Bullet(Clone)", "MuzzleFlash(Clone)", "BulletTracer(Clone)", "Shell(Clone)", "Hit(Clone)" };
+        //get all the present active/deactive game objects.
         GameObject[] allObjects = FindObjectsOfType<GameObject>();
-
+        //get the list of the top level objects.
         List<GameObject> topLevelObjects = new List<GameObject>();
 
         //get all the parent objects.
         foreach (GameObject obj in allObjects)
         {
+            //if the parent is null, it will be defined as hierachy object.
             if (obj.transform.parent == null)
             {
                 topLevelObjects.Add(obj);
@@ -195,19 +210,19 @@ public class Weapon_ProjectileManager : MonoBehaviour
             {
                 if (targets[i].Contains(topLevelObj.transform.name))
                 {
+                    //destory the remaining game objects.
                     Destroy(topLevelObj.gameObject);
                 }
             }
         }
-        Debug.Log("cleared");
     }
 
     /// <summary>
-    ///  Author: Sky
     ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts.
     /// </summary>
     public void InitBullets()
     {
+        //make a local variable object for the transform.
         Transform bullets;
         //check if the bullet object instnace is null
         if (transform.Find("Bullets") == null)
@@ -217,11 +232,13 @@ public class Weapon_ProjectileManager : MonoBehaviour
             bullets.SetParent(transform);
         }
         bullets = transform.Find("Bullets");
+        //check if the buellet object is matched to the type.
         GuardClause.InspectGuardClauseNullRef<Transform>(bullets, nameof(bullets));
         Transform firePos = transform.GetChild(0).GetChild(0).transform;
+        //check if the firepos has the transsform componen type.
         GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
         //iterate through all weapon bullet counts.
-        for (int i = 0; i < _weaponInfo.BulletCounts; i++)
+        for (int i = 0; i < WeaponInfo.BulletCounts; i++)
         {
             //create bullet object instnace in bulelts transform position.
             var bulletObject = Instantiate(
@@ -230,106 +247,120 @@ public class Weapon_ProjectileManager : MonoBehaviour
                 Quaternion.identity,
                 bullets.transform
             );
-
-
             //create muzzle flash object instnace in bulelts transform position.
             bulletObject.name = "(" + i + ")Bullet";
-            bulletObject.GetComponent<AudioSource>().clip = _weaponInfo.ShootEffect;
-            bulletObjects.Add(bulletObject.transform);
+            bulletObject.GetComponent<AudioSource>().clip = WeaponInfo.ShootEffect;
+            BulletObjects.Add(bulletObject.transform);
             var muzzleFlash = Instantiate(
-                _weaponInfo.MuzzleFlash.gameObject,
+                WeaponInfo.MuzzleFlash.gameObject,
                 Vector3.zero + new Vector3(0, 0, 5),
                 Quaternion.identity,
                 bulletObject.transform
             );
             muzzleFlash.name = "(" + i + ")muzzleFlash";
             muzzleFlash.SetActive(false);
-            muzzleFlashObjects.Add(muzzleFlash.transform);
+            MuzzleFlashObjects.Add(muzzleFlash.transform);
 
 
             //create bullet tracer object instnace in bulelts transform position.
             var bulletTrace = Instantiate(
-                _weaponInfo.BulletTrace.gameObject,
+                WeaponInfo.BulletTrace.gameObject,
                 (firePos.position + new Vector3(0, -3f, 0)),
-                _weaponInfo.BulletTrace.transform.rotation,
+                WeaponInfo.BulletTrace.transform.rotation,
                 bulletObject.transform
             );
             bulletTrace.name = "(" + i + ")bulletTracer";
             bulletTrace.SetActive(false);
-            bulletTracerObjects.Add(bulletTrace.transform);
+            BulletTracerObjects.Add(bulletTrace.transform);
 
             //create shell object instnace in bulelts transform position.
             var shellObject = Instantiate(
-                _weaponInfo.BulletShell,
+                WeaponInfo.BulletShell,
                 Vector3.zero + new Vector3(0, 0, 5),
                 Quaternion.identity,
                 bulletObject.transform
             );
             shellObject.name = "(" + i + ")shell";
             shellObject.SetActive(false);
-            shellObjects.Add(shellObject.transform);
+            ShellObjects.Add(shellObject.transform);
 
 
             //create hit object instnace in bulelts transform position.
             var hitObject = new GameObject();
             hitObject.transform.position = new Vector3(0, 0, 5);
             hitObject.layer = 2;
+            //add audio source component to the hit object and deactivate the playOnAwake.
             hitObject.AddComponent<AudioSource>().playOnAwake = false;
-            hitObject.GetComponent<AudioSource>().clip = _weaponInfo.HitEffect;
+            //change the clip to be hit effect sounnd
+            hitObject.GetComponent<AudioSource>().clip = WeaponInfo.HitEffect;
+            //change the 3d sound settings to be 1.
             hitObject.GetComponent<AudioSource>().spatialBlend = 1;
+            //change the rolloffmode to be linear sound, so the sound is linear to hear.
             hitObject.GetComponent<AudioSource>().rolloffMode = AudioRolloffMode.Linear;
+            //change the minimum distance to be 0.
             hitObject.GetComponent<AudioSource>().minDistance = 0;
+            //change the maximum distance to be 20.
             hitObject.GetComponent<AudioSource>().maxDistance = 20;
+            //set hit transform parent to be bullet script object transform.
             hitObject.transform.SetParent(bulletObject.transform);
             hitObject.name = "(" + i + ")hitObject";
             hitObject.SetActive(false);
-            hitObjects.Add(hitObject.transform);
+            HitObjects.Add(hitObject.transform);
             bulletObject.GetComponent<Weapon_Bullet>()._bulletIndex = (int)i;
             bulletObject.SetActive(true);
 
             //add the local bullet object instance to the weapon_bullet class.
-            _localBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
+            LocalBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
         }
         return;
     }
 
     /// <summary>
-    /// Author: Sky
     /// This method is automatic shoot method.
     /// </summary>
     /// <param name="delaySecond"></param>
     /// <returns></returns>
     public IEnumerator GetShoot(float delaySecond)
     {
-        foreach (Weapon_Bullet bullet in _localBullets)
+        //iterate through all the bullet script object instances.
+        foreach (Weapon_Bullet bullet in LocalBullets)
         {
+            //if the bullet object is not active.
             if (!bullet.gameObject.activeSelf)
             {
+                //call bullet fire method with the gun fire position.
                 bullet.Fire(_firePos);
+                //deactviate the current bullet object instance.
                 bullet.gameObject.SetActive(true);
             }
             yield return new WaitForSeconds(delaySecond);
         }
+        //stop the coriiutine once its called by this method.
         StopCoroutine(_currentCoroutine);
     }
 
     /// <summary>
-    /// Author: Sky
     /// This method initiates Fire method to shoot, ammo will be dcreased by 1 after the shot.
     /// </summary>
     [PunRPC]
     public void GetShoot()
     {
-        if (_weaponAmmo >= 1)
+        //if the weapon ammo is greater than the 1.
+        if (WeaponAmmo >= 1)
         {
-            _weaponAmmo--;
+            //decrease the bullet ammo by 1.
+            WeaponAmmo--;
             //update the current ammo.
-            _ammunitionUI.UpdateUI(_weaponAmmo, _weaponClip);
-            foreach (Transform bullet in bulletObjects)
+            AmmunitionUI.UpdateUI(WeaponAmmo, WeaponClip);
+            //interate through all the bullet game object instances.
+            foreach (Transform bullet in BulletObjects)
             {
+                //if the bullet object instance is deactive.
                 if (!bullet.transform.GetChild(0).gameObject.activeSelf)
                 {
+                    //get the bullet class object 
                     Weapon_Bullet weaponBullet = bullet.GetComponent<Weapon_Bullet>();
+                    //call bullet fire method with the gun fire position.
                     weaponBullet.Fire(_firePos);
                     return;
                 }
@@ -338,42 +369,46 @@ public class Weapon_ProjectileManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Author: Sky
     ///  This method reloads the current gun, ammo display will be refreshed after reload.
     /// </summary>
     [PunRPC]
     public void RPC_Reload()
     {
         //only reloads when the clip is greater than 0.
-        if (this._weaponClip > 0)
+        if (this.WeaponClip > 0)
         {
             //update the current ammo.
-            this._weaponAmmo = _weaponInfo.BulletCounts;
-            this._weaponClip--;
-            _ammunitionUI.SetAmmunition(this._weaponAmmo, this._weaponClip);
+            this.WeaponAmmo = WeaponInfo.BulletCounts;
+            //weapon clip will be decreased by 1.
+            this.WeaponClip--;
+            AmmunitionUI.SetAmmunition(this.WeaponAmmo, this.WeaponClip);
         }
     }
+    /// <summary>
+    /// This method reloads the current gun, ammo display will be refreshed after reload.
+    /// </summary>
     public void Reload()
     {
         //only reloads when the clip is greater than 0.
-        if (this._weaponClip > 0)
+        if (this.WeaponClip > 0)
         {
             //update the current ammo.
-            this._weaponAmmo = _weaponInfo.BulletCounts;
-            this._weaponClip--;
-            _ammunitionUI.SetAmmunition(this._weaponAmmo, this._weaponClip);
+            this.WeaponAmmo = WeaponInfo.BulletCounts;
+            this.WeaponClip--;
+            AmmunitionUI.SetAmmunition(this.WeaponAmmo, this.WeaponClip);
         }
     }
 
     /// <summary>
-    /// Author: Sky
     /// This method initialize the shooting type of the weapon there are three options (Auto, Burst, Semi).
     /// </summary>
     /// <param name="fireType"></param>
     public void InitShoot(Weapon_Firetype fireType)
     {
+        //check the fire type.
         switch (fireType)
         {
+            //if its auto the bullet will shoot automatically.
             case Weapon_Firetype.Auto:
             {
                 _currentCoroutine = StartCoroutine(GetShoot(0.1f));
@@ -383,6 +418,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
             {
                 break;
             }
+            //if its semi the bullet will shoot each time.
             case Weapon_Firetype.Semi:
             {
                     //get rpc shoot if the mutliplayer is enabled other wise it calls local method.
@@ -391,6 +427,7 @@ public class Weapon_ProjectileManager : MonoBehaviour
                         transform.GetComponent<PhotonView>().RPC(nameof(GetShoot),RpcTarget.All);
                         break;
                     }
+                    //if the player is local multiplayer, shoots in local method.
                     else
                     {
                         GetShoot();
@@ -404,12 +441,14 @@ public class Weapon_ProjectileManager : MonoBehaviour
         }
         return;
     }
-
+    /// <summary>
+    /// Reset the Ammo when player respawn
+    /// </summary>
     public void ResetAmmo()
     {
-        _weaponAmmo = _weaponInfo.BulletCounts;
-        _weaponClip = _weaponInfo.ClipCounts;
+        WeaponAmmo = WeaponInfo.BulletCounts;
+        WeaponClip = WeaponInfo.ClipCounts;
 
-        _ammunitionUI.SetAmmunition(_weaponAmmo, _weaponClip);
+        AmmunitionUI.SetAmmunition(WeaponAmmo, WeaponClip);
     }
 }

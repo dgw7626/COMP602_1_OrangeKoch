@@ -39,6 +39,7 @@ public class Player_UIManager : MonoBehaviour
         if (!Game_RuntimeData.isMultiplayer)
             return;
 
+
         //Do not load if the instance does not belong to me
         if (!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
         {
@@ -51,7 +52,6 @@ public class Player_UIManager : MonoBehaviour
             timerText.text = "";
             timerText.enabled = true;
             PreLoadVoiceUI();
-
             //added PlayerCounts ui to check the remove instances.
             PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
         }
@@ -83,11 +83,13 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        if (Game_RuntimeData.isMultiplayer && !transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
+        {
+            return;
+        }
         if (Game_RuntimeData.isMultiplayer)
         {
             UpdateTimer();
-            if(!transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
-                return;
         }
     }
 
@@ -192,10 +194,7 @@ public class Player_UIManager : MonoBehaviour
             if (!Game_RuntimeData.matchIsRunning)
                 return;
             //it removes all current player instances. the who left the game will be deleted.
-            if (transform.GetComponent<PhotonView>() != null)
-            {
-                transform.GetComponent<PhotonView>().RPC(nameof(RPC_RemoveAllPlayerCounts), RpcTarget.All);
-            }
+            transform.GetComponent<PhotonView>().RPC(nameof(RPC_RemoveAllPlayerCounts), RpcTarget.All);
             Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
         }
         else
