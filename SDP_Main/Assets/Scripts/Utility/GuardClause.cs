@@ -1,5 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Hanul Rheem		            *
+ * Student ID: 		20109218		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using UnityEngine;
 
 public static class GuardClause
@@ -13,8 +23,10 @@ public static class GuardClause
     /// <returns>returns current type of the object.</returns>
     public static T InspectGuardClause<T>(T currentType, string message)
     {
+        //print error if its null.
         if (currentType.Equals(null))
         {
+            //custom debug message will printout.
             Debug.LogError(message + nameof(T));
             return default(T);
         }
@@ -34,18 +46,21 @@ public static class GuardClause
         {
             switch (error)
             {
+                //print error if its null reference
                 case ErrorType.NullRef:
                     {
                         Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName + ", Type: (" + currentType.GetType() + ") , -----HERE-----" +
                          "\n \t\t[Comment]: Missing " + currentType.GetType() + ", this reference is required to run the current script.");
                         return default(T);
                     }
+                //print error if its missing component
                 case ErrorType.MissingComponent:
                     {
                         Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName + ", Type: (" + currentType.GetType() + ") , -----HERE-----" +
                         "\n \t\t[Comment]: Missing " + currentType.GetType() + ", Missing Component of (" + currentType.ToString() + "), this Component requires " + nameof(C));
                         return default(T);
                     }
+                //print error if it dosent match any errors.
                 default:
                     {
                         Debug.LogWarning("[Custom." + error.ToString() + "]: Unexpected error occured please check your syntax");
@@ -63,6 +78,7 @@ public static class GuardClause
     /// <returns>returns current type of the object.</returns>
     public static T InspectGuardClauseNullRef<T>(T currentType, string parameterName)
     {
+        //checking custom type if the type is null it will throw error.
         if (ReferenceEquals(currentType, null))
         {
             Debug.LogError("[Custom." + ErrorType.NullRef.ToString() + "]: Parameter Name: " + parameterName + ", Type: (" + typeof(T) + ") , -----HERE-----" +

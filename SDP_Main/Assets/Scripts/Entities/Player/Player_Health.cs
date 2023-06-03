@@ -1,10 +1,9 @@
 using Photon.Pun;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Manages the health of the player character.
-/// </summary>
 public class Player_Health : MonoBehaviour, IDamageable
 {
     // Variables
@@ -15,14 +14,18 @@ public class Player_Health : MonoBehaviour, IDamageable
     public float UI_HealthTime = 0.16f;
 
     public Vector3 respawnPosition;
-    public HealthBar healthBar;
+    public PlayerUI_HealthBar healthBar;
     private IEnumerator coroutine;
 
+    public bool IsDead;
+
     /// <summary>
+    /// Author: Siyi Wang
     /// Initializes the player's health.
     /// </summary>
     void Start()
     {
+        IsDead = false;
         // Check if not in multiplayer mode
         if (!Game_RuntimeData.isMultiplayer)
         {
@@ -38,13 +41,14 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
+    /// Author: Siyi Wang
     /// Handles the player's input and checks for death conditions.
     /// </summary>
     void Update()
     {
         // Check if player falls below a certain height and cause damage
         // if (transform.position.y >=  2)
-        if (transform.position.y <= -10)
+        if (!Game_RuntimeData.isMultiplayer &&  transform.position.y <= -10)
         {
             s_DamageInfo damageInfo = new s_DamageInfo();
             damageInfo.dmgValue = 10f;
@@ -53,6 +57,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
+
     /// Begins the player's health management in multiplayer mode.
     /// </summary>
     public void Begin(Player_MultiplayerEntity entity)
@@ -81,20 +86,31 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Decreases the player's health by the specified damage value.
+    /// Author: Siyi Wang
+    /// Subtract hp from the local instance. If hp falls below zero, inform all players that I have died.
+    /// Update the UI value.
     /// </summary>
+    /// <param name="damageInfo"></param>
     public void TakeDamage(s_DamageInfo damageInfo)
     {
+        if (
+            Game_RuntimeData.isMultiplayer && !Game_RuntimeData.thisMachinesPlayersPhotonView.IsMine
+        )
+            return;
+
         //If invincible deal no damage
-        if(isInvincible)
+        if (isInvincible)
         {
             return;
         }
+        //Subtract damage
         currentHealth -= damageInfo.dmgValue;
 
         // Check if health reaches zero or below and trigger death
-        if (currentHealth <= 0)
+        Debug.Log("Current health is: " + currentHealth + " and IsDead: " + IsDead);
+        if (currentHealth <= 0 && !IsDead)
         {
+            Debug.Log("I am dead so I die now");
             Die(damageInfo);
         }
     }
@@ -111,24 +127,49 @@ public class Player_Health : MonoBehaviour, IDamageable
         }
         else
         {
+            PhotonView pv = null;
+            foreach (
+                KeyValuePair<int, Player_MultiplayerEntity> kvp in Game_RuntimeData.activePlayers
+            )
+            {
+                if (kvp.Key == damageInfo.dmgRecievedId)
+                {
+                    pv = kvp.Value.playerController.photonView;
+                    break;
+                }
+            }
+            if (pv == null)
+            {
+                Debug.LogError("NULL photon view found on player killed");
+            }
+
+            if (PhotonNetwork.LocalPlayer.ActorNumber != pv.Owner.ActorNumber)
+            {
+                Debug.LogError("Trying to kill a clone!");
+                return;
+            }
+
             s_DeathInfo deathInfo = new s_DeathInfo();
-            deathInfo.killerTeam = 0;
-            deathInfo.diedTeam = 0;
+            deathInfo.killerTeam = damageInfo.dmgDealerTeam;
+            deathInfo.diedTeam = damageInfo.dmgRecievedTeam;
             deathInfo.killerId = damageInfo.dmgDealerId;
             deathInfo.diedId = damageInfo.dmgRecievedId;
 
-            // Call OnPlayerKilled method on the networked player
+            string json = JsonUtility.ToJson(deathInfo);
             gameObject
                 .GetComponent<Player_PlayerController>()
                 .photonView.RPC(
                     nameof(Player_MultiplayerEntity.OnPlayerKilled),
                     RpcTarget.All,
-                    JsonUtility.ToJson(deathInfo)
+                    json
                 );
+            IsDead = true;
+            Respawn();
         }
     }
 
     /// <summary>
+    /// Author: Siyi Wang
     /// Respawns the player character in single player mode.
     /// </summary>
     void SoloRespawn()
@@ -149,6 +190,7 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
+    /// Author: Siyi Wang
     /// Updates the UI representing the player's health over time.
     /// </summary>
     public IEnumerator UpdateUI()
@@ -171,5 +213,13 @@ public class Player_Health : MonoBehaviour, IDamageable
 
             yield return new WaitForSeconds(UI_HealthTime);
         }
+    }
+
+    public void Respawn()
+    {
+        IsDead = false;
+        currentHealth = maxHealth;
+        currentUIHealth = currentHealth;
+        healthBar.SetHealth(currentUIHealth);
     }
 }

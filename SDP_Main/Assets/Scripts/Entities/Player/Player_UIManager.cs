@@ -10,10 +10,10 @@
  ************************************************
 
  */
+using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-
 /// <summary>
 /// This class is designed to Manage Objects on the Players Interface within the Game
 /// </summary>
@@ -23,6 +23,7 @@ public class Player_UIManager : MonoBehaviour
     public TextMeshProUGUI proximityMuteText;
     public TextMeshProUGUI pushToTalkText;
     public TextMeshProUGUI timerText;
+    public UI_PlayerCounts PlayerCountsUI;
     public Color orangeColor = new Color(1f, 0.65f, 0f); //Create orange as it does not exist by default
     public int redAlertThreshold = 5; // Used for CountdownTimer
     public int orangeAlertThreshold = 15; // Used for CountdownTimer
@@ -51,6 +52,8 @@ public class Player_UIManager : MonoBehaviour
             timerText.text = "";
             timerText.enabled = true;
             PreLoadVoiceUI();
+            //added PlayerCounts ui to check the remove instances.
+            PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
         }
     }
 
@@ -84,7 +87,10 @@ public class Player_UIManager : MonoBehaviour
         {
             return;
         }
-        UpdateTimer();
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            UpdateTimer();
+        }
     }
 
     /// <summary>
@@ -182,17 +188,28 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void OnQuitGameButtonPressed()
     {
-        Debug.Log("Player quit game.");
+        Debug.Log("Player quit game. ");
         if (Game_RuntimeData.isMultiplayer)
         {
             if (!Game_RuntimeData.matchIsRunning)
                 return;
-
+            //it removes all current player instances. the who left the game will be deleted.
+            transform.GetComponent<PhotonView>().RPC(nameof(RPC_RemoveAllPlayerCounts), RpcTarget.All);
             Game_RuntimeData.gameMode_Manager.StartCoroutine(Game_RuntimeData.gameMode_Manager.gameMode.OnStopGame());
-        } else
+        }
+        else
         {
             Game_RuntimeData.gameMode_Manager.QuitSinglePlayer();
         }
+    }
+
+    /// <summary>
+    /// it removes all current player instances. the who left the game will be deleted.
+    /// </summary>
+    [PunRPC]
+    internal void RPC_RemoveAllPlayerCounts()
+    {
+        PlayerCountsUI.RemovePlayerCounts();
     }
 
     /// <summary>

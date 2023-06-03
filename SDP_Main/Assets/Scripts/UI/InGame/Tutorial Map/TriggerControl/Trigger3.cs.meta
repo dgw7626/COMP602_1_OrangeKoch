@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:SDP_Main/Assets/Scripts/UI/InGame/Tutorial Map/TriggerControl/Trigger3.cs.meta
+guid: 0bda29b0f7a866943b1e29884d049a3b
+========
+guid: fe9c0c3b86474064c950c8374385b302
+>>>>>>>> Kevin---ShootDummy:SDP_Main/Assets/Scripts/UI/InGame/Tutorial Map/TargetControl/TargetRespawn.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

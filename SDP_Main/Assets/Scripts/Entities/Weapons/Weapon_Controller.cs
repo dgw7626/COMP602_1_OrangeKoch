@@ -1,45 +1,83 @@
+/*
+
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Hanul Rheem		            *
+ * Student ID: 		20109218		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+
+ */
 using UnityEngine;
 using Photon.Pun;
-
+//Weapon projectile manager will be instantiated.
 [RequireComponent(typeof(Weapon_ProjectileManager))]
+///<summary>
+/// this is weapon controller script that controls user shooting, reloading and damaging the player instance.
+/// </summary>
 public class Weapon_Controller : MonoBehaviour
 {
-    public PhotonView photonView { get; private set; }
-    private Weapon_ProjectileManager _weaponProjectileMananger;
+    //Photon view object for the weapon controller.
+    public PhotonView PhotonView { get; private set; }
+    //Intializing wepaon projectile manager for the controller.
+    public Weapon_ProjectileManager WeaponProjectileMananger;
+    public bool isInitialized = false;
+    /// <summary>
+    ///  Functions to run once when object is instantiated.
+    /// </summary>
     void Awake()
     {
         //get the photon component to call the rpc method.
         if(Game_RuntimeData.isMultiplayer)
-            photonView = GetComponent<PhotonView>();
-        _weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
+            PhotonView = GetComponent<PhotonView>();
+        //Set weapon projectile manager component to child to current object instance.
+        WeaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
+    /// <summary>
+    ///  Functions to run once when object is initialized.
+    /// </summary>
     void Start()
     {
+        if(isInitialized)
+        {
+            return;
+        }
         // if its multiplayer instantiate bullet object instances otherwise will be instantiated without photon.
         if (Game_RuntimeData.isMultiplayer)
         {
-            _weaponProjectileMananger.InitBullets_P();
+            //intialize bullets if its multiplayer instance
+            WeaponProjectileMananger.InitBullets();
         }
         else
         {
-            _weaponProjectileMananger.InitBullets();
+            //initialie bullets if its local player instance
+            WeaponProjectileMananger.InitBullets();
         }
     }
+    /// <summary>
+    /// this update method called every 1 per frame.
+    /// </summary>
     void Update()
     {
+        if (isInitialized)
+        {
+            return;
+        }
         //if its multiplayer get the camera transform and parent to the child object otherwise it will link to local player object child.
         if (!Game_RuntimeData.isMultiplayer)
         {
-            _weaponProjectileMananger.UpdateChildTransform();
+            //Update helding gun transform position to the main camera object.
+            WeaponProjectileMananger.UpdateChildTransform();
             return;
         }
-
-       if (!photonView.IsMine)
+        //  if the photon view is not mine
+       if (!PhotonView.IsMine)
        {
            return;
        }
-        photonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
+       // call all the helding gun transform positions to be main camera object.
+        PhotonView.RPC(nameof(WeaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
     }
-
- 
 }

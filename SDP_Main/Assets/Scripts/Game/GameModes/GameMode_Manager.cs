@@ -4,6 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Author: Corey Knight - 21130891
+ */
+
 /// <summary>
 /// An instance of this will exist inside multiplayer scenes. Used to create a c# native gameMode, and start coroutines.
 /// </summary>
@@ -28,8 +32,7 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
 
         if(Game_RuntimeData.gameMode == null)
         {
-            GameObject gameObject = new GameObject();
-            Game_RuntimeData.gameMode = gameObject.AddComponent<GameMode_Standard>();
+            Game_RuntimeData.gameMode = new GameMode_Standard();
         }
         gameMode = Game_RuntimeData.gameMode;
 

@@ -3,17 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * Author: Corey Knight - 21130891
+ */
 public class Game_RuntimeData
 {
     /// <summary>
     /// Reference to game mode manager to be accessed from instantiated environment.
     /// </summary>
     public static GameMode_Manager gameMode_Manager = null;
-
-    /// <summary>
-    /// Reference to player manager to be accessed from instantiated environment.
-    /// </summary>
-    public static Game_PlayerManager playerManager = null;
 
     /// <summary>
     /// List of all Multiplayer Entities that were ever instantiated.
@@ -101,9 +100,11 @@ public class Game_RuntimeData
     public static void CleanUp_Multiplayer_Data()
     {
         Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
-
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.Disconnect();
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+        }
 
         //TODO: these members need to be alive after this method, because
         // they are required to cleanup the game.

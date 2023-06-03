@@ -5,6 +5,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+/*
+ * Author: Corey Knight - 21130891
+ */
+
 /// <summary>
 /// This class handles the UI logic for the post-game splash screen.
 /// It dynamically generates UI elements based on the the number of teams and players.
@@ -23,15 +28,27 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
 
     public GameObject textPrefab;
 
+    private bool initialized = false;
     /// <summary>
     /// Assigns UI layout groups to member references, and gets the score from RuntimeData
     /// </summary>
     void Start()
     {
+        if (initialized)
+            return;
+        Begin();
+
+    }
+    public void Begin()
+    {
+        if (initialized)
+            return;
+
+        initialized = true;
         m_NameCollumn = transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
         m_KillCollumn = transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
         m_DeathCollumn = transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
-        
+
         m_TeamNameCollumn = transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
         m_TeamKillCollumn = transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<VerticalLayoutGroup>();
         m_TeamDeathCollumn = transform.GetChild(0).GetChild(3).GetChild(2).GetComponent<VerticalLayoutGroup>();
@@ -39,8 +56,8 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
         m_score = Game_RuntimeData.gameScore;
 
         Init();
-    }
 
+    }
     /// <summary>
     /// Dynamically instantiate UI elements, assigns text elements a value from the score struct.
     /// </summary>
@@ -70,8 +87,9 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             }
         }
 
+        // instantiate text elements for players into temp GameObject
         GameObject tmp;
-        for (int i = 0; i < m_score.numPlayers; i++) 
+        for (int i = 0; i < m_score.numPlayers; i++)
         {
             string winTxt = "";
 
@@ -83,11 +101,12 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
 
             tmp = Instantiate(textPrefab, m_KillCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.killsPerPlayer[i]);
-            
+
             tmp = Instantiate(textPrefab, m_DeathCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("" + m_score.deathsPerPlayer[i]);
         }
 
+        // instantiate text elements for teams into temp GameObject
         for(int i = 0; i < m_score.numTeams; i++)
         {
             string winTxt = "";
@@ -95,7 +114,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             if (i == winningTeam)
                 winTxt += "\nWinner!";
             else
-                winTxt += "\nLOOSER!";
+                winTxt += "\nLoser!";
 
             tmp = Instantiate(textPrefab, m_TeamNameCollumn.transform);
             tmp.GetComponent<TextMeshProUGUI>().text = ("Team " + (i + 1) + winTxt);
@@ -114,7 +133,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
     void Update()
     {
         // Messy hack that breaks all of our conventions
-        if(Input.GetKeyDown(KeyCode.Escape)) 
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
             Game_GameState.NextScene("Lobby");
         }
