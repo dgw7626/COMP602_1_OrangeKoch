@@ -643,7 +643,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 250114684}
-        m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
+        m_TargetAssemblyTypeName: Multiplayer_NetworkManager, ScriptAssembly
         m_MethodName: QuitMultiplayer
         m_Mode: 1
         m_Arguments:

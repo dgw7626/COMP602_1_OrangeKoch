@@ -184,15 +184,16 @@ public class GameMode_Standard : IgameMode
     /// <param name="deathInfoStruct"></param>
     public void CalculateScore(s_DeathInfo deathInfoStruct)
     {
-        if(deathInfoStruct.killerId != -1)
+        if (deathInfoStruct.killerId != -1)
         {
             teamScores.killsPerPlayer[deathInfoStruct.killerId - 1]++;
             teamScores.killsPerTeam[deathInfoStruct.killerTeam]++;
         }
-
-        teamScores.deathsPerPlayer[deathInfoStruct.diedId - 1]++;
-        teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
-
+        else
+        {
+            teamScores.deathsPerPlayer[deathInfoStruct.diedId - 1]++;
+            teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
+        }
         Game_RuntimeData.gameScore = teamScores;
     }
 
