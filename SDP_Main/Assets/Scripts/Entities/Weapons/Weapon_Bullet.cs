@@ -121,6 +121,16 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     //it will call and check health and damage count.
                     HitPlayer(hit);
                 }
+                //if the target is dummy
+                else if(hit.transform.tag == "Dummy")
+                {
+                    //gets the target respoan script
+                    TargetRespawn target = hit.transform.GetComponent<TargetRespawn>();
+                    //add the score by 1.
+                    target.scoreCount.IncreaseScore();
+                    //disable the target object with the certain time.
+                    target.RespawnDelay();
+                }
                 RenderGunTrace(hit.point, origin.position);
                 _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
                 //check if the controller is not null and is multiplayer is false.

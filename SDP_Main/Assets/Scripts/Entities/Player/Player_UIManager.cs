@@ -87,7 +87,10 @@ public class Player_UIManager : MonoBehaviour
         {
             return;
         }
-        UpdateTimer();
+        if (Game_RuntimeData.isMultiplayer)
+        {
+            UpdateTimer();
+        }
     }
 
     /// <summary>

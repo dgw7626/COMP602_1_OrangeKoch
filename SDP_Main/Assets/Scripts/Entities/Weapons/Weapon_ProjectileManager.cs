@@ -247,8 +247,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
                 Quaternion.identity,
                 bullets.transform
             );
-
-            Debug.Log("CREATED!");
             //create muzzle flash object instnace in bulelts transform position.
             bulletObject.name = "(" + i + ")Bullet";
             bulletObject.GetComponent<AudioSource>().clip = WeaponInfo.ShootEffect;
@@ -443,8 +441,9 @@ public class Weapon_ProjectileManager : MonoBehaviour
         }
         return;
     }
-
-    // Reset the Ammo when player respawn
+    /// <summary>
+    /// Reset the Ammo when player respawn
+    /// </summary>
     public void ResetAmmo()
     {
         WeaponAmmo = WeaponInfo.BulletCounts;
