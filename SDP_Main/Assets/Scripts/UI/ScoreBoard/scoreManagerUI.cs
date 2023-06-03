@@ -18,14 +18,14 @@ using UnityEngine;
 
 public class scoreManagerUI : MonoBehaviour
 {
-    PutPlayerDetailOnFirebase putPlayerDetailOnFirebase = new PutPlayerDetailOnFirebase();
-    ScoreBoard scoreBoard = new ScoreBoard();
+    PutPlayerDetailOnFirebase putPlayerDetailOnFirebase;
 
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
+        putPlayerDetailOnFirebase = new GameObject().AddComponent<PutPlayerDetailOnFirebase>();
         RestClient.Delete("https://project-10bbb-default-rtdb.firebaseio.com/.json");
         StartCoroutine(UpdateDbScores());
     }
