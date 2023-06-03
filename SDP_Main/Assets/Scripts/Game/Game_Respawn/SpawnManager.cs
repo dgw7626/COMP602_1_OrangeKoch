@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This script will be used in future development
+/// </summary>
 public class SpawnManager : MonoBehaviour
 {
     //public static SpawnManager Instance;
