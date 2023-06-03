@@ -22,7 +22,8 @@ public class Weapon_Controller : MonoBehaviour
     //Photon view object for the weapon controller.
     public PhotonView PhotonView { get; private set; }
     //Intializing wepaon projectile manager for the controller.
-    private Weapon_ProjectileManager _weaponProjectileMananger;
+    public Weapon_ProjectileManager WeaponProjectileMananger;
+    public bool isInitialized = false;
     /// <summary>
     ///  Functions to run once when object is instantiated.
     /// </summary>
@@ -32,23 +33,27 @@ public class Weapon_Controller : MonoBehaviour
         if(Game_RuntimeData.isMultiplayer)
             PhotonView = GetComponent<PhotonView>();
         //Set weapon projectile manager component to child to current object instance.
-        _weaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
+        WeaponProjectileMananger = GetComponent<Weapon_ProjectileManager>();
     }
     /// <summary>
     ///  Functions to run once when object is initialized.
     /// </summary>
     void Start()
     {
+        if(isInitialized)
+        {
+            return;
+        }
         // if its multiplayer instantiate bullet object instances otherwise will be instantiated without photon.
         if (Game_RuntimeData.isMultiplayer)
         {
             //intialize bullets if its multiplayer instance
-            _weaponProjectileMananger.InitBullets();
+            WeaponProjectileMananger.InitBullets();
         }
         else
         {
             //initialie bullets if its local player instance
-            _weaponProjectileMananger.InitBullets();
+            WeaponProjectileMananger.InitBullets();
         }
     }
     /// <summary>
@@ -56,11 +61,15 @@ public class Weapon_Controller : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (isInitialized)
+        {
+            return;
+        }
         //if its multiplayer get the camera transform and parent to the child object otherwise it will link to local player object child.
         if (!Game_RuntimeData.isMultiplayer)
         {
             //Update helding gun transform position to the main camera object.
-            _weaponProjectileMananger.UpdateChildTransform();
+            WeaponProjectileMananger.UpdateChildTransform();
             return;
         }
         //  if the photon view is not mine
@@ -69,6 +78,6 @@ public class Weapon_Controller : MonoBehaviour
            return;
        }
        // call all the helding gun transform positions to be main camera object.
-        PhotonView.RPC(nameof(_weaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
+        PhotonView.RPC(nameof(WeaponProjectileMananger.UpdateChildTransform), RpcTarget.All);
     }
 }
