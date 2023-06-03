@@ -31,7 +31,9 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     internal Weapon_ProjectileManager _projectileManager;           //private weapon projectile manager class for the bullet object instance.
     internal Weapon_Controller _projectController;                  //private weapon controller class for the bullet object instance.
     public Player_MultiplayerEntity m_MultiplayerEntity;            //current mutliplayer entity class to get the current photon view component.
-    public float weaponDamage;              //current weapon damage value.
+    public float WeaponDamage;              //current weapon damage value.
+    public Transform FirePosition;          //current weapon fire position.
+    internal bool _showGizmos = false;      //this is for checking if the bullet is present.
     /// <summary>
     ///  Functions to run once when object is initialized.
     /// </summary>
@@ -107,6 +109,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         //insntatiating the bullet vfx instances.
         InstantiateGunVFX();
         //raycasting the origin position
+        
         if (Physics.Raycast(_projectileManager.transform.position, _projectileManager.transform.forward, out RaycastHit hit, Mathf.Infinity))
         {
             //if the transform is not null.
@@ -135,9 +138,22 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
 
     }
     /// <summary>
+    /// Debugging the shooting position and bullet position, so player can see which bullet its landing.
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (_showGizmos)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_projectileManager.transform.position, 0.5f);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(_hit.transform.position, 0.2f);
+        }
+    }
+    /// <summary>
     /// This method intantiates bullet vfx game instances.
     /// </summary>
-
     public void InstantiateGunVFX()
     {
         //get all the object instances from the projectile manager class.

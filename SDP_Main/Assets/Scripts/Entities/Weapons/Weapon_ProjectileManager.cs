@@ -45,12 +45,12 @@ public class Weapon_ProjectileManager : MonoBehaviour
     void Awake()
     {
         //check if the photon is mine.
-        if (!transform.GetComponentInParent<PhotonView>().IsMine)
+        if (!Game_RuntimeData.isMultiplayer && !transform.GetComponentInParent<PhotonView>().IsMine)
         {
             return;
         }
         //get the camera rotation and position by calling transform methods.
-        this._camera = this.transform.parent.GetComponentInChildren<Camera>().transform;
+        this._camera = this.transform.parent.GetComponentInChildren<Camera>().transform.Find("Player_Raycast").transform;
         GuardClause.InspectGuardClauseNullRef<Transform>(this._camera, nameof(this._camera));
         this._fw = _camera.transform.InverseTransformDirection(transform.forward);
         GuardClause.InspectGuardClauseNullRef<Vector3>(this._fw, nameof(this._fw));

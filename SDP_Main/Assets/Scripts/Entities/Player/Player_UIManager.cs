@@ -35,8 +35,6 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        //added PlayerCounts ui to check the remove instances.
-        PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
         //Return if not playing multiplayer, such that it is single.
         if (!Game_RuntimeData.isMultiplayer)
             return;
@@ -54,20 +52,9 @@ public class Player_UIManager : MonoBehaviour
             timerText.text = "";
             timerText.enabled = true;
             PreLoadVoiceUI();
+            //added PlayerCounts ui to check the remove instances.
+            PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
         }
-    }
-    /// <summary>
-    /// Functions to run once when object is initialized.
-    /// </summary>
-    private void Start()
-    {
-        //when the game is mulitplayer
-        if (Game_RuntimeData.isMultiplayer && !transform.parent.GetComponent<Player_PlayerController>().photonView.IsMine)
-        {
-            return;
-        }
-        // if its photon mine get the player count ui.
-        PlayerCountsUI = transform.Find("PlayerCounts").GetComponent<UI_PlayerCounts>();
     }
 
     /// <summary>
