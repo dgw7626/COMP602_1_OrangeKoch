@@ -42,7 +42,7 @@ public class MoveObject : MonoBehaviour
             if (Vector3.Distance(transform.position, endPosition.position) < 0.01f)
             {
                 // Reverse the direction of movement
-                movingToEnd = false; 
+                movingToEnd = false;
             }
         }
         else

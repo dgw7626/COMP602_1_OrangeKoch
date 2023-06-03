@@ -11,12 +11,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 /// <summary>
-/// This class will manager multiplayer's spaswnpoint position. 
-/// Using in future
+/// This script will be used in future development
 /// </summary>
-
 public class SpawnManager : MonoBehaviour
 {
     //public static SpawnManager Instance;
