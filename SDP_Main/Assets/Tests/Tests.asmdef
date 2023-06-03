@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "ScriptAssembly",
         "Unity.TextMeshPro",
-        "RestClientAssembly"
+        "RestClientAssembly",
+        "PhotonUnityNetworking"
     ],
     "includePlatforms": [
         "Editor"
