@@ -39,7 +39,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
     internal Transform _firePos;                //current position of the gun fire position.
     public PhotonView PhotonView;               //current photon view for this class
     public AudioMixerGroup MasterMixer;         //current audio group for this class
-    public bool isIntialized = false; 
     /// <summary>
     ///  Functions to run once when object is instantiated.
     /// </summary>
@@ -216,104 +215,6 @@ public class Weapon_ProjectileManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    /// <summary>
-    ///  This method creates the bullet instance, it will create number of bullets based on WeaponInfo BulletCounts. Manual mode.
-    /// </summary>
-    public void ManualInitBullets(ParticleSystem muzzleFlashPrefab, TrailRenderer bulletTracePrefab, GameObject bulletShellPrefab, AudioClip shootEffectPrefab, AudioClip hitEffectPrefab)
-    {
-        //make a local variable object for the transform.
-        Transform bullets;
-        //check if the bullet object instnace is null
-        if (transform.Find("Bullets") == null)
-        {
-            //create if the bullet object instnace is null.
-            bullets = new GameObject("Bullets").transform;
-            bullets.SetParent(transform);
-        }
-        bullets = transform.Find("Bullets");
-        //check if the buellet object is matched to the type.
-        GuardClause.InspectGuardClauseNullRef<Transform>(bullets, nameof(bullets));
-        Transform firePos = transform.GetChild(0).GetChild(0).transform;
-        //check if the firepos has the transsform componen type.
-        GuardClause.InspectGuardClauseNullRef<Transform>(firePos, nameof(firePos));
-        //iterate through all weapon bullet counts.
-        for (int i = 0; i < WeaponInfo.BulletCounts; i++)
-        {
-            //create bullet object instnace in bulelts transform position.
-            var bulletObject = Instantiate(
-                Resources.Load(Path.Combine("LocalPrefabs", "Bullet")) as GameObject,
-                Vector3.zero + new Vector3(0, 0, 5),
-                Quaternion.identity,
-                bullets.transform
-            );
-            //create muzzle flash object instnace in bulelts transform position.
-            bulletObject.name = "(" + i + ")Bullet";
-            bulletObject.GetComponent<AudioSource>().clip = shootEffectPrefab;
-            BulletObjects.Add(bulletObject.transform);
-            var muzzleFlash = Instantiate(
-                muzzleFlashPrefab.gameObject,
-                Vector3.zero + new Vector3(0, 0, 5),
-                Quaternion.identity,
-                bulletObject.transform
-            );
-            muzzleFlash.name = "(" + i + ")muzzleFlash";
-            muzzleFlash.SetActive(false);
-            MuzzleFlashObjects.Add(muzzleFlash.transform);
-
-
-            //create bullet tracer object instnace in bulelts transform position.
-            var bulletTrace = Instantiate(
-                bulletTracePrefab.gameObject,
-                (firePos.position + new Vector3(0, -3f, 0)),
-                WeaponInfo.BulletTrace.transform.rotation,
-                bulletObject.transform
-            );
-            bulletTrace.name = "(" + i + ")bulletTracer";
-            bulletTrace.SetActive(false);
-            BulletTracerObjects.Add(bulletTrace.transform);
-
-            //create shell object instnace in bulelts transform position.
-            var shellObject = Instantiate(
-                bulletShellPrefab,
-                Vector3.zero + new Vector3(0, 0, 5),
-                Quaternion.identity,
-                bulletObject.transform
-            );
-            shellObject.name = "(" + i + ")shell";
-            shellObject.SetActive(false);
-            ShellObjects.Add(shellObject.transform);
-
-
-            //create hit object instnace in bulelts transform position.
-            var hitObject = new GameObject();
-            hitObject.transform.position = new Vector3(0, 0, 5);
-            hitObject.layer = 2;
-            //add audio source component to the hit object and deactivate the playOnAwake.
-            hitObject.AddComponent<AudioSource>().playOnAwake = false;
-            //change the clip to be hit effect sounnd
-            hitObject.GetComponent<AudioSource>().clip = hitEffectPrefab;
-            //change the 3d sound settings to be 1.
-            hitObject.GetComponent<AudioSource>().spatialBlend = 1;
-            //change the rolloffmode to be linear sound, so the sound is linear to hear.
-            hitObject.GetComponent<AudioSource>().rolloffMode = AudioRolloffMode.Linear;
-            //change the minimum distance to be 0.
-            hitObject.GetComponent<AudioSource>().minDistance = 0;
-            //change the maximum distance to be 20.
-            hitObject.GetComponent<AudioSource>().maxDistance = 20;
-            //set hit transform parent to be bullet script object transform.
-            hitObject.transform.SetParent(bulletObject.transform);
-            hitObject.name = "(" + i + ")hitObject";
-            hitObject.SetActive(false);
-            HitObjects.Add(hitObject.transform);
-            bulletObject.GetComponent<Weapon_Bullet>().BulletIndex = (int)i;
-            bulletObject.SetActive(true);
-
-            //add the local bullet object instance to the weapon_bullet class.
-            LocalBullets.Add(bulletObject.GetComponent<Weapon_Bullet>());
-        }
-        return;
     }
 
     /// <summary>
