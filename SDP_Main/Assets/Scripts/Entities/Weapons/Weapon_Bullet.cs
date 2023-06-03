@@ -18,15 +18,15 @@ using System.Text.RegularExpressions;
 /// <summary>
 /// this class is designed to send the damage to the player and responsible for making vfx effects to the bullet instance.
 /// </summary>
-public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
+public class Weapon_Bullet : MonoBehaviour, IWeapon_Fireable
 {
-    internal GameObject _hit;               //hit object so it can contain hit sound.
-    internal GameObject _bulletTracer;      //bullet trace object.
-    internal GameObject _shell;             //shell object that contains rigidbody component.
-    internal GameObject _muzzleFlash;       //muzzle flash object that contains vfx instance.
-    internal GameObject _bullet;            //bullet object that contains bullet script.
-    internal Coroutine _currentCoroutine;   //custom coroutine to desroy the bullet instance.
-    public int _bulletIndex;                //bullet index to check the current object of the index name.
+    public GameObject HitObject;               //hit object so it can contain hit sound.
+    public GameObject BulletTracer;      //bullet trace object.
+    public GameObject Shell;             //shell object that contains rigidbody component.
+    public GameObject MuzzleFlash;       //muzzle flash object that contains vfx instance.
+    public GameObject Bullet;            //bullet object that contains bullet script.
+    public Coroutine CurrentCoroutine;   //custom coroutine to desroy the bullet instance.
+    public int BulletIndex;                //bullet index to check the current object of the index name.
     internal int _currentIndex;             //current index name for the current object name.
     internal Weapon_ProjectileManager _projectileManager;           //private weapon projectile manager class for the bullet object instance.
     internal Weapon_Controller _projectController;                  //private weapon controller class for the bullet object instance.
@@ -44,7 +44,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         {
                 //get the current index of the transform
                 _currentIndex = GetCurrentBuildIndex(transform.name);
-                if (_bulletIndex == _currentIndex)
+                if (BulletIndex == _currentIndex)
                 {
                 //if the current bullet object index matches to  the current object of the bullet index it will return with the projectile manager and multiplayer entitity.
                 m_MultiplayerEntity = transform.parent.parent.parent.GetComponent<Player_MultiplayerEntity>();
@@ -132,13 +132,13 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
                     target.RespawnDelay();
                 }
                 RenderGunTrace(hit.point, origin.position);
-                _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
+                CurrentCoroutine = StartCoroutine(DisableBullet(this.Bullet.transform.GetComponent<AudioSource>().clip.length));
                 //check if the controller is not null and is multiplayer is false.
                 if (_projectController != null && !Game_RuntimeData.isMultiplayer)
                 {
                     //exectue the mutliplayer bullet trace vfx.
                     RenderGunTrace(hit.point, origin.position);
-                    _currentCoroutine = StartCoroutine(DisableBullet(this._bullet.transform.GetComponent<AudioSource>().clip.length));
+                    CurrentCoroutine = StartCoroutine(DisableBullet(this.Bullet.transform.GetComponent<AudioSource>().clip.length));
                     return;
                 }
                 //exectue the mutliplayer bullet trace vfx.
@@ -158,7 +158,7 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
             Gizmos.DrawSphere(_projectileManager.transform.position, 0.5f);
 
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(_hit.transform.position, 0.2f);
+            Gizmos.DrawSphere(HitObject.transform.position, 0.2f);
         }
     }
     /// <summary>
@@ -167,27 +167,46 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     public void InstantiateGunVFX()
     {
         //get all the object instances from the projectile manager class.
-        this._shell = _projectileManager.ShellObjects[_currentIndex].gameObject;
-        this._bulletTracer = _projectileManager.BulletTracerObjects[_currentIndex].gameObject;
-        this._muzzleFlash = _projectileManager.MuzzleFlashObjects[_currentIndex].gameObject;
-        this._hit = _projectileManager.HitObjects[_currentIndex].gameObject;
-        this._bullet = _projectileManager.BulletObjects[_currentIndex].gameObject;
+        this.Shell = _projectileManager.ShellObjects[_currentIndex].gameObject;
+        this.BulletTracer = _projectileManager.BulletTracerObjects[_currentIndex].gameObject;
+        this.MuzzleFlash = _projectileManager.MuzzleFlashObjects[_currentIndex].gameObject;
+        this.HitObject = _projectileManager.HitObjects[_currentIndex].gameObject;
+        this.Bullet = _projectileManager.BulletObjects[_currentIndex].gameObject;
         //executing each vfx, shell is the rigidbody based vfx instance.
-        this._shell.SetActive(true);
-        this._shell = _projectileManager.ShellObjects[_bulletIndex].gameObject;
+        this.Shell.SetActive(true);
+        this.Shell = _projectileManager.ShellObjects[BulletIndex].gameObject;
         //set the shell rigid body velocity to be zero.
-        this._shell.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        this.Shell.GetComponent<Rigidbody>().velocity = Vector3.zero;
         //set the shell rigid body angular velocity to be zero.
-        this._shell.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        this._shell.transform.position = this.transform.parent.parent.GetChild(0).Find("BulletShellPos").position;
+        this.Shell.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        this.Shell.transform.position = this.transform.parent.parent.GetChild(0).Find("BulletShellPos").position;
         //add a force to shell postiton with random value numbers in transform y position and -x position with 160 ~ 210 value range.
-        this._shell.GetComponent<Rigidbody>().AddForce((transform.up * Random.Range(160, 210)) + (transform.right * Random.Range(160, 210)));
+        this.Shell.GetComponent<Rigidbody>().AddForce((transform.up * Random.Range(160, 210)) + (transform.right * Random.Range(160, 210)));
         //enable the muzzle flash vfx.
-        this._muzzleFlash.SetActive(true);
+        this.MuzzleFlash.SetActive(true);
         //play the muzzle falsh particle system
-        this._muzzleFlash.GetComponent<ParticleSystem>().Play();
+        this.MuzzleFlash.GetComponent<ParticleSystem>().Play();
         //play the audio source of the bullet instance.
-        this._bullet.GetComponent<AudioSource>().Play();
+        this.Bullet.GetComponent<AudioSource>().Play();
+    }
+    /// <summary>
+    /// This method intantiates bullet vfx game instances.
+    /// </summary>
+    public void ManualInstantiateGunVFX()
+    {
+        //get all the object instances from the projectile manager class.
+        //executing each vfx, shell is the rigidbody based vfx instance.
+        this.Shell.SetActive(true);
+        //set the shell rigid body velocity to be zero.
+        this.Shell.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //set the shell rigid body angular velocity to be zero.
+        this.Shell.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        //add a force to shell postiton with random value numbers in transform y position and -x position with 160 ~ 210 value range.
+        this.Shell.GetComponent<Rigidbody>().AddForce((transform.up * Random.Range(160, 210)) + (transform.right * Random.Range(160, 210)));
+        //enable the muzzle flash vfx.
+        this.MuzzleFlash.SetActive(true);
+        //play the muzzle falsh particle system
+        this.MuzzleFlash.GetComponent<ParticleSystem>().Play();
     }
 
     /// <summary>
@@ -196,23 +215,23 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
     /// <param name="hit"></param>
     /// <param name="origin"></param>
 
-    internal void RenderGunTrace(Vector3 hit, Vector3 origin)
+    public void RenderGunTrace(Vector3 hit, Vector3 origin)
     {
-        _hit.transform.position = hit;
-        _hit.transform.parent = null;
+        HitObject.transform.position = hit;
+        HitObject.transform.parent = null;
         // bullet and hit set to active.
-        this._bulletTracer.SetActive(true);
-        this._hit.SetActive(true);
+        this.BulletTracer.SetActive(true);
+        this.HitObject.SetActive(true);
         //change the position to the origin position.
-        this._bulletTracer.transform.position = origin;
+        this.BulletTracer.transform.position = origin;
         //get trailrenderer and add origin position.
-        _bulletTracer.GetComponent<TrailRenderer>().AddPosition(origin);
-        _bulletTracer.transform.position = hit;
+        BulletTracer.GetComponent<TrailRenderer>().AddPosition(origin);
+        BulletTracer.transform.position = hit;
         //set shell, bullet tracer parent's null so it dosent attach to the local player object.
-        this._shell.transform.parent = null;
-        _bulletTracer.transform.parent = null;
+        this.Shell.transform.parent = null;
+        BulletTracer.transform.parent = null;
         // play the audio sound of the hit transform.
-        _hit.transform.GetComponent<AudioSource>().Play();
+        HitObject.transform.GetComponent<AudioSource>().Play();
 
     }
 
@@ -284,19 +303,19 @@ public class Weapon_Bullet : MonoBehaviourPun, IWeapon_Fireable
         // waiting for the specific time of the delay second.
         yield return new WaitForSeconds(delaySecond);
         //change the _buleltTracer transform to the original bullet transform.
-        _bulletTracer.transform.SetParent(transform);
+        BulletTracer.transform.SetParent(transform);
         //change the rotatin to the camera postion.
-        _bulletTracer.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)), GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0);
+        BulletTracer.transform.rotation = Quaternion.Euler((Camera.main.transform.rotation.eulerAngles.x + (-90f)), GetComponentInParent<Player_InputManager>().transform.rotation.eulerAngles.y, 0);
         //set the hit object parent to be bullet transform object.
-        _hit.transform.SetParent(transform);
+        HitObject.transform.SetParent(transform);
         //set the shell object parent to be bullet transform object.
-        this._shell.transform.SetParent(transform);
+        this.Shell.transform.SetParent(transform);
         //deactive all the object instances.
-        this._shell.SetActive(false);
-        this._bulletTracer.SetActive(false);
-        this._muzzleFlash.SetActive(false);
-        this._hit.SetActive(false);
+        this.Shell.SetActive(false);
+        this.BulletTracer.SetActive(false);
+        this.MuzzleFlash.SetActive(false);
+        this.HitObject.SetActive(false);
         //stop the coroutine one the method is ended.
-        StopCoroutine(_currentCoroutine);
+        StopCoroutine(CurrentCoroutine);
     }
 }
