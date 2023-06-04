@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:SDP_Main/Assets/Resources/LocalPrefabs/Weapon_Test.meta
-guid: 6b4a32d170d193744813922cfac6d285
+<<<<<<<< HEAD:SDP_Main/Assets/Resources/WeaponData.meta
+guid: 2fc703a9864ba744589cb6b0c1712c1b
 ========
-guid: b6cecfe317901fe4ab9fc736733f68c9
->>>>>>>> Kevin_shootDummy:SDP_Main/Assets/Resources/Sprites.meta
+guid: 6b4a32d170d193744813922cfac6d285
+>>>>>>>> main:SDP_Main/Assets/Resources/LocalPrefabs/Weapon_Test.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
