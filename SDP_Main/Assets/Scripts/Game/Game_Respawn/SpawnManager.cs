@@ -1,10 +1,22 @@
-using System.Collections;
+/*
+ ************************************************
+ *                                              *				
+ * Primary Dev: 	Siyi Wang		            *
+ * Student ID: 		19036757		            *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *			
+ ************************************************
+ */using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 /// <summary>
-/// This script will be used in future development
+/// This class will manager multiplayer's spaswnpoint position. 
+/// Using in future
 /// </summary>
+
 public class SpawnManager : MonoBehaviour
 {
     //public static SpawnManager Instance;

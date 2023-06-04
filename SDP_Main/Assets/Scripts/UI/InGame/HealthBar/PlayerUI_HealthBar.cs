@@ -1,20 +1,24 @@
 /*
  ************************************************
- *                                              *
+ *                                              *				
  * Primary Dev: 	Siyi Wang		            *
  * Student ID: 		19036757		            *
  * Course Code: 	COMP602_2023_S1             *
  * Assessment Item: Orange Koch                 *
- * 						                        *
+ * 						                        *			
  ************************************************
  */
 using UnityEngine;
 using UnityEngine.UI;
+
+/// <summary>
+/// The PlayerUI_HealthBar class is responsible for managing the health bar UI for a player. 
+/// </summary>
 public class PlayerUI_HealthBar : MonoBehaviour
 {
-    public Slider slider;
-    public Gradient gradient;
-    public Image fill;
+    public Slider slider; 
+    public Gradient gradient; 
+    public Image fill; 
 
     /// <summary>
     /// Sets the maximum health value of the health bar and updates the fill color.

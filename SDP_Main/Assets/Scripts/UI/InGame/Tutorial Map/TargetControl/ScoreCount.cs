@@ -14,6 +14,10 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+/// <summary>
+/// 
+/// </summary>
 public class ScoreCount : MonoBehaviour
 {
     public float quitTime = 5f;
