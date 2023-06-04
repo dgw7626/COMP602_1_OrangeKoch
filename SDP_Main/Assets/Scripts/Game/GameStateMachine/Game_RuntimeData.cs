@@ -99,9 +99,9 @@ public class Game_RuntimeData
     /// </summary>
     public static void CleanUp_Multiplayer_Data()
     {
-        Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
         if (Game_RuntimeData.isMultiplayer)
         {
+            Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
             if (gameMode_Manager != null)
                 PhotonNetwork.LeaveRoom();
             PhotonNetwork.Disconnect();
