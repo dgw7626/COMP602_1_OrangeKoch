@@ -102,7 +102,8 @@ public class Game_RuntimeData
         Debug.Log("Quit Multiplayer Invoked - Returning to Main Multiplayer_MenuItem.");
         if (Game_RuntimeData.isMultiplayer)
         {
-            PhotonNetwork.LeaveRoom();
+            if (gameMode_Manager != null)
+                PhotonNetwork.LeaveRoom();
             PhotonNetwork.Disconnect();
         }
 
