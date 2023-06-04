@@ -80,7 +80,7 @@ public class Player_Health_Tests
     /// It verifies that the player's UI health decreases over time as expected.
     /// </summary>
     [UnityTest]
-    public IEnumerator UpdateUI_HealthDecreasesOverTime()
+    public IEnumerator UpdateUI_HealthDecreasesOverTimeTest()
     {
         float initialHealth = 100.0f;
         float healthDecreaseRate = 10.0f;
@@ -114,7 +114,7 @@ public class Player_Health_Tests
     /// It verifies that the player's health is restored to the maximum value after respawning.
     /// </summary>
     [Test]
-    public void Respawn_RestoresHealthToMax()
+    public void Respawn_RestoresHealthToMaxTest()
     {
         // Arrange
         float maxHealth = 100f;

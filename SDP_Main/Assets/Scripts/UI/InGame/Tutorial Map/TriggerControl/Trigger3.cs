@@ -28,7 +28,7 @@ public class Trigger3 : MonoBehaviour
     public TextMeshProUGUI ShootText;
 
     /// <summary>
-    /// Called when a collider enters the trigger.
+    ///  change the TipUI when a player enters the trigger.
     /// </summary>
     /// <param name="other">The collider that entered the trigger.</param>
     private void OnTriggerEnter(Collider other)
