@@ -16,6 +16,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// The Trigger1 class is responsible for handling the trigger behavior when player enters it.  
+/// </summary>
 public class Trigger1 : MonoBehaviour
 {
     public TextMeshProUGUI MoveText;
@@ -23,13 +26,14 @@ public class Trigger1 : MonoBehaviour
     public GameObject trigger2;
 
     /// <summary>
-    /// Called when a collider enters the trigger.
+    /// change the TipUI when a player enters the trigger.
     /// </summary>
     /// <param name="other">The collider that entered the trigger.</param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            Debug.Log("player arrived at waypoint 1");
             // Move the tip text downward
             MoveText.rectTransform.anchoredPosition -= new Vector2(0, 50);
             MoveText.fontStyle |= FontStyles.Strikethrough;

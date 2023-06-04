@@ -1,9 +1,27 @@
+
+/*
+
+ ************************************************
+ *                                              *
+ * Primary Dev: 	Siyi Wang && Corey Knight   *
+ * Student ID: 		19036757 && 21130891	    *
+ * Course Code: 	COMP602_2023_S1             *
+ * Assessment Item: Orange Koch                 *
+ * 						                        *
+ ************************************************
+
+ */
 using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The Player_Health class manages the player character's health. 
+/// It implements the IDamageable interface
+/// includes variables for maximum health, current health, invincibility, UI elements, respawn position, health bar reference, and UI update coroutine.
+/// </summary>
 public class Player_Health : MonoBehaviour, IDamageable
 {
     // Variables
@@ -20,7 +38,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     public bool IsDead;
 
     /// <summary>
-    /// Author: Siyi Wang
     /// Initializes the player's health.
     /// </summary>
     void Start()
@@ -41,7 +58,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Author: Siyi Wang
     /// Handles the player's input and checks for death conditions.
     /// </summary>
     void Update()
@@ -57,7 +73,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-
     /// Begins the player's health management in multiplayer mode.
     /// </summary>
     public void Begin(Player_MultiplayerEntity entity)
@@ -86,7 +101,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Author: Siyi Wang
     /// Subtract hp from the local instance. If hp falls below zero, inform all players that I have died.
     /// Update the UI value.
     /// </summary>
@@ -169,7 +183,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Author: Siyi Wang
     /// Respawns the player character in single player mode.
     /// </summary>
     void SoloRespawn()
@@ -190,7 +203,6 @@ public class Player_Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>
-    /// Author: Siyi Wang
     /// Updates the UI representing the player's health over time.
     /// </summary>
     public IEnumerator UpdateUI()

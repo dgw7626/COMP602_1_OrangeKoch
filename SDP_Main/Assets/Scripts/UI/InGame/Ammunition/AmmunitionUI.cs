@@ -13,6 +13,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// class is responsible for updating ammunition UI when ammo number changes.
+/// </summary>
 public class AmmunitionUI : MonoBehaviour
 {
     public Text Text; // Reference to the Text component
