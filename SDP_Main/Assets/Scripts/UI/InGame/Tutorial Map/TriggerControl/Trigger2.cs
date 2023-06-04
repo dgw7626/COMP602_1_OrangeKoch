@@ -13,6 +13,9 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// The Trigger2 class is responsible for handling the trigger behavior when player enters it.  
+/// </summary>
 public class Trigger2 : MonoBehaviour
 {
     public TextMeshProUGUI MoveText;
@@ -20,12 +23,12 @@ public class Trigger2 : MonoBehaviour
     public TextMeshProUGUI JumpText;
     public GameObject trigger3;
     /// <summary>
-    /// Called when a collider enters the trigger.
+    ///  change the TipUI when a player enters the trigger.
     /// </summary>
     /// <param name="other">The collider that entered the trigger.</param>
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger work");
+        Debug.Log("player arrived at step 2");
         if (other.CompareTag("Player"))
         {
             //Move downward the tip text

@@ -13,6 +13,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// The TargetRespawn class manages the respawn of a target object. It includes variables for the respawn time, respawn position, and a reference to the ScoreCount script. 
+/// </summary>
 public class TargetRespawn : MonoBehaviour
 {
     public float respawnTime = 3f; // The time it takes for the target to respawn

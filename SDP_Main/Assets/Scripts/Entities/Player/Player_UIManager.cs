@@ -188,7 +188,6 @@ public class Player_UIManager : MonoBehaviour
     /// </summary>
     private void OnQuitGameButtonPressed()
     {
-        Debug.Log("Player quit game. ");
         if (Game_RuntimeData.isMultiplayer)
         {
             if (!Game_RuntimeData.matchIsRunning)

@@ -16,7 +16,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// 
+/// The ScoreCount class manages the player's score, quit time, score text, and confirmation window.
 /// </summary>
 public class ScoreCount : MonoBehaviour
 {
