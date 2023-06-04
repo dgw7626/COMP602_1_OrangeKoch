@@ -10,6 +10,10 @@
  */
 using UnityEngine;
 using UnityEngine.UI;
+
+/// <summary>
+/// The PlayerUI_HealthBar class is responsible for managing the health bar UI for a player. 
+/// </summary>
 public class PlayerUI_HealthBar : MonoBehaviour
 {
     public Slider slider; 

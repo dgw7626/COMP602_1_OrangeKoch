@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SDP_Main/Assets/Resources/WeaponData.meta
+guid: 1bba38d69be44c74fb580997177153a5
+========
 guid: 6b4a32d170d193744813922cfac6d285
+>>>>>>>> main:SDP_Main/Assets/Resources/LocalPrefabs/Weapon_Test.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

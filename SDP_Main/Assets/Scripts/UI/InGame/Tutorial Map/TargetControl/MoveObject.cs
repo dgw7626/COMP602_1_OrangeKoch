@@ -10,6 +10,9 @@
  */
 using UnityEngine;
 
+/// <summary>
+/// The MoveObject class is responsible for moving an attached object back and forth between two specified positions.
+/// </summary>
 public class MoveObject : MonoBehaviour
 {
     // The starting position of the object

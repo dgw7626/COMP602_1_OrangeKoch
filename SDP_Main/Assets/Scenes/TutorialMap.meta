@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:SDP_Main/Assets/Scenes/TutorialMap.meta
 guid: 2e92ee7e902a20d42a7b1a0acdcb3424
 folderAsset: yes
+========
+guid: 9b3bc4377b518f6409e30a818839892c
+>>>>>>>> main:SDP_Main/Assets/New Scene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
