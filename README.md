@@ -56,14 +56,14 @@
 <h2>Building Project from GitHub</h2>
 <ol>
 <li>Navigate to https://github.com/dgw7626/COMP602_1_OrangeKoch.git</ul>
-<ll>Click the Code button and Download Zip (Approximately 400MB), or alternatively use Git Clone.</ul>
-<ll>Extract the Zip to your Unity Projects desired location</ul>
-<ll>Open Unity Hub and click the dropdown next to "Open" and select Add project from Disk</ul>
-<ll>Navigate to the location you extracted the zip to, open the directory "COMP602_1_OrangeKoch-release" and select SDP_Main then click Add Project</ul>
-<ll>Then in the Unity Hub open the new Project recently added.</ul>
-<ll>Initially there will be errors in the console, these errors can be ignored for the first time.</ul>
-<ll>To start the game in the editor, In the Asset Directory expand the Directory "Scenes" and select "Lobby"</ul>
-<ll>From here the game can be run.</ul>
+<li>Click the Code button and Download Zip (Approximately 400MB), or alternatively use Git Clone.</ul>
+<li>Extract the Zip to your Unity Projects desired location</ul>
+<li>Open Unity Hub and click the dropdown next to "Open" and select Add project from Disk</ul>
+<li>Navigate to the location you extracted the zip to, open the directory "COMP602_1_OrangeKoch-release" and select SDP_Main then click Add Project</ul>
+<li>Then in the Unity Hub open the new Project recently added.</ul>
+<li>Initially there will be errors in the console, these errors can be ignored for the first time.</ul>
+<li>To start the game in the editor, In the Asset Directory expand the Directory "Scenes" and select "Lobby"</ul>
+<li>From here the game can be run.</ul>
 </ol>
 
 <h2>Troubleshooting</h2>
