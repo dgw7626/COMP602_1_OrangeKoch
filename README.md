@@ -47,17 +47,23 @@
 
 <h2>Installation</h2>
 <ol>
-<li>Download the game files from GitHub or a trusted source.</ul>
+<li>Download the game files from https://autuni-my.sharepoint.com/:u:/g/personal/gtk2105_autuni_ac_nz/EcGnAgi4rWRLkBhLRSic5wAB0A-fP4-H8jW2LEsx_48NOg?e=WAWWcm.</ul>
 <li>Extract the downloaded files to your desired location on your computer.</ul>
-<li>TBC</ul>
-<li>TBC</ul>
-<li>Launch the game and enjoy playing!</ul>
+<li>Open the Build Directory and run the OrangeKoch-FPS.exe</ul>
+<li>Enjoy playing!</ul>
 </ol>
 
 <h2>Building Project from GitHub</h2>
 <ol>
-<li></ul>
-<ll></ul>
+<li>Navigate to https://github.com/dgw7626/COMP602_1_OrangeKoch.git</ul>
+<ll>Click the Code button and Download Zip (Approximately 400MB), or alternatively use Git Clone.</ul>
+<ll>Extract the Zip to your Unity Projects desired location</ul>
+<ll>Open Unity Hub and click the dropdown next to "Open" and select Add project from Disk</ul>
+<ll>Navigate to the location you extracted the zip to, open the directory "COMP602_1_OrangeKoch-release" and select SDP_Main then click Add Project</ul>
+<ll>Then in the Unity Hub open the new Project recently added.</ul>
+<ll>Initially there will be errors in the console, these errors can be ignored for the first time.</ul>
+<ll>To start the game in the editor, In the Asset Directory expand the Directory "Scenes" and select "Lobby"</ul>
+<ll>From here the game can be run.</ul>
 </ol>
 
 <h2>Troubleshooting</h2>
