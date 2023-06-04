@@ -55,8 +55,7 @@
 
 <h2>Building Project from GitHub</h2>
 <ol>
-<li>Navigate to https://github.com/dgw7626/COMP602_1_OrangeKoch.git</ul>
-<li>Ensure you are on the "release" branch, if not switch to it.</ul>
+<li>Navigate to https://github.com/dgw7626/COMP602_1_OrangeKoch/tree/Release</ul>
 <li>Click the Code button and Download Zip (Approximately 400MB), or alternatively use Git Clone.</ul>
 <li>Extract the Zip to your Unity Projects desired location</ul>
 <li>Open Unity Hub and click the dropdown next to "Open" and select Add project from Disk</ul>
