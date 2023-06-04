@@ -56,6 +56,7 @@
 <h2>Building Project from GitHub</h2>
 <ol>
 <li>Navigate to https://github.com/dgw7626/COMP602_1_OrangeKoch.git</ul>
+<li>Ensure you are on the "release" branch, if not switch to it.</ul>
 <li>Click the Code button and Download Zip (Approximately 400MB), or alternatively use Git Clone.</ul>
 <li>Extract the Zip to your Unity Projects desired location</ul>
 <li>Open Unity Hub and click the dropdown next to "Open" and select Add project from Disk</ul>
@@ -84,45 +85,6 @@
 <li>Game development: Corey Knight, Dion Hemmes, Hanul Rheem, Munish Kumar, Siyi Wang</li>
 <li>Artwork: Hanul Rheem</li>
 <li>Sound Design: Corey Knight</li>
-
-
-
-
-
-
-
-
-[-------------------------------------------------------------------------------------------]
-Paper Name: COMP621
-Team Name: Orange Koch
-[-------------------------------------------------------------------------------------------]
-
-Project: Orange Koch's First Person Shooter
-About  : this project is 6 vs 6 first person shooter game.
-Theme  : Dark Universe, Matrix, Machine, Manipulating by AI, Prisoners trying to escape
-         from dream world.
-
-Input  : 
-       - Player movement W,A,S,D keys
-       - Mouse Button right to shoot 
-       - R Key to relaod ammo
-       - Tab Key to show scoreboard.
-
--Before you download the file please follow the instructions below-
-
--Introduction Of Running Game-
-Link: ///Game Link///
-download above link and unzip the folder and run the "orangeKoch.exe" executable.
-
--Introduction Of Running Unity Project-
-Required files (Please open the package manager from unity and enable in unity registry).
--URP (Universal Rendering Pipeline)
--Text Mesh Pro
-Note: once you download the folder you will have "Text Mesh Pro" pop up. you will
-    have to install UI to make display it on unity.
-
-[-------------------------------------------------------------------------------------------]
-
 
 
 
