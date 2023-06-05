@@ -11,7 +11,7 @@
 <li>Shift: Hold down the shift key to make your character sprint.</li>
 <li>Tab: Press the Tab key to display the current scores or leaderboard.</li>
 <li>M: Press the M key to mute or unmute the voice chat.</li>
-<li>Mouse Click: Use the left mouse button to fire your weapon or perform primary actions.</li>
+<li>Left Mouse Click: Use the left mouse button to fire your weapon or perform primary actions.</li>
 
 <h2>Voice Communication (Push to Talk)</h2>
 <li>By default, the game uses a push-to-talk system for proximity voice communication.</li>
@@ -87,17 +87,6 @@
 
 <h3>Tutorial</h3>
 <li>Upon entering the Tutorial follow the prompts to finish the Tutorial, press ESC to leave at any time.</li>
-</ol>
-
-<h3>Controls</h3>
-<li>Mouse Left Click: Fire Weapon</li>
-<li>WASD: Movement</li>
-<li>Spacebar: Jump</li>
-<li>Shift: Sprint</li>
-<li>Left Alt Key: Push-To-Talk Proximity chat</li>
-<li>M Key: Mute Proximity Chat</li>
-<li>ESC: Quit Game</li>
-
 
 <h2>Troubleshooting</h2>
 <p>If you encounter any issues while playing the game, try the following troubleshooting steps:</p>
