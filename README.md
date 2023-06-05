@@ -66,6 +66,39 @@
 <li>From here the game can be run.</ul>
 </ol>
 
+<h2>Playing the Game</h2>
+<ol>
+<li>After executing the OrangeKoch-FPS.exe the game will progress through a loading screen until you reach the menu screen</ul>
+<li>Select an option from the Menu:
+</br>Multiplayer - Connects to server and enters the Multiplayer menu
+</br>Tutorial - Enters a single player game to learn the ropes    
+</br>Settings - Display the keybinds and alter player settings such as sound, mouse sensitivity.
+</br>Quit - Exits the game.        
+</ul>
+</ol>
+<h3>Multiplayer</h3>
+<ol>
+<li>Upon connecting to the server, click find room and wait for your friends to join. The first player to join becomes the master of the match.</ul>
+<li>Once your friend has joined the room, the master player can click the start game button</ul>
+<li>Once in the game you will have 120 seconds of a team deathmatch</ul>
+<li>At the end of the game, a scoreboard will appear, then press ESC to quit to main menu</ul>
+</ol>
+<li>You may use push to talk during Multiplayer.</li>
+
+<h3>Tutorial</h3>
+<li>Upon entering the Tutorial follow the prompts to finish the Tutorial, press ESC to leave at any time.</li>
+</ol>
+
+<h3>Controls</h3>
+<li>Mouse Left Click: Fire Weapon</li>
+<li>WASD: Movement</li>
+<li>Spacebar: Jump</li>
+<li>Shift: Sprint</li>
+<li>Left Alt Key: Push-To-Talk Proximity chat</li>
+<li>M Key: Mute Proximity Chat</li>
+<li>ESC: Quit Game</li>
+
+
 <h2>Troubleshooting</h2>
 <p>If you encounter any issues while playing the game, try the following troubleshooting steps:</p>
 
