@@ -34,7 +34,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (initialized)
+        if (!Game_RuntimeData.isMultiplayer || initialized)
             return;
         Begin();
 

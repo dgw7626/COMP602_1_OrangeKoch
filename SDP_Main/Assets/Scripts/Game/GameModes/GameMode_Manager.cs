@@ -36,7 +36,8 @@ public class GameMode_Manager : MonoBehaviourPunCallbacks
         }
         gameMode = Game_RuntimeData.gameMode;
 
-        Invoke("Init", GAME_START_DELAY_SECONDS);
+        if(Game_RuntimeData.isMultiplayer)
+            Invoke("Init", GAME_START_DELAY_SECONDS);
     }
 
 
