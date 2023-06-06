@@ -176,11 +176,17 @@ public class Multiplayer_NetworkManager : MonoBehaviourPunCallbacks
         Game_RuntimeData.CleanUp_Multiplayer_Data();
         // Get a reference to the Photon Voice Manager object
         var voiceManager = GameObject.Find("VoiceManager");
+        // Get a reference to the Photon Voice Logger object
+        var voiceLogger = GameObject.Find("VoiceLogger");
+        // Get a reference to the Room Manager object
+        var roomManager = GameObject.Find("RoomManager");
         // If the object exists, stop and destroy the voice service
         if (voiceManager != null)
-        {
             Destroy(voiceManager);
-        }
+        if (voiceLogger != null)
+            Destroy(voiceLogger);
+        if (roomManager != null)
+            Destroy(roomManager);
         StartCoroutine(QuitAfterDelay());
     }
     /// <summary>
