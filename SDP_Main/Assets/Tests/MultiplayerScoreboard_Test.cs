@@ -92,16 +92,15 @@ public class MultiplayerScorebard_Test
         UI_MultiplayerScoreboard scoreScript = scoreboardGameObj.GetComponent<UI_MultiplayerScoreboard>();
         scoreScript.Begin(); //IT now works
 
-        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
-        VerticalLayoutGroup KillCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
-        VerticalLayoutGroup DeathCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup KillCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup DeathCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
        
-        VerticalLayoutGroup TeamNameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
-        VerticalLayoutGroup TeamKillCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<VerticalLayoutGroup>();
-        VerticalLayoutGroup TeamDeathCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(2).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup TeamNameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup TeamKillCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(3).GetChild(1).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup TeamDeathCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(3).GetChild(2).GetComponent<VerticalLayoutGroup>();
 
         string s = NameCollumn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
-        TextMeshProUGUI[] textMeshProUGUIs = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>().GetComponents<TextMeshProUGUI>();
 
         // ASSERT
         Assert.NotNull(scoreboardGameObj.transform);
@@ -158,9 +157,9 @@ public class MultiplayerScorebard_Test
         UI_MultiplayerScoreboard scoreScript = scoreboardGameObj.GetComponent<UI_MultiplayerScoreboard>();
         scoreScript.Begin(); //IT now works
 
-        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
 
-        VerticalLayoutGroup TeamNameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup TeamNameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
         
         // ASSERT
         //----------------------------------------------------
@@ -203,9 +202,9 @@ public class MultiplayerScorebard_Test
         UI_MultiplayerScoreboard scoreScript = scoreboardGameObj.GetComponent<UI_MultiplayerScoreboard>();
         scoreScript.Begin(); //IT now works
 
-        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
-        VerticalLayoutGroup KillCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
-        VerticalLayoutGroup DeathCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup NameCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup KillCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
+        VerticalLayoutGroup DeathCollumn = scoreboardGameObj.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
 
         // ASSERT
         //----------------------------------------------------
