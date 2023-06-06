@@ -188,6 +188,8 @@ public class GameMode_Standard : IgameMode
         {
             teamScores.killsPerPlayer[deathInfoStruct.killerId - 1]++;
             teamScores.killsPerTeam[deathInfoStruct.killerTeam]++;
+            teamScores.deathsPerPlayer[deathInfoStruct.diedId - 1]++;
+            teamScores.deathsPerTeam[deathInfoStruct.diedTeam]++;
         }
         else
         {

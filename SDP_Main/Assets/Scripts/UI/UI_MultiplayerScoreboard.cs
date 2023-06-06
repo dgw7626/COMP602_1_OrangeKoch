@@ -34,7 +34,7 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (!Game_RuntimeData.isMultiplayer || initialized)
+        if (initialized)
             return;
         Begin();
 
@@ -45,13 +45,13 @@ public class UI_MultiplayerScoreboard : MonoBehaviour
             return;
 
         initialized = true;
-        m_NameCollumn = transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
-        m_KillCollumn = transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
-        m_DeathCollumn = transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
+        m_NameCollumn = transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        m_KillCollumn = transform.GetChild(0).GetChild(0).GetChild(1).GetChild(1).GetComponent<VerticalLayoutGroup>();
+        m_DeathCollumn = transform.GetChild(0).GetChild(0).GetChild(1).GetChild(2).GetComponent<VerticalLayoutGroup>();
 
-        m_TeamNameCollumn = transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
-        m_TeamKillCollumn = transform.GetChild(0).GetChild(3).GetChild(1).GetComponent<VerticalLayoutGroup>();
-        m_TeamDeathCollumn = transform.GetChild(0).GetChild(3).GetChild(2).GetComponent<VerticalLayoutGroup>();
+        m_TeamNameCollumn = transform.GetChild(0).GetChild(0).GetChild(3).GetChild(0).GetComponent<VerticalLayoutGroup>();
+        m_TeamKillCollumn = transform.GetChild(0).GetChild(0).GetChild(3).GetChild(1).GetComponent<VerticalLayoutGroup>();
+        m_TeamDeathCollumn = transform.GetChild(0).GetChild(0).GetChild(3).GetChild(2).GetComponent<VerticalLayoutGroup>();
 
         m_score = Game_RuntimeData.gameScore;
 
